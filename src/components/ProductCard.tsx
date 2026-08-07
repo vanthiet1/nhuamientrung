@@ -46,7 +46,7 @@ export default function ProductCard({
     <Link href={`/san-pham/${category.slug}`} className="card-hover group block overflow-hidden">
       <div
         className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${theme.gradient} ${
-          lg ? "h-52 sm:h-56 md:h-60" : "h-44 sm:h-48"
+          lg ? "h-[213px] sm:h-[229px] md:h-[245px]" : "h-[181px] sm:h-[197px]"
         }`}
       >
         {category.image ? (

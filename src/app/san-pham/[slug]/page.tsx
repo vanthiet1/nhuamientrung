@@ -400,7 +400,7 @@ export default async function ProductOrCategoryPage({
 
           <div className="space-y-8 lg:col-span-3">
             <article className="card overflow-hidden">
-              <div className="relative flex min-h-64 items-center justify-center overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 sm:min-h-80 md:min-h-[26rem]">
+              <div className="relative flex min-h-[261px] items-center justify-center overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 sm:min-h-[325px] md:min-h-[421px]">
                 {coverImage ? (
                   <SafeImage
                     src={coverImage}

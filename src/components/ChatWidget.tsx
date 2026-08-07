@@ -45,7 +45,7 @@ const QUICK = [
 const WELCOME: ChatLine = {
   id: "welcome",
   role: "assistant",
-  content: `Xin chào! Mình là **ChatBot AI tư vấn** của ${company.shortName}. Hỏi PVC/PE/POF, sản phẩm, giao hàng hoặc báo giá — phản hồi ngay. Cần người thật: gọi ${company.phone} hoặc Chat Zalo.`,
+  content: `Xin chào! Mình là **ChatBot tư vấn** của ${company.shortName}. Hỏi PVC/PE/POF, sản phẩm, giao hàng hoặc báo giá. Cần người thật: gọi ${company.phone} hoặc Chat Zalo.`,
 };
 
 export default function ChatWidget() {
@@ -55,8 +55,6 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showTip, setShowTip] = useState(true);
-  const [modeLabel, setModeLabel] = useState("Đang kết nối AI…");
-  const [isRealAi, setIsRealAi] = useState<boolean | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -113,21 +111,6 @@ export default function ChatWidget() {
           },
         ]);
         return;
-      }
-
-      if (data.mode === "ai") {
-        setIsRealAi(true);
-        setModeLabel("Grok AI · đang suy luận");
-      } else {
-        setIsRealAi(false);
-        // Hết credit / chưa nạp → rule local (không phải LLM)
-        if (data.reason === "no_credits") {
-          setModeLabel("AI chờ credit xAI");
-        } else if (data.reason === "no_key") {
-          setModeLabel("Chưa cấu hình AI key");
-        } else {
-          setModeLabel("Tư vấn nhanh (dự phòng)");
-        }
       }
 
       setMessages((prev) => [
@@ -224,7 +207,7 @@ export default function ChatWidget() {
         <div
           className="pointer-events-auto flex w-[min(100vw-1.5rem,23rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.22)]"
           role="dialog"
-          aria-label="ChatBot AI tư vấn"
+          aria-label="ChatBot tư vấn"
         >
           <div className="flex items-start gap-3 bg-gradient-to-r from-violet-700 via-brand-600 to-sky-600 px-4 py-3.5 text-white">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 ring-2 ring-white/25">
@@ -232,27 +215,15 @@ export default function ChatWidget() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="flex items-center gap-1.5 text-sm font-extrabold leading-tight">
-                ChatBot tư vấn miễn phí
+                ChatBot tư vấn
                 <Sparkles className="h-3.5 w-3.5 text-amber-200" />
               </p>
               <p className="mt-0.5 text-[11px] text-white/85">
-                {company.shortName} · {modeLabel}
+                {company.shortName}
               </p>
-              <p
-                className={`mt-1 flex items-center gap-1.5 text-[11px] font-semibold ${
-                  isRealAi === false ? "text-amber-200" : "text-emerald-200"
-                }`}
-              >
-                <span
-                  className={`h-1.5 w-1.5 animate-pulse rounded-full ${
-                    isRealAi === false ? "bg-amber-300" : "bg-emerald-300"
-                  }`}
-                />
-                {isRealAi === false
-                  ? "AI thật chưa sẵn sàng (xAI chưa có credit)"
-                  : isRealAi
-                    ? "AI đang trả lời theo câu hỏi của bạn"
-                    : "Sẵn sàng chat"}
+              <p className="mt-1 flex items-center gap-1.5 text-[11px] font-semibold text-emerald-200">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
+                Online
               </p>
             </div>
             <button
@@ -317,7 +288,7 @@ export default function ChatWidget() {
             {loading && (
               <div className="flex items-center gap-2 text-[12px] font-medium text-slate-500">
                 <Loader2 className="h-3.5 w-3.5 animate-spin text-violet-600" />
-                AI đang suy nghĩ theo câu hỏi của bạn…
+                Đang trả lời…
               </div>
             )}
           </div>
@@ -384,9 +355,9 @@ export default function ChatWidget() {
             onClick={() => setOpen(true)}
             className="mb-1 max-w-[12rem] rounded-2xl rounded-br-md border border-violet-100 bg-white px-3 py-2 text-left text-[12px] font-semibold leading-snug text-slate-700 shadow-lg animate-float-soft sm:max-w-[14rem]"
           >
-            🤖 ChatBot tư vấn miễn phí
+            💬 ChatBot tư vấn
             <span className="mt-0.5 block text-[11px] font-medium text-slate-500">
-              PVC / PE / POF · Báo giá · Giao hàng — free
+              PVC / PE / POF · Báo giá · Giao hàng
             </span>
           </button>
         )}
@@ -395,7 +366,7 @@ export default function ChatWidget() {
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="relative flex h-[56px] w-[56px] items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-brand-700 text-white shadow-[0_10px_28px_rgba(109,40,217,0.45)] ring-4 ring-white transition hover:scale-105 animate-float-bounce sm:h-[60px] sm:w-[60px]"
-          aria-label={open ? "Đóng ChatBot AI" : "Mở ChatBot AI tư vấn"}
+          aria-label={open ? "Đóng ChatBot tư vấn" : "Mở ChatBot tư vấn"}
           aria-expanded={open}
         >
           <span
@@ -405,12 +376,7 @@ export default function ChatWidget() {
           {open ? (
             <X className="relative h-6 w-6" strokeWidth={2.25} />
           ) : (
-            <Bot className="relative h-6 w-6" strokeWidth={2.25} />
-          )}
-          {!open && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-400 px-0.5 text-[8px] font-black text-slate-900 ring-2 ring-white">
-              AI
-            </span>
+            <MessageCircle className="relative h-6 w-6" strokeWidth={2.25} />
           )}
         </button>
       </div>

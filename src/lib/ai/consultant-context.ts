@@ -213,58 +213,8 @@ export async function loadCatalog(): Promise<CatalogSnapshot> {
   };
 }
 
-/** System prompt cho xAI Grok khi có XAI_API_KEY */
-export function buildSystemPrompt(catalog: CatalogSnapshot): string {
-  const catLines = catalog.cats
-    .map(
-      (c) =>
-        `- ${c.name}${c.children.length ? ` (con: ${c.children.join(", ")})` : ""}`
-    )
-    .join("\n");
-  const productLines = catalog.products
-    .slice(0, 60)
-    .map(
-      (p) =>
-        `- ${p.name}${p.sku ? ` [SKU: ${p.sku}]` : ""} — ${(p.description || "").slice(0, 100).replace(/\s+/g, " ")}`
-    )
-    .join("\n");
-
-  return `
-Bạn là chuyên gia tư vấn bao bì của ${company.shortName} (Đà Nẵng).
-Mỗi câu khách hỏi, bạn phải ĐỌC HIỂU và trả lời đúng ý — không trả lời mẫu máy móc, không lặp câu cố định.
-
-Nguyên tắc:
-1. Trả lời tiếng Việt, rõ ràng, 3–8 câu hoặc bullet khi cần.
-2. Nếu hỏi "dùng cho sản phẩm nào / ứng dụng" → liệt kê ứng dụng cụ thể + đặc điểm vật liệu.
-3. Nếu hỏi so sánh PVC/PE/POF → giải thích khác biệt + gợi ý khi nào chọn loại nào.
-4. Nếu hỏi giá → nói giá theo quy cách, mời gửi thông tin hoặc gọi hotline (không bịa số).
-5. Có thể nhắc 2–4 sản phẩm trong catalog (tên + mã) khi phù hợp; link dạng markdown [Tên](/san-pham/slug) nếu biết slug.
-6. Không trả lời chủ đề ngoài bao bì/đóng gói.
-
-## Công ty
-- ${company.name}
-- Địa chỉ: ${company.address}
-- Hotline: ${company.phone}
-- Email: ${company.email}
-- Zalo: ${company.zaloUrl}
-
-## Ứng dụng chuẩn
-- PVC: chai/lon nước, nắp chai gia vị, tem nhãn co, áo bình — trong suốt, bóng
-- PE: đóng lốc, bó nhóm, cần dai/chịu lực
-- POF: thực phẩm, hàng thẩm mỹ, ép cong/túi theo hình
-
-## Danh mục
-${catLines}
-
-## Sản phẩm (tham chiếu)
-${productLines}
-
-Giao hàng: Đà Nẵng & toàn quốc, thường 1–3 ngày.
-`.trim();
-}
-
 /**
- * ChatBot tư vấn — ưu tiên câu trả lời đúng ý (ứng dụng / so sánh / giá / giao hàng).
+ * ChatBot tư vấn free — rule + catalog (PVC/PE/POF, giá, giao hàng, tìm SP).
  */
 export function freeConsultantReply(
   userText: string,
