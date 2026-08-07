@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-08-07T05:33:14.507Z",
+  "total": 103,
+  "ok": 102,
+  "issues": 1,
+  "errors": [],
+  "issueList": [
+    {
+      "slug": "mang-co-pet-nap-chai",
+      "name": "Màng co PET nắp chai",
+      "sku": "PET - 01",
+      "liveName": "Màng co PET nắp chai",
+      "liveSku": "PET - 01 Gi",
+      "contentLen": 2899,
+      "liveContentLen": 2870,
+      "problems": [
+        "material_content_mismatch"
+      ],
+      "nameScore": 1,
+      "descScore": 0.33
+    }
+  ]
+}

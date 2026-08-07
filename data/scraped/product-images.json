@@ -1,0 +1,620 @@
+[
+  {
+    "slug": "mang-co-pof-ep-cong-theo-yeu-cau",
+    "name": "Màng co POF ép cong theo yêu cầu",
+    "image": "https://mangcopvc.vn/upload/product/ep-cong-1-dau-8-4984.jpg",
+    "sku": "POF - 05"
+  },
+  {
+    "slug": "mang-co-pvc-ep-theo-yeu-cau",
+    "name": "Màng co PVC theo yêu cầu",
+    "image": "https://mangcopvc.vn/upload/product/ep-cong-1-dau-2303.jpg",
+    "sku": "PVC - 08"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-lon",
+    "name": "Màng co in PE đóng lốc lon",
+    "image": "https://mangcopvc.vn/upload/product/fna008-main-1-peshrink-9831.png",
+    "sku": "MCI-PE001"
+  },
+  {
+    "slug": "mang-co-pvc-in-tem-nhan-dang-cuon-phong-nhan",
+    "name": "Màng co PVC in tem nhãn dạng cuộn phóng nhãn",
+    "image": "https://mangcopvc.vn/upload/product/12-2203.jpg",
+    "sku": "MCI-PVC001"
+  },
+  {
+    "slug": "mang-co-pvc-in-tem-nhan-dang-cat-roi",
+    "name": "Màng co PVC in tem nhãn dạng cắt rời",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-tem-nhan-3616.jpg",
+    "sku": "MCI-PVC002"
+  },
+  {
+    "slug": "mang-co-in-chat-lieu-pet-in-tren-trai-dua",
+    "name": "Màng co in chất liệu PET in trên trái dừa",
+    "image": "https://mangcopvc.vn/upload/product/ruou-dua-qua-3104.jpg",
+    "sku": "MCI-PET001"
+  },
+  {
+    "slug": "mang-co-in-chat-lieu-pet-in-tren-than-chai",
+    "name": "Màng co in chất liệu PET in trên thân chai",
+    "image": "https://mangcopvc.vn/upload/product/unnamed-2734.png",
+    "sku": "MCI-PET002"
+  },
+  {
+    "slug": "mang-co-in-chat-lieu-pet-tren-nuoc-giai-khat",
+    "name": "Màng co in chất liệu PET trên nước giải khát",
+    "image": "https://mangcopvc.vn/upload/product/nhnmngcotrxanh-ncgiikhtsplarge-5347.jpg",
+    "sku": "MCI-PET003"
+  },
+  {
+    "slug": "mang-co-pvc-in-nap-chai-nuoc-tuong-ot",
+    "name": "Màng co PVC in nắp chai nước tương ớt",
+    "image": "https://mangcopvc.vn/upload/product/tuong-ot-cholimex-chai-270g-201901141335178661-2400.jpg",
+    "sku": "MCI-PVC003"
+  },
+  {
+    "slug": "mang-co-pvc-in-nap-chai-nuoc-tuong",
+    "name": "Màng co PVC in nắp chai",
+    "image": "https://mangcopvc.vn/upload/product/tp-10-1417.png",
+    "sku": "MCI-PVC004"
+  },
+  {
+    "slug": "mang-co-pvc-in-nap-chai-nuoc-mam",
+    "name": "Màng co PVC in nắp chai nước mắm",
+    "image": "https://mangcopvc.vn/upload/product/rmy6vy6v3ofjjlegmzg0-8026.jpg",
+    "sku": "MCI-PVC005"
+  },
+  {
+    "slug": "mang-co-pvc-in-lon-nuoc-ngot",
+    "name": "Màng co PVC in lon nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/1-5523.jpg",
+    "sku": "MCI-PVC006"
+  },
+  {
+    "slug": "mang-co-pvc-in-ao-binh",
+    "name": "Màng co PVC áo bình",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-ao-binh-21-lit-4404.jpg",
+    "sku": "MCI-PVC007"
+  },
+  {
+    "slug": "mang-co-pvc-in-loc-nuoc-ngot",
+    "name": "Màng co PVC in lốc nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/5fd38194e19ba5e5011aa59fd14eb2cbtn-3021.jpg",
+    "sku": "MCI-PVC008"
+  },
+  {
+    "slug": "mang-co-pvc-in-but-long",
+    "name": "Màng co PVC in bút lông",
+    "image": "https://mangcopvc.vn/upload/product/but-long-dau-viet-hoa-7862.jpg",
+    "sku": "MCI-PVC009"
+  },
+  {
+    "slug": "mang-co-pvc-in-bang-keo",
+    "name": "Màng co PVC băng keo",
+    "image": "https://mangcopvc.vn/upload/product/thumbmang-co-cuon-bang-keo1466496990-6831.jpg",
+    "sku": "MCI-PVC010"
+  },
+  {
+    "slug": "mang-co-pvc-in-chai-nuoc-mam",
+    "name": "Màng co PVC in chai nước mắm",
+    "image": "https://mangcopvc.vn/upload/product/19-4101.jpg",
+    "sku": "MCI-PVC011"
+  },
+  {
+    "slug": "mang-co-pvc-in-chai-nuoc-tuong",
+    "name": "Màng co PVC in chai nước tương",
+    "image": "https://mangcopvc.vn/upload/product/fd287704003976fede93cbf0abcc39cb-1772.jpg",
+    "sku": "MCI-PVC012"
+  },
+  {
+    "slug": "mang-co-pvc-in-chai-tuong-ca",
+    "name": "Màng co PVC in chai tương cà",
+    "image": "https://mangcopvc.vn/upload/product/1-tuong-ca-chua-chai-up-nguoc-heinz-397gr-1631609365-large-9206.jpg",
+    "sku": "MCI-PVC013"
+  },
+  {
+    "slug": "mang-co-pvc-in-chai-tuong-ot",
+    "name": "Màng co PVC in chai tương ớt",
+    "image": "https://mangcopvc.vn/upload/product/87269a7819aeedaeb503da93a720270etn-8240.jpg",
+    "sku": "MCI-PVC014"
+  },
+  {
+    "slug": "mang-co-pvc-co-in",
+    "name": "Màng co có in PVC",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-pvc-in-9222.jpg",
+    "sku": "MCI-PVC015"
+  },
+  {
+    "slug": "mang-co-pvc-in-nuoc-tang-luc",
+    "name": "Màng co PVC in nước tăng lực",
+    "image": "https://mangcopvc.vn/upload/product/nuoc-tang-luc-ho-van-chai-330ml-202111260938176270-9489.jpg",
+    "sku": "MCI-PVC016"
+  },
+  {
+    "slug": "mang-co-pvc-in-nuoc-trai-cay",
+    "name": "Màng co PVC in nước trái cây",
+    "image": "https://mangcopvc.vn/upload/product/nuoc-ep-trai-cay-dong-chai-9721.jpg",
+    "sku": "MCI-PVC017"
+  },
+  {
+    "slug": "mang-co-pvc-in-nuoc-giai-khat",
+    "name": "Màng co PVC in nước giải khát",
+    "image": "https://mangcopvc.vn/upload/product/22-1135.jpg",
+    "sku": "MCI-PVC018"
+  },
+  {
+    "slug": "mang-co-pvc-in-nuoc-ngot",
+    "name": "Màng co PVC in nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/eed436bd8431e03d499f1e1d831fb5f6-2527.jpg",
+    "sku": "MCI-PVC019"
+  },
+  {
+    "slug": "mang-co-pvc-in-nap-hu-yen",
+    "name": "Màng co PVC in nắp hủ yến",
+    "image": "https://mangcopvc.vn/upload/product/cach-mo-hu-yen-sao-nhanh-gon-khong-bi-dut-tay-202201251341386559-7889.jpg",
+    "sku": "MCI-PVC020"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-chai",
+    "name": "Màng co in PE đóng lốc chai",
+    "image": "https://mangcopvc.vn/upload/product/for-the-beverages-industry-shrink-wrapping-may-be-a-viable-alternative-to-cardboard-cluster-products-71360581890141133901000-3614.jpg",
+    "sku": "MCI-PE002"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-nuoc-tang-luc",
+    "name": "Màng co in PE đóng lốc",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-pe-in-loc-2647.jpg",
+    "sku": "MCI-PE003"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-sua",
+    "name": "Màng co in PE đóng lốc sữa",
+    "image": "https://mangcopvc.vn/upload/product/29752ff7-11fd-484f-bd81-3d1be31bdc02-5489.jpg",
+    "sku": "MCI-PE004"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-chai-nuoc-suoi",
+    "name": "Màng co in PE đóng lốc chai nước suối",
+    "image": "https://mangcopvc.vn/upload/product/637485716828266864highland-spring-12x500mlcoveris-duralite-r-5241.jpg",
+    "sku": "MCI-PE005"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-lon-nuoc-ngot",
+    "name": "Màng co in PE đóng lốc lon nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/cocacolalc6lo-4182.jpg",
+    "sku": "MCI-PE006"
+  },
+  {
+    "slug": "mang-co-in-pof-loc-mi-to",
+    "name": "Màng co in POF lốc mì tô",
+    "image": "https://mangcopvc.vn/upload/product/098323ac6bffb56c084633acae9c4883-8917.jpg",
+    "sku": "MCI-POF001"
+  },
+  {
+    "slug": "mang-co-in-pof-loc-keo",
+    "name": "Màng co in POF lốc kẹo",
+    "image": "https://mangcopvc.vn/upload/product/dbaf335e219c40fd24b29bb43947bf06-6720.jpg",
+    "sku": "MCI-POF002"
+  },
+  {
+    "slug": "mang-co-in-pof-loc-mi-ly",
+    "name": "Màng co in POF lốc mì ly",
+    "image": "https://mangcopvc.vn/upload/product/loc-6-ly-mi-kim-chi-jin-ottogi-62g-202204191541147404-7177.jpg",
+    "sku": "MCI-POF003"
+  },
+  {
+    "slug": "mang-in-opp-dan-tren-than-chai-nuoc-ngot",
+    "name": "Màng in OPP dán trên thân chai nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/thu-tuc-mo-dai-ly-bia-nuoc-ngot-1-copy-6214.jpg",
+    "sku": "MI-OPP001"
+  },
+  {
+    "slug": "mang-co-pof-ep-boc-dung-cu",
+    "name": "Màng co POF ép bọc dụng cụ",
+    "image": "https://mangcopvc.vn/upload/product/18-6537.jpg",
+    "sku": "POF - 04"
+  },
+  {
+    "slug": "mang-co-pof-dang-tui",
+    "name": "Màng co POF dạng túi",
+    "image": "https://mangcopvc.vn/upload/product/17-7680.jpg",
+    "sku": "POF - 06"
+  },
+  {
+    "slug": "mang-co-pof-dang-ong",
+    "name": "Màng co POF dạng ống",
+    "image": "https://mangcopvc.vn/upload/product/16-8947.jpg",
+    "sku": "POF - 07"
+  },
+  {
+    "slug": "mang-co-pof-cuon-doi",
+    "name": "Màng co POF cuộn đôi",
+    "image": "https://mangcopvc.vn/upload/product/231321-3215.jpg",
+    "sku": "POF - 08"
+  },
+  {
+    "slug": "mang-co-pof-dong-loc-mi-to",
+    "name": "Màng co POF đóng lốc mì tô",
+    "image": "https://mangcopvc.vn/upload/product/098323ac6bffb56c084633acae9c4883-8543.jpg",
+    "sku": "POF - 09"
+  },
+  {
+    "slug": "mang-co-pof-dong-loc-mi-ly",
+    "name": "Màng co POF đóng lốc mì ly",
+    "image": "https://mangcopvc.vn/upload/product/13-8477.jpg",
+    "sku": "POF - 10"
+  },
+  {
+    "slug": "mang-co-pof-dong-loc-yakult",
+    "name": "Màng co POF đóng lốc Yakult",
+    "image": "https://mangcopvc.vn/upload/product/23-3918.jpg",
+    "sku": "POF - 11"
+  },
+  {
+    "slug": "mang-co-pof-mi-to",
+    "name": "Màng co POF mì tô",
+    "image": "https://mangcopvc.vn/upload/product/20220912090941-removebg-preview-7710.png",
+    "sku": "POF - 12"
+  },
+  {
+    "slug": "mang-co-pof-mi-ly",
+    "name": "Màng co POF mì ly",
+    "image": "https://mangcopvc.vn/upload/product/79bfdd0d40b703fef9c6370f91776ba3-4489.jpg",
+    "sku": "POF - 13"
+  },
+  {
+    "slug": "mang-co-pof-hop-tra",
+    "name": "Màng co POF hộp trà",
+    "image": "https://mangcopvc.vn/upload/product/9-3209.jpg",
+    "sku": "POF - 14"
+  },
+  {
+    "slug": "mang-co-pof-hop-cafe",
+    "name": "Màng co POF hộp cafe",
+    "image": "https://mangcopvc.vn/upload/product/25-8676.jpg",
+    "sku": "POF - 15"
+  },
+  {
+    "slug": "mang-co-pe-loc-sa-te",
+    "name": "Màng co PE lốc sa tế",
+    "image": "https://mangcopvc.vn/upload/product/1-9489.jpg",
+    "sku": "PE - 01"
+  },
+  {
+    "slug": "mang-co-pe-tuong-ot",
+    "name": "Màng co PE tương ớt",
+    "image": "https://mangcopvc.vn/upload/product/loc-tuong-ot-210-g-1-scaled-2832.jpg",
+    "sku": "PE - 02"
+  },
+  {
+    "slug": "mang-co-pe-muoi-tieu",
+    "name": "Màng co PE muối tiêu",
+    "image": "https://mangcopvc.vn/upload/product/capture-7961.jpg",
+    "sku": "PE - 03"
+  },
+  {
+    "slug": "mang-co-pe-loc-24-lon",
+    "name": "Màng co PE lốc 24 lon",
+    "image": "https://mangcopvc.vn/upload/product/untitled-1-4861.jpg",
+    "sku": "PE - 04"
+  },
+  {
+    "slug": "mang-co-pe-loc-24-chai",
+    "name": "Màng co PE lốc 24 chai",
+    "image": "https://mangcopvc.vn/upload/product/7-5268.jpg",
+    "sku": "PE - 05"
+  },
+  {
+    "slug": "mang-co-pe-loc-12-chai",
+    "name": "Màng co PE lốc 12 chai",
+    "image": "https://mangcopvc.vn/upload/product/6-9691.jpg",
+    "sku": "PE - 06"
+  },
+  {
+    "slug": "mang-co-pe-loc-nuoc-tuong",
+    "name": "Màng co PE lốc nước tương",
+    "image": "https://mangcopvc.vn/upload/product/5-9403.jpg",
+    "sku": "PE - 07"
+  },
+  {
+    "slug": "mang-co-pe-loc-6-chai",
+    "name": "Màng co PE lốc 6 chai",
+    "image": "https://mangcopvc.vn/upload/product/4-1865.jpg",
+    "sku": "PE - 08"
+  },
+  {
+    "slug": "mang-co-pe-loc-6-lon",
+    "name": "Màng co PE lốc 6 lon",
+    "image": "https://mangcopvc.vn/upload/product/3-5826.jpg",
+    "sku": "PE - 09"
+  },
+  {
+    "slug": "mang-co-pe-loc-chai-dau-goi",
+    "name": "Màng co PE lốc chai dầu gội",
+    "image": "https://mangcopvc.vn/upload/product/2-1058.jpg",
+    "sku": "PE - 10"
+  },
+  {
+    "slug": "mang-co-pvc-ep-cong",
+    "name": "Màng co PVC ép cong",
+    "image": "https://mangcopvc.vn/upload/product/ep-cong-1-dau-2-3067.jpg",
+    "sku": "PVC - 01"
+  },
+  {
+    "slug": "mang-co-loc-yen",
+    "name": "Màng co lốc yến",
+    "image": "https://mangcopvc.vn/upload/product/nuoc-yen-ngan-nhi-wonderfarm-loc-6-lon-17112018122554-6494.jpg",
+    "sku": "PVC - 02"
+  },
+  {
+    "slug": "mang-co-moc-nhom",
+    "name": "Màng co móc nhôm",
+    "image": "https://mangcopvc.vn/upload/product/d245828fe75bb58cbc5d0178fafe760c-7172.jpg",
+    "sku": "PVC - 04"
+  },
+  {
+    "slug": "mang-co-loc-nuoc-mam",
+    "name": "Màng co lốc nước mắm",
+    "image": "https://mangcopvc.vn/upload/product/f932f342763618b8e1487acc7347248f-9391.jpg",
+    "sku": "PVC - 03"
+  },
+  {
+    "slug": "mang-co-nen",
+    "name": "Màng co nến",
+    "image": "https://mangcopvc.vn/upload/product/2-8826.jpg",
+    "sku": "PVC - 06"
+  },
+  {
+    "slug": "mang-co-boc-sach-vo-tap",
+    "name": "Màng co bọc sách, vở tập",
+    "image": "https://mangcopvc.vn/upload/product/3f2fda4af68f2bb1b381ad7bc186621b-1106.jpg",
+    "sku": "PVC - 05"
+  },
+  {
+    "slug": "mang-co-dang-cuon-ong",
+    "name": "Màng co dạng cuộn ống",
+    "image": "https://mangcopvc.vn/upload/product/mang-co513767063572-9154.jpg",
+    "sku": "PVC - 07"
+  },
+  {
+    "slug": "mang-co-pvc-cat-ngang",
+    "name": "Màng co PVC cắt ngang",
+    "image": "https://mangcopvc.vn/upload/product/4781d0d82565e13bb874-3460.jpg",
+    "sku": "PVC - 09"
+  },
+  {
+    "slug": "mang-co-pvc-ep-ngang",
+    "name": "Màng co PVC ép ngang",
+    "image": "https://mangcopvc.vn/upload/product/4-1137.jpg",
+    "sku": "PVC - 10"
+  },
+  {
+    "slug": "mang-co-pvc-loc-24-chai",
+    "name": "Màng co PVC lốc 24 chai",
+    "image": "https://mangcopvc.vn/upload/product/kisspng-shrink-wrap-bottle-water-box-packaging-and-labelin-botella-de-agua-5b311267d29eb66928902715299426318627-5211.jpg",
+    "sku": "PVC - 11"
+  },
+  {
+    "slug": "mang-co-pvc-loc-12-chai",
+    "name": "Màng co PVC lốc 12 chai",
+    "image": "https://mangcopvc.vn/upload/product/shrink-film-400x400-4385.png",
+    "sku": "PVC - 12"
+  },
+  {
+    "slug": "mang-co-pvc-loc-6-chai",
+    "name": "Màng co PVC lốc 6 chai",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-nhiet-6-9386.png",
+    "sku": "PVC - 13"
+  },
+  {
+    "slug": "mang-co-hop-cafe",
+    "name": "Màng co hộp cafe",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-tui-pof-gia-re-nhat-12fd3ad4-acee-462a-b579-9c066201a0c3-8777.jpg",
+    "sku": "PVC - 15"
+  },
+  {
+    "slug": "mang-co-pvc-loc-6-lon",
+    "name": "Màng co PVC lốc",
+    "image": "https://mangcopvc.vn/upload/product/4b2cc405b72c0d90b2ca6c37e0144bab-3985.jpg",
+    "sku": "PVC - 14"
+  },
+  {
+    "slug": "mang-co-hop-tra",
+    "name": "Màng co hộp trà",
+    "image": "https://mangcopvc.vn/upload/product/p-cong-1-dau-6-3440.jpg",
+    "sku": "PVC - 16"
+  },
+  {
+    "slug": "mang-co-ao-binh-nuoc-suoi-20-lit",
+    "name": "Màng co áo bình nước suối 20 lít",
+    "image": "https://mangcopvc.vn/upload/product/806043mang-co-pvc-ao-binh-21l-4940.jpg",
+    "sku": "PVC - 17"
+  },
+  {
+    "slug": "mang-co-ao-binh-nuoc-suoi-19-lit",
+    "name": "Màng co áo bình nước suối 19 lít",
+    "image": "https://mangcopvc.vn/upload/product/720810183330-5020.jpg",
+    "sku": "PVC - 18"
+  },
+  {
+    "slug": "mang-co-bang-keo",
+    "name": "Màng co băng keo",
+    "image": "https://mangcopvc.vn/upload/product/bang-keo-trong-100y-co-bao-nhieu-kich-thuoc-wonderland-2-1140x445-9515.jpg",
+    "sku": "PVC - 19"
+  },
+  {
+    "slug": "mang-co-dang-cuon-mau",
+    "name": "Màng co dạng cuộn màu",
+    "image": "https://mangcopvc.vn/upload/product/cuon-mau-9107.jpg",
+    "sku": "PVC - 20"
+  },
+  {
+    "slug": "mang-co-duoc-pham",
+    "name": "Màng co dược phẩm",
+    "image": "https://mangcopvc.vn/upload/product/image-6638.jpg",
+    "sku": "PVC - 21"
+  },
+  {
+    "slug": "mang-co-chai-lo-my-pham",
+    "name": "Màng co chai lọ mỹ phẩm",
+    "image": "https://mangcopvc.vn/upload/product/wkhqxfp8iosefn3daaaaap0fowe491-jpg-700x700-546d6476-2068-430c-9b90-390ca52265cb-4936.jpg",
+    "sku": "PVC - 22"
+  },
+  {
+    "slug": "mang-co-chai-dau-goi",
+    "name": "Màng co chai dầu gội",
+    "image": "https://mangcopvc.vn/upload/product/z29858399991597d2565c1fcf4878ca1c3b5038b319e5f-2234.jpg",
+    "sku": "PVC - 23"
+  },
+  {
+    "slug": "mang-co-loc-sua",
+    "name": "Màng co lốc sữa",
+    "image": "https://mangcopvc.vn/upload/product/29752ff7-11fd-484f-bd81-3d1be31bdc02-5770.jpg",
+    "sku": "PVC - 24"
+  },
+  {
+    "slug": "mang-co-loc-nuoc-suoi",
+    "name": "Màng co lốc nước suối",
+    "image": "https://mangcopvc.vn/upload/product/san-xuat-mang-co-nhiet-2-1-1488.jpg",
+    "sku": "PVC - 25"
+  },
+  {
+    "slug": "mang-co-gio-qua-tet",
+    "name": "Màng co giỏ quà tết",
+    "image": "https://mangcopvc.vn/upload/product/70f42435bb607c3e2571-9159.jpg",
+    "sku": "PVC - 26"
+  },
+  {
+    "slug": "mang-co-gio-trai-cay",
+    "name": "Màng co giỏ trái cây",
+    "image": "https://mangcopvc.vn/upload/product/dea0e22ce0c40dba90669a28dfb716cb-4291.jpg",
+    "sku": "PVC - 27"
+  },
+  {
+    "slug": "mang-co-loc-nuoc-tuong",
+    "name": "Màng co lốc nước tương",
+    "image": "https://mangcopvc.vn/upload/product/376716-2552.jpg",
+    "sku": "PVC - 28"
+  },
+  {
+    "slug": "mang-co-dang-cuon-don",
+    "name": "Màng co dạng cuộn đơn",
+    "image": "https://mangcopvc.vn/upload/product/mang-co-pof-2682-1847.jpg",
+    "sku": "PVC - 29"
+  },
+  {
+    "slug": "mang-co-loc-nuoc-ngot",
+    "name": "Màng co lốc nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/thung-24-chai-nuoc-ngot-coca-cola-390ml-202205101337087525-3325.jpg",
+    "sku": "PVC - 30"
+  },
+  {
+    "slug": "mang-co-hop-banh",
+    "name": "Màng co hộp bánh",
+    "image": "https://mangcopvc.vn/upload/product/1572597647070-9517.jpg",
+    "sku": "PVC - 31"
+  },
+  {
+    "slug": "mang-co-pvc-in-ep-ong-chi",
+    "name": "Màng co PVC in ép ống chỉ",
+    "image": "https://mangcopvc.vn/upload/product/5-5329.jpg",
+    "sku": "PVC - 32"
+  },
+  {
+    "slug": "mang-co-pe-loc-chai-sua-tam",
+    "name": "Màng co PE lốc chai sữa tắm",
+    "image": "https://mangcopvc.vn/upload/product/10-2972.jpg",
+    "sku": "PE - 11"
+  },
+  {
+    "slug": "mang-co-pe-loc-nuoc-ngot",
+    "name": "Màng co PE lốc nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/8-1750.jpg",
+    "sku": "PE - 12"
+  },
+  {
+    "slug": "mang-co-pof-cuon-don",
+    "name": "Màng co POF cuộn đơn",
+    "image": "https://mangcopvc.vn/upload/product/h787fe101cb3846df86bf02d11298dafe5-1-5949.jpg",
+    "sku": "POF - 19"
+  },
+  {
+    "slug": "mang-co-pof-hop",
+    "name": "Màng co POF hộp",
+    "image": "https://mangcopvc.vn/upload/product/236fd9f213cb33e198e19147c46a1fd171aabdcb-20201028174139-5271.jpg",
+    "sku": "POF - 21"
+  },
+  {
+    "slug": "mang-co-pet-nap-chai",
+    "name": "Màng co PET nắp chai",
+    "image": "https://mangcopvc.vn/upload/product/in-mang-co-3300.png",
+    "sku": "PET - 01"
+  },
+  {
+    "slug": "mang-in-opp-dan-tren-than-chai-nuoc-suoi",
+    "name": "Màng in OPP dán trên thân chai nước suối",
+    "image": "https://mangcopvc.vn/upload/product/27-5045.jpg",
+    "sku": "MI-OPP002"
+  },
+  {
+    "slug": "mang-co-in-pof-loc-yakult",
+    "name": "Màng co in POF lốc Yakult",
+    "image": "https://mangcopvc.vn/upload/product/23-5085.jpg",
+    "sku": "MCI-POF004"
+  },
+  {
+    "slug": "mang-co-in-pe-dong-loc-chai-nuoc-ngot",
+    "name": "Màng co in PE đóng lốc chai nước ngọt",
+    "image": "https://mangcopvc.vn/upload/product/8-5754.jpg",
+    "sku": "MCI-PE007"
+  },
+  {
+    "slug": "mang-co-pvc-in-nap-chai",
+    "name": "Màng co PVC in nắp chai",
+    "image": "https://mangcopvc.vn/upload/product/may-co-mang-chai-niem-phong-nap-chai-cnc-vina-5293.jpg",
+    "sku": "MCI-PVC021"
+  },
+  {
+    "slug": "mang-co-in-chat-lieu-pet-tren-nap-chai-ruou",
+    "name": "Màng co in chất liệu PET trên nắp chai rượu",
+    "image": "https://mangcopvc.vn/upload/product/30-9413.jpg",
+    "sku": "MCI-PET004"
+  },
+  {
+    "slug": "mang-co-pe-loc-sua",
+    "name": "Màng co PE lốc sữa",
+    "image": "https://mangcopvc.vn/upload/product/8-5456.jpg",
+    "sku": "PE - 13"
+  },
+  {
+    "slug": "mang-co-pof-theo-yeu-cau-moi",
+    "name": "Màng co POF theo yêu cầu",
+    "image": "https://mangcopvc.vn/upload/product/timthumb-1-9273.png",
+    "sku": "POF - 22"
+  },
+  {
+    "slug": "mang-co-pet-in-chai",
+    "name": "Màng co PET in chai",
+    "image": "https://mangcopvc.vn/upload/product/11-4907.jpg",
+    "sku": "PET - 02"
+  },
+  {
+    "slug": "tong-quan-bao-bi-tui-dung-gao",
+    "name": "Các loại Bao bì túi đựng gạo",
+    "image": "https://mangcopvc.vn/upload/product/tui-dung-gao-5569.jpg",
+    "sku": "T"
+  },
+  {
+    "slug": "mang-opp-dang-tui",
+    "name": "Màng OPP dạng túi",
+    "image": "https://mangcopvc.vn/upload/product/27-2082.jpg",
+    "sku": "OPP - 01"
+  },
+  {
+    "slug": "cau-tao-bao-bi-mang-ghep-phuc-hop",
+    "name": "Cấu tạo bao bì màng ghép phức hợp",
+    "image": "https://mangcopvc.vn/upload/product/",
+    "sku": "Bao b"
+  }
+]

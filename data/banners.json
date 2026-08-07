@@ -1,0 +1,44 @@
+[
+  {
+    "id": "default-1",
+    "title": "Giải pháp bao bì chuyên nghiệp",
+    "subtitle": "Màng co PVC · PE · POF · PET · Màng phức hợp — chất lượng ổn định, giao hàng toàn quốc",
+    "badge": "Thành Phát Bao Bì",
+    "cta": "Xem sản phẩm",
+    "href": "/san-pham",
+    "image": "",
+    "gradient": "from-brand-800 via-brand-600 to-brand-500",
+    "isActive": true,
+    "sortOrder": 0,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "default-2",
+    "title": "In màng co nhiệt logo thương hiệu",
+    "subtitle": "Nâng tầm nhận diện · Bảo vệ sản phẩm · Tăng giá trị trên kệ hàng",
+    "badge": "In ấn branding",
+    "cta": "Tư vấn ngay",
+    "href": "/lien-he",
+    "image": "",
+    "gradient": "from-brand-800 via-brand-600 to-sky-500",
+    "isActive": true,
+    "sortOrder": 1,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "default-3",
+    "title": "Cung cấp màng co số lượng lớn",
+    "subtitle": "Giá cạnh tranh · Tư vấn chọn loại màng · Hỗ trợ doanh nghiệp sản xuất",
+    "badge": "B2B wholesale",
+    "cta": "Liên hệ báo giá",
+    "href": "/lien-he",
+    "image": "",
+    "gradient": "from-teal-800 via-teal-600 to-emerald-500",
+    "isActive": true,
+    "sortOrder": 2,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

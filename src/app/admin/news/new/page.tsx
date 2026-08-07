@@ -1,0 +1,132 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
+import ImageUpload from "@/components/admin/ImageUpload";
+import ContentLinksEditor from "@/components/admin/ContentLinksEditor";
+import { slugify } from "@/lib/slugify";
+
+export default function NewNewsPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [slugLocked, setSlugLocked] = useState(false);
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    const fd = new FormData(e.currentTarget);
+    const res = await fetch("/api/admin/news", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: fd.get("title"),
+        slug: (fd.get("slug") as string)?.trim() || undefined,
+        excerpt: fd.get("excerpt"),
+        content: fd.get("content"),
+        date: fd.get("date"),
+        image: fd.get("image") || "",
+        isPublished: fd.get("isPublished") === "on",
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.error || "Lỗi lưu");
+      setLoading(false);
+      return;
+    }
+    router.push("/admin/news");
+    router.refresh();
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <h1 className="mb-4 text-xl font-extrabold text-slate-900 sm:mb-6 sm:text-2xl">
+        Thêm tin tức
+      </h1>
+      <form
+        onSubmit={onSubmit}
+        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+      >
+        <Field label="Tiêu đề" required>
+          <input
+            name="title"
+            required
+            value={title}
+            onChange={(e) => {
+              const next = e.target.value;
+              setTitle(next);
+              if (!slugLocked) setSlug(slugify(next));
+            }}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          label="Slug"
+          hint={
+            slugLocked
+              ? "Bạn đã sửa slug thủ công — không còn tự điền"
+              : "Tự tạo từ tiêu đề · URL /tin-tuc/[slug]"
+          }
+        >
+          <input
+            name="slug"
+            value={slug}
+            onChange={(e) => {
+              setSlugLocked(true);
+              setSlug(e.target.value);
+            }}
+            className={inputClass}
+            placeholder="tieu-de-bai-viet"
+          />
+          {slugLocked && (
+            <button
+              type="button"
+              className="mt-1.5 text-xs font-semibold text-brand-600 hover:underline"
+              onClick={() => {
+                setSlugLocked(false);
+                setSlug(slugify(title));
+              }}
+            >
+              Bật lại tự điền từ tiêu đề
+            </button>
+          )}
+        </Field>
+        <Field label="Mô tả ngắn">
+          <textarea name="excerpt" className={textareaClass} rows={3} />
+        </Field>
+        <ContentLinksEditor name="content" label="Nội dung" rows={12} />
+        <Field label="Ngày đăng">
+          <input name="date" type="date" defaultValue={today} className={inputClass} />
+        </Field>
+        <ImageUpload
+          name="image"
+          folder="news"
+          label="Hình ảnh tin tức"
+          hint="Upload ảnh lên Supabase Storage hoặc dán URL hình ảnh có sẵn"
+        />
+        <label className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <input
+            name="isPublished"
+            type="checkbox"
+            defaultChecked
+            className="h-4 w-4 rounded border-slate-300 text-sky-500"
+          />
+          Xuất bản ngay
+        </label>
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+        <FormActions cancelHref="/admin/news" loading={loading} />
+      </form>
+    </div>
+  );
+}

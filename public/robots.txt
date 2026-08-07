@@ -1,0 +1,9 @@
+# Bao Bì Thành Phát — robots.txt
+# Primary source: /robots (Next.js MetadataRoute). This file is a static fallback.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://baobithanhphat.com/sitemap.xml
