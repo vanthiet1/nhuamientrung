@@ -188,7 +188,17 @@ export default function Footer({
         <div className="container-page flex flex-col items-center justify-between gap-2 py-4 text-xs text-slate-500 sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="text-slate-400">{company.shortName}</span>. All rights reserved.
+            <span className="text-slate-400">{company.shortName}</span>.{" "}
+            Bản quyền đã được bảo hộ. Thiết kế bởi{" "}
+            <a
+              href="https://webcodeby.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 transition hover:text-accent-400"
+            >
+              WebCodeBy
+            </a>
+            .
           </p>
           <p>Đà Nẵng · Việt Nam</p>
         </div>

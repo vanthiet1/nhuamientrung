@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 import ZaloFloat from "@/components/ZaloFloat";
 import BreadcrumbBar from "@/components/BreadcrumbBar";
 import { GoogleTranslateBootstrap } from "@/components/LanguageSwitcher";
@@ -28,6 +29,7 @@ export default function SiteChrome({
       <main className="flex-1">{children}</main>
       <Footer categories={categories} />
       <ZaloFloat />
+      <ChatWidget />
     </>
   );
 }

@@ -148,14 +148,6 @@ export default function PartnersSlider({ partners }: { partners: Partner[] }) {
       >
         <ChevronRight className="h-5 w-5" />
       </button>
-
-      <p
-        className={`mt-3 text-center text-[11px] text-slate-400 transition duration-700 ${
-          visible ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        Tự cuộn ngang · Di chuột để tạm dừng
-      </p>
     </div>
   );
 }

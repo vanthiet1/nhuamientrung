@@ -75,8 +75,8 @@ export default function HomeCategoryProducts({
               </Link>
             </div>
 
-            {/* Products under category */}
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Products under category (3 cols khi có sidebar trang chủ) */}
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {items.map((p, i) => (
                 <ProductCard
                   size="lg"

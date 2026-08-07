@@ -12,6 +12,7 @@ import HeroSlider from "@/components/HeroSlider";
 import HomeCategoryProducts from "@/components/HomeCategoryProducts";
 import HomeNewsScroll from "@/components/HomeNewsScroll";
 import PartnersSlider from "@/components/PartnersSlider";
+import CategorySidebar from "@/components/CategorySidebar";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { company } from "@/lib/data/company";
 import { partners } from "@/lib/data/partners";
@@ -76,7 +77,7 @@ export default async function HomePage({ searchParams }: Props) {
         </div>
       </section>
 
-      {/* Danh mục + sản phẩm + phân trang */}
+      {/* Danh mục + sidebar + sản phẩm + phân trang */}
       <section
         id="danh-muc-san-pham"
         className="section container-home scroll-mt-28"
@@ -88,7 +89,16 @@ export default async function HomePage({ searchParams }: Props) {
           href="/san-pham"
           linkLabel="Xem toàn bộ danh mục bao bì →"
         />
-        <HomeCategoryProducts groups={groups} page={page} />
+        <div className="grid gap-8 lg:grid-cols-4">
+          <div className="lg:col-span-1">
+            <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 [scrollbar-width:thin]">
+              <CategorySidebar categories={categories} />
+            </div>
+          </div>
+          <div className="lg:col-span-3">
+            <HomeCategoryProducts groups={groups} page={page} />
+          </div>
+        </div>
       </section>
 
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-800 via-brand-600 to-brand-500 text-white">

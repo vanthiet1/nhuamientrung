@@ -35,7 +35,7 @@ function PulseRings({ colorClass }: { colorClass: string }) {
 
 export default function ZaloFloat() {
   return (
-    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] z-[100] flex flex-col items-end gap-3 sm:bottom-7 sm:right-5">
+    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] z-[90] flex flex-col items-end gap-3 sm:bottom-7 sm:right-5">
       {/* Hotline — always visible + bounce */}
       <a
         href={`tel:${company.phoneRaw}`}

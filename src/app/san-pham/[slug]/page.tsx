@@ -26,12 +26,13 @@ import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
 
 export const dynamic = "force-dynamic";
 
+const LIST_PER_PAGE = 12;
 const RELATED_PER_PAGE = 9;
 const NEWS_PER_PAGE = 6;
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ sp?: string; np?: string }>;
+  searchParams: Promise<{ sp?: string; np?: string; page?: string }>;
 };
 
 export async function generateStaticParams() {
@@ -52,37 +53,39 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await loadProductBySlug(slug);
+  // Ưu tiên danh mục / danh mục con hơn sản phẩm (tránh nhầm trang list)
   const found = await loadCategoryLookup(slug);
+  const product = found ? null : await loadProductBySlug(slug);
 
   const name =
-    product?.name ||
-    (found?.type === "category"
+    found?.type === "category"
       ? found.category.name
       : found?.type === "subcategory"
         ? found.subcategory.name
-        : "Sản phẩm");
+        : product?.name || "Sản phẩm";
+
   const description =
-    product?.description ||
-    (found?.type === "category"
+    found?.type === "category"
       ? found.category.description
       : found?.type === "subcategory"
         ? found.subcategory.description
-        : `Sản phẩm bao bì ${company.shortName}`);
+        : product?.description || `Sản phẩm bao bì ${company.shortName}`;
 
-  const title = `${name} | Mua tại Đà Nẵng`;
-  const keywords = productKeywords(name, product?.sku);
+  const title = found
+    ? `${name} | Danh mục bao bì Đà Nẵng`
+    : `${name} | Mua tại Đà Nẵng`;
+  const keywords = productKeywords(name, product?.sku || undefined);
   const url = `${siteUrl}/san-pham/${slug}`;
   const image = product?.image || "/logo.png";
 
   return {
     title,
-    description: description.slice(0, 160),
+    description: (description || "").slice(0, 160),
     keywords,
     alternates: { canonical: url },
     openGraph: {
       title,
-      description: description.slice(0, 160),
+      description: (description || "").slice(0, 160),
       url,
       type: "website",
       locale: "vi_VN",
@@ -91,91 +94,206 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description: description.slice(0, 160),
+      description: (description || "").slice(0, 160),
       images: [image],
     },
   };
 }
 
-export default async function ProductDetailPage({
+export default async function ProductOrCategoryPage({
   params,
   searchParams,
 }: Props) {
   const { slug } = await params;
   const sp = await searchParams;
+  const listPage = Math.max(1, parseInt(sp.page || sp.sp || "1", 10) || 1);
   const productPage = Math.max(1, parseInt(sp.sp || "1", 10) || 1);
   const newsPage = Math.max(1, parseInt(sp.np || "1", 10) || 1);
 
   const categories = await loadCategories();
   const found = await loadCategoryLookup(slug);
-  const product = await loadProductBySlug(slug);
+  // Chỉ lấy product khi KHÔNG phải danh mục / danh mục con
+  const product = found ? null : await loadProductBySlug(slug);
   const newsItems = await loadNews();
 
   if (!found && !product) notFound();
 
-  let title = "";
-  let description = "";
-  let content = "";
-  let coverImage = "";
-  let sku = "";
-  let breadcrumbs: { label: string; href?: string }[] = [];
-  let relatedProducts: Awaited<ReturnType<typeof loadProducts>> = [];
+  const isListing =
+    found?.type === "category" || found?.type === "subcategory";
 
-  if (found?.type === "category") {
-    title = found.category.name;
-    description = found.category.description;
-    content = description;
-    breadcrumbs = [
+  // ─── Trang DANH MỤC / DANH MỤC CON: grid sản phẩm ───
+  if (isListing && found) {
+    const isCategory = found.type === "category";
+    const title = isCategory
+      ? found.category.name
+      : found.subcategory.name;
+    const description = isCategory
+      ? found.category.description
+      : found.subcategory.description;
+
+    const breadcrumbs: { label: string; href?: string }[] = [
       { label: "Sản phẩm", href: "/san-pham" },
-      { label: title },
     ];
-    relatedProducts = await loadProducts({ categoryId: found.category.id });
-    coverImage = relatedProducts.find((p) => p.image)?.image || "";
-  } else if (found?.type === "subcategory") {
-    title = found.subcategory.name;
-    description = found.subcategory.description;
-    content = description;
-    breadcrumbs = [
-      { label: "Sản phẩm", href: "/san-pham" },
-      ...(found.parent
-        ? [{ label: found.parent.name, href: `/san-pham/${found.parent.slug}` }]
-        : []),
-      { label: title },
+    if (!isCategory && found.parent) {
+      breadcrumbs.push({
+        label: found.parent.name,
+        href: `/san-pham/${found.parent.slug}`,
+      });
+    }
+    breadcrumbs.push({ label: title });
+
+    const listProducts = isCategory
+      ? await loadProducts({ categoryId: found.category.id })
+      : await loadProducts({ subcategoryId: found.subcategory.id });
+
+    const total = listProducts.length;
+    const totalPages = Math.max(1, Math.ceil(total / LIST_PER_PAGE));
+    const safePage = Math.min(listPage, totalPages);
+    const start = (safePage - 1) * LIST_PER_PAGE;
+    const paged = listProducts.slice(start, start + LIST_PER_PAGE);
+
+    const jsonLdList: Record<string, unknown>[] = [
+      breadcrumbJsonLd([
+        { name: "Trang chủ", url: siteUrl },
+        { name: "Sản phẩm", url: `${siteUrl}/san-pham` },
+        ...(found.type === "subcategory" && found.parent
+          ? [
+              {
+                name: found.parent.name,
+                url: `${siteUrl}/san-pham/${found.parent.slug}`,
+              },
+            ]
+          : []),
+        { name: title, url: `${siteUrl}/san-pham/${slug}` },
+      ]),
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: title,
+        numberOfItems: total,
+        itemListElement: paged.map((p, i) => ({
+          "@type": "ListItem",
+          position: start + i + 1,
+          name: p.name,
+          url: `${siteUrl}/san-pham/${p.slug}`,
+        })),
+      },
     ];
-    relatedProducts = await loadProducts({
-      subcategoryId: found.subcategory.id,
-    });
-    coverImage = relatedProducts.find((p) => p.image)?.image || "";
-  } else if (product) {
-    title = product.name;
-    description = product.description;
-    content = product.content || product.description;
-    coverImage = product.image || "";
-    sku = product.sku || "";
-    breadcrumbs = [
-      { label: "Sản phẩm", href: "/san-pham" },
-      { label: title },
-    ];
-    if (product.categoryId) {
-      relatedProducts = await loadProducts({ categoryId: product.categoryId });
+
+    return (
+      <>
+        <JsonLd data={jsonLdList} />
+        <PageBanner
+          title={title}
+          breadcrumbs={breadcrumbs}
+          subtitle={description}
+          wide
+          asH1
+        />
+
+        <section className="section container-home">
+          <div className="grid gap-8 lg:grid-cols-4">
+            <div className="lg:col-span-1">
+              <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 [scrollbar-width:thin]">
+                <CategorySidebar categories={categories} activeSlug={slug} />
+              </div>
+            </div>
+
+            <div className="lg:col-span-3">
+              {description ? (
+                <p className="mb-5 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm leading-relaxed text-slate-700 sm:text-[15px]">
+                  {description}
+                </p>
+              ) : null}
+
+              <div className="mb-5 flex flex-wrap items-end justify-between gap-2">
+                <h2 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                  Sản phẩm trong {title}
+                </h2>
+                <p className="text-sm text-slate-500">
+                  {total === 0
+                    ? "0 sản phẩm"
+                    : `Hiển thị ${start + 1}–${Math.min(start + LIST_PER_PAGE, total)} / ${total}`}
+                  {totalPages > 1 && ` · Trang ${safePage}/${totalPages}`}
+                </p>
+              </div>
+
+              {paged.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-14 text-center text-slate-500">
+                  Chưa có sản phẩm trong danh mục này.
+                  <div className="mt-4">
+                    <Link href="/san-pham" className="btn-outline !text-xs">
+                      Xem tất cả sản phẩm
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                  {paged.map((p, i) => (
+                    <ProductCard
+                      key={p.id}
+                      category={{
+                        slug: p.slug,
+                        name: p.name,
+                        description: p.description,
+                        image: p.image,
+                        sku: p.sku,
+                      }}
+                      index={start + i}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <Pagination
+                page={safePage}
+                totalPages={totalPages}
+                basePath={`/san-pham/${slug}`}
+                param="page"
+              />
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // ─── Trang CHI TIẾT SẢN PHẨM ───
+  if (!product) notFound();
+
+  const title = product.name;
+  const description = product.description;
+  const content = product.content || product.description;
+  const coverImage = product.image || "";
+  const sku = product.sku || "";
+
+  // Breadcrumb: Sản phẩm → (danh mục) → (danh mục con) → SP
+  const breadcrumbs: { label: string; href?: string }[] = [
+    { label: "Sản phẩm", href: "/san-pham" },
+  ];
+  if (product.categoryId) {
+    const cat = categories.find((c) => c.id === product.categoryId);
+    if (cat) {
+      breadcrumbs.push({
+        label: cat.name,
+        href: `/san-pham/${cat.slug}`,
+      });
+      if (product.subcategoryId && cat.children) {
+        const sub = cat.children.find((s) => s.id === product.subcategoryId);
+        if (sub) {
+          breadcrumbs.push({
+            label: sub.name,
+            href: `/san-pham/${sub.slug}`,
+          });
+        }
+      }
     }
   }
+  breadcrumbs.push({ label: title });
 
-  if (product) {
-    title = product.name;
-    description = product.description;
-    content = product.content || product.description;
-    coverImage = product.image || coverImage;
-    sku = product.sku || sku;
-    if (!relatedProducts.length && product.categoryId) {
-      relatedProducts = await loadProducts({ categoryId: product.categoryId });
-    }
-  }
-
-  // If still no related, take from all products
-  if (!relatedProducts.length) {
-    relatedProducts = await loadProducts();
-  }
+  let relatedProducts = product.categoryId
+    ? await loadProducts({ categoryId: product.categoryId })
+    : await loadProducts();
 
   const sameTypeProducts = relatedProducts.filter((p) => p.slug !== slug);
   const productTotalPages = Math.max(
@@ -200,7 +318,6 @@ export default async function ProductDetailPage({
 
   const basePath = `/san-pham/${slug}`;
 
-  // Sidebar: short previews (separate products / news)
   const sidebarProducts = sameTypeProducts.slice(0, 6).map((p) => ({
     href: `/san-pham/${p.slug}`,
     title: p.name,
@@ -226,20 +343,15 @@ export default async function ProductDetailPage({
         })),
       { name: title, url: `${siteUrl}/san-pham/${slug}` },
     ]),
+    productJsonLd({
+      name: product.name,
+      description: product.description,
+      image: product.image,
+      sku: product.sku,
+      slug: product.slug,
+      price: product.price,
+    }),
   ];
-
-  if (product) {
-    jsonLdList.push(
-      productJsonLd({
-        name: product.name,
-        description: product.description,
-        image: product.image,
-        sku: product.sku,
-        slug: product.slug,
-        price: product.price,
-      })
-    );
-  }
 
   return (
     <>
@@ -254,7 +366,6 @@ export default async function ProductDetailPage({
 
       <section className="section container-home">
         <div className="grid gap-8 lg:grid-cols-4">
-          {/* Cột trái: sticky + cuộn nội bộ (danh mục + SP cùng loại + tin) */}
           <div className="lg:col-span-1">
             <div className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 lg:pb-4 [scrollbar-width:thin]">
               <CategorySidebar categories={categories} activeSlug={slug} />
@@ -311,7 +422,6 @@ export default async function ProductDetailPage({
                 )}
               </div>
               <div className="p-6 sm:p-8">
-                {/* Duy nhất 1 H1 trên trang chi tiết sản phẩm */}
                 <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
                   {title}
                 </h1>
@@ -321,26 +431,20 @@ export default async function ProductDetailPage({
                       Mã SP: {sku}
                     </span>
                   )}
-                  {product?.price && (
+                  {product.price && (
                     <span className="font-semibold text-brand-700">
                       Giá: {product.price}
                     </span>
                   )}
-                  {product?.views != null && (
-                    <span className="text-slate-400">
-                      Lượt xem: {product.views.toLocaleString("vi-VN")}
-                    </span>
-                  )}
                 </div>
 
-                {/* Description — bold for SEO emphasis */}
                 {description && (
                   <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800 sm:text-[15px]">
                     {description}
                   </p>
                 )}
 
-                {product?.images && product.images.length > 1 && (
+                {product.images && product.images.length > 1 && (
                   <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
                     {product.images.slice(0, 8).map((img, imgIdx) => (
                       <div
@@ -361,7 +465,6 @@ export default async function ProductDetailPage({
                   </div>
                 )}
 
-                {/* Full content — tables auto from pipe layout */}
                 {content && content !== description && (
                   <div className="mt-6">
                     <h2 className="text-base font-extrabold text-slate-900 sm:text-lg">
@@ -371,10 +474,7 @@ export default async function ProductDetailPage({
                   </div>
                 )}
 
-                {/* Thông tin liên hệ công ty (thay mẫu đối thủ) */}
-                {(description || (content && content !== description) || product) && (
-                  <ProductContactBox />
-                )}
+                <ProductContactBox />
 
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
@@ -395,11 +495,11 @@ export default async function ProductDetailPage({
                   </a>
                 </div>
 
-                {/* SEO context — tránh lặp từ “màng” */}
                 <p className="mt-6 text-xs leading-relaxed text-slate-400">
                   {company.shortName} cung cấp <strong>{title}</strong>
                   {sku ? ` (mã ${sku})` : ""}, giải pháp{" "}
-                  <strong>bao bì đóng gói Đà Nẵng</strong> — giao hàng toàn quốc.{" "}
+                  <strong>bao bì đóng gói Đà Nẵng</strong> — giao hàng toàn
+                  quốc.{" "}
                   <Link
                     href="/san-pham"
                     className="font-semibold text-brand-600 hover:underline"
@@ -417,7 +517,6 @@ export default async function ProductDetailPage({
               </div>
             </article>
 
-            {/* Sản phẩm cùng loại — full + pagination */}
             {sameTypeProducts.length > 0 && (
               <div id="san-pham-cung-loai" className="scroll-mt-28">
                 <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
@@ -450,13 +549,14 @@ export default async function ProductDetailPage({
                   totalPages={productTotalPages}
                   basePath={basePath}
                   param="sp"
-                  extraParams={{ np: safeNewsPage > 1 ? safeNewsPage : undefined }}
+                  extraParams={{
+                    np: safeNewsPage > 1 ? safeNewsPage : undefined,
+                  }}
                   hash="san-pham-cung-loai"
                 />
               </div>
             )}
 
-            {/* Tin tức — full + pagination (tách riêng) */}
             {newsItems.length > 0 && (
               <div id="tin-tuc" className="scroll-mt-28">
                 <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
@@ -489,7 +589,9 @@ export default async function ProductDetailPage({
                   totalPages={newsTotalPages}
                   basePath={basePath}
                   param="np"
-                  extraParams={{ sp: safeProductPage > 1 ? safeProductPage : undefined }}
+                  extraParams={{
+                    sp: safeProductPage > 1 ? safeProductPage : undefined,
+                  }}
                   hash="tin-tuc"
                 />
               </div>
