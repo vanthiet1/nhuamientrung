@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import type { BannerRecord } from "@/lib/cms/types";
@@ -21,6 +21,11 @@ const FALLBACK: Pick<
   },
 ];
 
+/** Min horizontal distance (px) to count as a swipe */
+const SWIPE_THRESHOLD = 48;
+/** Ignore if vertical movement is dominant (page scroll) */
+const SWIPE_AXIS_RATIO = 1.15;
+
 export default function HeroSlider({
   banners = [],
 }: {
@@ -40,29 +45,71 @@ export default function HeroSlider({
 
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const touchStart = useRef<{ x: number; y: number; t: number } | null>(null);
 
   useEffect(() => {
     setIndex(0);
   }, [slides.length]);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1 || paused) return;
     const t = setInterval(
       () => setIndex((i) => (i + 1) % slides.length),
       5600
     );
     return () => clearInterval(t);
-  }, [slides.length]);
+  }, [slides.length, paused]);
 
-  const prev = () =>
-    setIndex((i) => (i - 1 + slides.length) % slides.length);
-  const next = () => setIndex((i) => (i + 1) % slides.length);
+  const prev = useCallback(
+    () => setIndex((i) => (i - 1 + slides.length) % slides.length),
+    [slides.length]
+  );
+  const next = useCallback(
+    () => setIndex((i) => (i + 1) % slides.length),
+    [slides.length]
+  );
   const slide = slides[index] || slides[0];
 
   // Reset error when slide changes
   useEffect(() => {
     setImgFailed(false);
   }, [slide?.id, slide?.image]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (slides.length <= 1) return;
+    const t = e.touches[0];
+    if (!t) return;
+    touchStart.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+    setPaused(true);
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    setPaused(false);
+    if (!start || slides.length <= 1) return;
+
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+
+    // Prefer horizontal swipe; ignore mostly-vertical scrolls
+    if (absX < SWIPE_THRESHOLD) return;
+    if (absY > absX * SWIPE_AXIS_RATIO) return;
+
+    if (dx < 0) next();
+    else prev();
+  };
+
+  const onTouchCancel = () => {
+    touchStart.current = null;
+    setPaused(false);
+  };
 
   if (!slide) return null;
 
@@ -71,9 +118,12 @@ export default function HeroSlider({
   return (
     <section className="relative overflow-hidden">
       <div
-        className={`relative min-h-[420px] bg-gradient-to-br sm:min-h-[500px] md:min-h-[540px] ${
+        className={`relative min-h-[420px] touch-pan-y bg-gradient-to-br sm:min-h-[500px] md:min-h-[540px] ${
           hasImage ? "from-slate-900 to-slate-800" : slide.gradient
         } transition-all duration-700`}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchCancel}
       >
         {/* Background image */}
         {hasImage && (
