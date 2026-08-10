@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Phone } from "lucide-react";
+import { Phone, Eye } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
 import CategorySidebar from "@/components/CategorySidebar";
 import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/ProductGallery";
+import ProductViewTracker from "@/components/ProductViewTracker";
 import NewsCard from "@/components/NewsCard";
 import InternalLinks from "@/components/InternalLinks";
 import Pagination from "@/components/Pagination";
@@ -13,6 +14,7 @@ import ProductContactBox from "@/components/ProductContactBox";
 import ProductContent from "@/components/ProductContent";
 import SafeImage from "@/components/SafeImage";
 import JsonLd from "@/components/JsonLd";
+import { createClient } from "@/lib/supabase/server";
 import {
   loadAllCategorySlugs,
   loadCategories,
@@ -262,6 +264,17 @@ export default async function ProductOrCategoryPage({
   // ─── Trang CHI TIẾT SẢN PHẨM ───
   if (!product) notFound();
 
+  let viewCount = product.views || 0;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("products").select("views").eq("id", product.id).single();
+    if (data && typeof data.views === "number") {
+      viewCount = data.views;
+    }
+  } catch (error) {
+    console.error("Lỗi lấy view từ supabase:", error);
+  }
+
   const title = product.name;
   const description = product.description;
   const content = product.content || product.description;
@@ -422,6 +435,10 @@ export default async function ProductOrCategoryPage({
                           Giá: {product.price}
                         </span>
                       )}
+                      <span className="flex items-center gap-1 font-medium text-slate-500">
+                        <Eye className="h-4 w-4" />
+                        {viewCount} lượt xem
+                      </span>
                     </div>
 
                     {description && (
@@ -482,6 +499,7 @@ export default async function ProductOrCategoryPage({
                   </Link>
                 </p>
               </ProductGallery>
+              <ProductViewTracker productId={product.id} />
             </article>
 
             {sameTypeProducts.length > 0 && (

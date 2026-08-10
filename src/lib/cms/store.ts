@@ -322,6 +322,31 @@ export async function deleteProduct(id: string) {
   await writeJson("products.json", next);
 }
 
+export async function incrementProductView(id: string, ip: string) {
+  type ProductViewsRecord = Record<string, string[]>;
+  const viewsData = await readJson<ProductViewsRecord>("product-views.json", {});
+  const productIps = viewsData[id] || [];
+
+  if (productIps.includes(ip)) {
+    return false; // Already viewed
+  }
+
+  // Add IP and save
+  productIps.push(ip);
+  viewsData[id] = productIps;
+  await writeJson("product-views.json", viewsData);
+
+  // Increment product views
+  const list = await getProducts();
+  const idx = list.findIndex((p) => p.id === id);
+  if (idx >= 0) {
+    list[idx].views = (list[idx].views || 0) + 1;
+    await writeJson("products.json", list);
+  }
+
+  return true;
+}
+
 // ── News ──
 
 export async function getNews(includeDraft = true) {
