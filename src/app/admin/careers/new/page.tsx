@@ -34,7 +34,10 @@ export default function NewCareerPage() {
         type: fd.get("type"),
         salary: fd.get("salary"),
         description: fd.get("description"),
-        requirements: String(fd.get("requirements") || ""),
+        requirements: String(fd.get("requirements") || "")
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
         isActive: fd.get("isActive") === "on",
         sortOrder: Number(fd.get("sortOrder") || 0),
       }),

@@ -266,21 +266,58 @@ export async function getCareers(includeInactive = true): Promise<CareerRecord[]
     console.warn("Careers table error", error.message);
     return [];
   }
-  return toCamel(data);
+  const result = toCamel(data);
+  result.forEach((r: any) => {
+    if (typeof r.requirements === 'string') {
+      try {
+        const parsed = JSON.parse(r.requirements);
+        r.requirements = Array.isArray(parsed) ? parsed : [r.requirements];
+      } catch {
+        r.requirements = [r.requirements];
+      }
+    } else if (!Array.isArray(r.requirements)) {
+      r.requirements = [];
+    }
+  });
+  return result;
 }
 
 export async function getCareerById(id: string): Promise<CareerRecord | null> {
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('careers').select('*').eq('id', id).maybeSingle();
   if (error) throw error;
-  return data ? toCamel(data) : null;
+  if (!data) return null;
+  const result = toCamel(data);
+  if (typeof result.requirements === 'string') {
+    try {
+      const parsed = JSON.parse(result.requirements);
+      result.requirements = Array.isArray(parsed) ? parsed : [result.requirements];
+    } catch {
+      result.requirements = [result.requirements];
+    }
+  } else if (!Array.isArray(result.requirements)) {
+    result.requirements = [];
+  }
+  return result;
 }
 
 export async function getCareerBySlug(slug: string): Promise<CareerRecord | null> {
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('careers').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
   if (error) throw error;
-  return data ? toCamel(data) : null;
+  if (!data) return null;
+  const result = toCamel(data);
+  if (typeof result.requirements === 'string') {
+    try {
+      const parsed = JSON.parse(result.requirements);
+      result.requirements = Array.isArray(parsed) ? parsed : [result.requirements];
+    } catch {
+      result.requirements = [result.requirements];
+    }
+  } else if (!Array.isArray(result.requirements)) {
+    result.requirements = [];
+  }
+  return result;
 }
 
 export async function createCareer(input: Partial<CareerRecord> & { title: string }) {
