@@ -1,6 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { randomUUID } from "crypto";
+import { createServiceClient } from "@/lib/supabase/admin";
 import type {
   CategoryRecord,
   SubcategoryRecord,
@@ -12,31 +10,35 @@ import type {
   CategoryTree,
 } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-
-async function ensureDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-}
-
-async function readJson<T>(file: string, fallback: T): Promise<T> {
-  await ensureDir();
-  const full = path.join(DATA_DIR, file);
-  try {
-    const raw = await fs.readFile(full, "utf8");
-    return JSON.parse(raw) as T;
-  } catch {
-    await fs.writeFile(full, JSON.stringify(fallback, null, 2), "utf8");
-    return fallback;
+function toCamel(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+  if (Array.isArray(obj)) return obj.map(toCamel);
+  if (typeof obj === 'object') {
+    const res: any = {};
+    for (const key in obj) {
+      const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+      res[camelKey] = toCamel(obj[key]);
+    }
+    return res;
   }
+  return obj;
 }
 
-async function writeJson<T>(file: string, data: T) {
-  await ensureDir();
-  const full = path.join(DATA_DIR, file);
-  await fs.writeFile(full, JSON.stringify(data, null, 2), "utf8");
+function toSnake(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+  if (Array.isArray(obj)) return obj.map(toSnake);
+  if (typeof obj === 'object') {
+    const res: any = {};
+    for (const key in obj) {
+      const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+      res[snakeKey] = toSnake(obj[key]);
+    }
+    return res;
+  }
+  return obj;
 }
 
-function slugify(input: string) {
+export function slugify(input: string) {
   return input
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -48,500 +50,276 @@ function slugify(input: string) {
     .replace(/-+/g, "-");
 }
 
-function now() {
-  return new Date().toISOString();
-}
-
 // ── Categories ──
-
-export async function getCategories() {
-  const list = await readJson<CategoryRecord[]>("categories.json", []);
-  return list.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function getCategories(): Promise<CategoryRecord[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('categories').select('*').order('sort_order', { ascending: true });
+  if (error) throw error;
+  return toCamel(data);
 }
 
-export async function getCategoryById(id: string) {
-  return (await getCategories()).find((c) => c.id === id) || null;
+export async function getCategoryById(id: string): Promise<CategoryRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('categories').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
-export async function createCategory(
-  input: Partial<CategoryRecord> & { name: string }
-) {
-  const list = await getCategories();
+export async function createCategory(input: Partial<CategoryRecord> & { name: string }) {
+  const supabase = createServiceClient();
   const slug = input.slug?.trim() || slugify(input.name);
-  if (list.some((c) => c.slug === slug)) {
-    throw new Error("Slug danh mục đã tồn tại");
-  }
-  const item: CategoryRecord = {
-    id: randomUUID(),
-    slug,
-    name: input.name.trim(),
-    description: (input.description || "").trim(),
-    sortOrder: input.sortOrder ?? list.length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  list.push(item);
-  await writeJson("categories.json", list);
-  return item;
+  const snakeInput = toSnake({ ...input, slug, name: input.name.trim() });
+  const { data, error } = await supabase.from('categories').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function updateCategory(id: string, input: Partial<CategoryRecord>) {
-  const list = await getCategories();
-  const idx = list.findIndex((c) => c.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy danh mục");
-  const slug = input.slug?.trim() || list[idx].slug;
-  if (list.some((c) => c.slug === slug && c.id !== id)) {
-    throw new Error("Slug danh mục đã tồn tại");
-  }
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    slug,
-    name: input.name?.trim() ?? list[idx].name,
-    description: input.description?.trim() ?? list[idx].description,
-    updatedAt: now(),
-  };
-  await writeJson("categories.json", list);
-  return list[idx];
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('categories').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteCategory(id: string) {
-  const list = await getCategories();
-  const next = list.filter((c) => c.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy danh mục");
-  await writeJson("categories.json", next);
-
-  const subs = await getSubcategories();
-  await writeJson(
-    "subcategories.json",
-    subs.filter((s) => s.categoryId !== id)
-  );
-
-  const products = await getProducts();
-  await writeJson(
-    "products.json",
-    products.filter((p) => p.categoryId !== id)
-  );
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('categories').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 // ── Subcategories ──
-
-export async function getSubcategories() {
-  const list = await readJson<SubcategoryRecord[]>("subcategories.json", []);
-  return list.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function getSubcategories(): Promise<SubcategoryRecord[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('subcategories').select('*').order('sort_order', { ascending: true });
+  if (error) throw error;
+  return toCamel(data);
 }
 
-export async function getSubcategoryById(id: string) {
-  return (await getSubcategories()).find((s) => s.id === id) || null;
+export async function getSubcategoryById(id: string): Promise<SubcategoryRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('subcategories').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
-export async function createSubcategory(
-  input: Partial<SubcategoryRecord> & { name: string; categoryId: string }
-) {
-  const list = await getSubcategories();
-  const cats = await getCategories();
-  if (!cats.some((c) => c.id === input.categoryId)) {
-    throw new Error("Danh mục cha không tồn tại");
-  }
+export async function createSubcategory(input: Partial<SubcategoryRecord> & { name: string; categoryId: string }) {
+  const supabase = createServiceClient();
   const slug = input.slug?.trim() || slugify(input.name);
-  if (list.some((s) => s.slug === slug)) {
-    throw new Error("Slug danh mục con đã tồn tại");
-  }
-  const item: SubcategoryRecord = {
-    id: randomUUID(),
-    categoryId: input.categoryId,
-    slug,
-    name: input.name.trim(),
-    description: (input.description || "").trim(),
-    sortOrder:
-      input.sortOrder ??
-      list.filter((s) => s.categoryId === input.categoryId).length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  list.push(item);
-  await writeJson("subcategories.json", list);
-  return item;
+  const snakeInput = toSnake({ ...input, slug, name: input.name.trim() });
+  const { data, error } = await supabase.from('subcategories').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
-export async function updateSubcategory(
-  id: string,
-  input: Partial<SubcategoryRecord>
-) {
-  const list = await getSubcategories();
-  const idx = list.findIndex((s) => s.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy danh mục con");
-  const slug = input.slug?.trim() || list[idx].slug;
-  if (list.some((s) => s.slug === slug && s.id !== id)) {
-    throw new Error("Slug danh mục con đã tồn tại");
-  }
-  if (input.categoryId) {
-    const cats = await getCategories();
-    if (!cats.some((c) => c.id === input.categoryId)) {
-      throw new Error("Danh mục cha không tồn tại");
-    }
-  }
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    slug,
-    name: input.name?.trim() ?? list[idx].name,
-    description: input.description?.trim() ?? list[idx].description,
-    updatedAt: now(),
-  };
-  await writeJson("subcategories.json", list);
-  return list[idx];
+export async function updateSubcategory(id: string, input: Partial<SubcategoryRecord>) {
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('subcategories').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteSubcategory(id: string) {
-  const list = await getSubcategories();
-  const next = list.filter((s) => s.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy danh mục con");
-  await writeJson("subcategories.json", next);
-
-  const products = await getProducts();
-  await writeJson(
-    "products.json",
-    products.map((p) =>
-      p.subcategoryId === id ? { ...p, subcategoryId: null, updatedAt: now() } : p
-    )
-  );
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('subcategories').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 // ── Products ──
-
-export async function getProducts() {
-  const list = await readJson<ProductRecord[]>("products.json", []);
-  // normalize legacy rows missing sku
-  return list
-    .map((p) => ({
-      ...p,
-      sku: p.sku ?? "",
-      image: p.image ?? "",
-    }))
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+export async function getProducts(): Promise<ProductRecord[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('products').select('*').order('sort_order', { ascending: true });
+  if (error) throw error;
+  return toCamel(data);
 }
 
-export async function getProductById(id: string) {
-  return (await getProducts()).find((p) => p.id === id) || null;
+export async function getProductById(id: string): Promise<ProductRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
-export async function getProductBySlug(slug: string) {
-  return (await getProducts()).find((p) => p.slug === slug && p.isActive) || null;
+export async function getProductBySlug(slug: string): Promise<ProductRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('products').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
-export async function createProduct(
-  input: Partial<ProductRecord> & { name: string; categoryId: string }
-) {
-  const list = await getProducts();
-  const cats = await getCategories();
-  if (!cats.some((c) => c.id === input.categoryId)) {
-    throw new Error("Danh mục không tồn tại");
-  }
-  if (input.subcategoryId) {
-    const subs = await getSubcategories();
-    const sub = subs.find((s) => s.id === input.subcategoryId);
-    if (!sub || sub.categoryId !== input.categoryId) {
-      throw new Error("Danh mục con không hợp lệ");
-    }
-  }
+export async function createProduct(input: Partial<ProductRecord> & { name: string; categoryId: string }) {
+  const supabase = createServiceClient();
   const slug = input.slug?.trim() || slugify(input.name);
-  if (list.some((p) => p.slug === slug)) {
-    throw new Error("Slug sản phẩm đã tồn tại");
-  }
-  const sku = (input.sku || "").trim();
-  if (sku && list.some((p) => (p.sku || "").toLowerCase() === sku.toLowerCase())) {
-    throw new Error("Mã sản phẩm đã tồn tại");
-  }
-
-  const item: ProductRecord = {
-    id: randomUUID(),
-    slug,
-    name: input.name.trim(),
-    description: (input.description || "").trim(),
-    content: (input.content || input.description || "").trim(),
-    categoryId: input.categoryId,
-    subcategoryId: input.subcategoryId || null,
-    image: input.image || "",
-    sku,
-    price: (input.price || "Liên hệ").trim(),
-    isActive: input.isActive ?? true,
-    sortOrder: input.sortOrder ?? list.length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  list.push(item);
-  await writeJson("products.json", list);
-  return item;
+  const snakeInput = toSnake({ ...input, slug, name: input.name.trim() });
+  const { data, error } = await supabase.from('products').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function updateProduct(id: string, input: Partial<ProductRecord>) {
-  const list = await getProducts();
-  const idx = list.findIndex((p) => p.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy sản phẩm");
-  const slug = input.slug?.trim() || list[idx].slug;
-  if (list.some((p) => p.slug === slug && p.id !== id)) {
-    throw new Error("Slug sản phẩm đã tồn tại");
-  }
-  const nextSku =
-    input.sku !== undefined ? String(input.sku).trim() : list[idx].sku || "";
-  if (
-    nextSku &&
-    list.some(
-      (p) =>
-        p.id !== id &&
-        (p.sku || "").toLowerCase() === nextSku.toLowerCase()
-    )
-  ) {
-    throw new Error("Mã sản phẩm đã tồn tại");
-  }
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    slug,
-    name: input.name?.trim() ?? list[idx].name,
-    description: input.description?.trim() ?? list[idx].description,
-    content: input.content?.trim() ?? list[idx].content,
-    sku: nextSku,
-    image:
-      input.image !== undefined ? String(input.image) : list[idx].image || "",
-    subcategoryId:
-      input.subcategoryId === undefined
-        ? list[idx].subcategoryId
-        : input.subcategoryId || null,
-    updatedAt: now(),
-  };
-  await writeJson("products.json", list);
-  return list[idx];
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('products').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteProduct(id: string) {
-  const list = await getProducts();
-  const next = list.filter((p) => p.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy sản phẩm");
-  await writeJson("products.json", next);
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('products').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 export async function incrementProductView(id: string, ip: string) {
-  type ProductViewsRecord = Record<string, string[]>;
-  const viewsData = await readJson<ProductViewsRecord>("product-views.json", {});
-  const productIps = viewsData[id] || [];
-
-  if (productIps.includes(ip)) {
-    return false; // Already viewed
-  }
-
-  // Add IP and save
-  productIps.push(ip);
-  viewsData[id] = productIps;
-  await writeJson("product-views.json", viewsData);
-
-  // Increment product views
-  const list = await getProducts();
-  const idx = list.findIndex((p) => p.id === id);
-  if (idx >= 0) {
-    list[idx].views = (list[idx].views || 0) + 1;
-    await writeJson("products.json", list);
-  }
-
+  // Supabase implementation can use a dedicated views table or RPC
+  // For simplicity, we just increment the views column
+  const supabase = createServiceClient();
+  const { data: product, error: fetchErr } = await supabase.from('products').select('views').eq('id', id).maybeSingle();
+  if (fetchErr || !product) return false;
+  
+  const currentViews = product.views || 0;
+  await supabase.from('products').update({ views: currentViews + 1 }).eq('id', id);
   return true;
 }
 
 // ── News ──
-
-export async function getNews(includeDraft = true) {
-  const list = await readJson<NewsRecord[]>("news.json", []);
-  const filtered = includeDraft ? list : list.filter((n) => n.isPublished);
-  // Prefer sortOrder (listing scrape order) then date desc
-  return filtered.sort((a, b) => {
-    const so = (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999);
-    if (so !== 0) return so;
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
-}
-
-export async function getNewsById(id: string) {
-  return (await getNews(true)).find((n) => n.id === id) || null;
-}
-
-export async function getNewsBySlug(slug: string) {
-  return (
-    (await getNews(true)).find((n) => n.slug === slug && n.isPublished) || null
-  );
-}
-
-export async function createNews(
-  input: Partial<NewsRecord> & { title: string }
-) {
-  const list = await getNews(true);
-  const slug = input.slug?.trim() || slugify(input.title);
-  if (list.some((n) => n.slug === slug)) {
-    throw new Error("Slug tin tức đã tồn tại");
+export async function getNews(includeDraft = true): Promise<NewsRecord[]> {
+  const supabase = createServiceClient();
+  let query = supabase.from('news').select('*').order('sort_order', { ascending: true });
+  if (!includeDraft) {
+    query = query.eq('is_published', true);
   }
-  const item: NewsRecord = {
-    id: randomUUID(),
-    slug,
-    title: input.title.trim(),
-    excerpt: (input.excerpt || "").trim(),
-    content: (input.content || "").trim(),
-    date: input.date || now().slice(0, 10),
-    image: input.image || "",
-    isPublished: input.isPublished ?? true,
-    sortOrder: input.sortOrder ?? list.length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  list.push(item);
-  await writeJson("news.json", list);
-  return item;
+  const { data, error } = await query;
+  if (error) throw error;
+  return toCamel(data).map((n: any) => ({ ...n, date: n.publishedAt }));
+}
+
+export async function getNewsById(id: string): Promise<NewsRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('news').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const camel = toCamel(data);
+  camel.date = camel.publishedAt;
+  return camel;
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('news').select('*').eq('slug', slug).eq('is_published', true).maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const camel = toCamel(data);
+  camel.date = camel.publishedAt;
+  return camel;
+}
+
+export async function createNews(input: Partial<NewsRecord> & { title: string }) {
+  const supabase = createServiceClient();
+  const slug = input.slug?.trim() || slugify(input.title);
+  const snakeInput = toSnake({ ...input, slug, title: input.title.trim() });
+  if (snakeInput.date) {
+    snakeInput.published_at = snakeInput.date;
+    delete snakeInput.date;
+  }
+  const { data, error } = await supabase.from('news').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  const camel = toCamel(data);
+  camel.date = camel.publishedAt;
+  return camel;
 }
 
 export async function updateNews(id: string, input: Partial<NewsRecord>) {
-  const list = await getNews(true);
-  const idx = list.findIndex((n) => n.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy tin tức");
-  const slug = input.slug?.trim() || list[idx].slug;
-  if (list.some((n) => n.slug === slug && n.id !== id)) {
-    throw new Error("Slug tin tức đã tồn tại");
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  if (snakeInput.date) {
+    snakeInput.published_at = snakeInput.date;
+    delete snakeInput.date;
   }
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    slug,
-    title: input.title?.trim() ?? list[idx].title,
-    excerpt: input.excerpt?.trim() ?? list[idx].excerpt,
-    content: input.content?.trim() ?? list[idx].content,
-    updatedAt: now(),
-  };
-  await writeJson("news.json", list);
-  return list[idx];
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('news').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  const camel = toCamel(data);
+  camel.date = camel.publishedAt;
+  return camel;
 }
 
 export async function deleteNews(id: string) {
-  const list = await getNews(true);
-  const next = list.filter((n) => n.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy tin tức");
-  await writeJson("news.json", next);
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('news').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
-// ── Careers (Tuyển dụng) ──
-
-export async function getCareers(includeInactive = true) {
-  const list = await readJson<CareerRecord[]>("careers.json", []);
-  const filtered = includeInactive ? list : list.filter((j) => j.isActive);
-  return filtered.sort((a, b) => a.sortOrder - b.sortOrder);
-}
-
-export async function getCareerById(id: string) {
-  return (await getCareers(true)).find((j) => j.id === id) || null;
-}
-
-export async function getCareerBySlug(slug: string) {
-  return (
-    (await getCareers(true)).find((j) => j.slug === slug && j.isActive) || null
-  );
-}
-
-function parseRequirements(value: unknown): string[] {
-  if (Array.isArray(value)) {
-    return value.map((r) => String(r).trim()).filter(Boolean);
+// ── Careers ──
+export async function getCareers(includeInactive = true): Promise<CareerRecord[]> {
+  const supabase = createServiceClient();
+  let query = supabase.from('careers').select('*').order('sort_order', { ascending: true });
+  if (!includeInactive) {
+    query = query.eq('is_active', true);
   }
-  if (typeof value === "string") {
-    return value
-      .split("\n")
-      .map((r) => r.trim())
-      .filter(Boolean);
+  const { data, error } = await query;
+  if (error) {
+    console.warn("Careers table error", error.message);
+    return [];
   }
-  return [];
+  return toCamel(data);
 }
 
-export async function createCareer(
-  input: Partial<CareerRecord> & { title: string } & {
-    requirements?: string[] | string;
-  }
-) {
-  const list = await getCareers(true);
+export async function getCareerById(id: string): Promise<CareerRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('careers').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
+}
+
+export async function getCareerBySlug(slug: string): Promise<CareerRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('careers').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
+}
+
+export async function createCareer(input: Partial<CareerRecord> & { title: string }) {
+  const supabase = createServiceClient();
   const slug = input.slug?.trim() || slugify(input.title);
-  if (list.some((j) => j.slug === slug)) {
-    throw new Error("Slug tuyển dụng đã tồn tại");
-  }
-  const requirements = parseRequirements(input.requirements);
-  const item: CareerRecord = {
-    id: randomUUID(),
-    slug,
-    title: input.title.trim(),
-    location: (input.location || "Đà Nẵng").trim(),
-    type: (input.type || "Toàn thời gian").trim(),
-    salary: (input.salary || "Thỏa thuận").trim(),
-    description: (input.description || "").trim(),
-    requirements,
-    isActive: input.isActive ?? true,
-    sortOrder: input.sortOrder ?? list.length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  list.push(item);
-  await writeJson("careers.json", list);
-  return item;
+  const snakeInput = toSnake({ ...input, slug, title: input.title.trim() });
+  const { data, error } = await supabase.from('careers').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
-export async function updateCareer(
-  id: string,
-  input: Partial<CareerRecord> & { requirements?: string[] | string }
-) {
-  const list = await getCareers(true);
-  const idx = list.findIndex((j) => j.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy tin tuyển dụng");
-  const slug = input.slug?.trim() || list[idx].slug;
-  if (list.some((j) => j.slug === slug && j.id !== id)) {
-    throw new Error("Slug tuyển dụng đã tồn tại");
-  }
-  let requirements = list[idx].requirements;
-  if (input.requirements !== undefined) {
-    requirements = parseRequirements(input.requirements);
-  }
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    slug,
-    title: input.title?.trim() ?? list[idx].title,
-    location: input.location?.trim() ?? list[idx].location,
-    type: input.type?.trim() ?? list[idx].type,
-    salary: input.salary?.trim() ?? list[idx].salary,
-    description: input.description?.trim() ?? list[idx].description,
-    requirements,
-    updatedAt: now(),
-  };
-  await writeJson("careers.json", list);
-  return list[idx];
+export async function updateCareer(id: string, input: Partial<CareerRecord>) {
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('careers').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteCareer(id: string) {
-  const list = await getCareers(true);
-  const next = list.filter((j) => j.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy tin tuyển dụng");
-  await writeJson("careers.json", next);
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('careers').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
-// ── Contact messages ──
-
-export async function getContactMessages() {
-  const list = await readJson<ContactMessageRecord[]>("contact-messages.json", []);
-  // normalize legacy rows without type
-  return list
-    .map((m) => ({
-      ...m,
-      type: m.type === "career" ? ("career" as const) : ("contact" as const),
-      cvUrl: m.cvUrl || "",
-      cvFileName: m.cvFileName || "",
-    }))
-    .sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+// ── Contact Messages ──
+export async function getContactMessages(): Promise<ContactMessageRecord[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  return toCamel(data);
 }
 
-export async function getContactMessageById(id: string) {
-  return (await getContactMessages()).find((m) => m.id === id) || null;
+export async function getContactMessageById(id: string): Promise<ContactMessageRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('contact_messages').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
 export async function createContactMessage(
@@ -550,179 +328,83 @@ export async function createContactMessage(
     remoteId?: number | string | null;
   }
 ) {
-  const list = await getContactMessages();
-  const type = input.type === "career" ? "career" : "contact";
-  const item: ContactMessageRecord = {
-    id: randomUUID(),
-    name: (input.name || "").trim(),
-    phone: (input.phone || "").trim(),
-    email: (input.email || "").trim(),
-    subject: (input.subject || "").trim(),
-    content: (input.content || "").trim(),
-    type,
-    cvUrl: (input.cvUrl || "").trim(),
-    cvFileName: (input.cvFileName || "").trim(),
-    isRead: input.isRead ?? false,
-    createdAt: now(),
-    remoteId: input.remoteId ?? null,
-  };
-  if (!item.name) throw new Error("Họ tên là bắt buộc");
-  if (!item.phone) throw new Error("Số điện thoại là bắt buộc");
-  if (!item.content) throw new Error("Nội dung là bắt buộc");
-  if (type === "career" && !item.cvUrl) {
-    throw new Error("Vui lòng đính kèm file CV (PDF)");
-  }
-  list.unshift(item);
-  await writeJson("contact-messages.json", list);
-  return item;
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  const { data, error } = await supabase.from('contact_messages').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function updateContactMessage(
   id: string,
   input: Partial<Pick<ContactMessageRecord, "isRead" | "remoteId">>
 ) {
-  const list = await getContactMessages();
-  const idx = list.findIndex((m) => m.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy yêu cầu liên hệ");
-  list[idx] = { ...list[idx], ...input };
-  await writeJson("contact-messages.json", list);
-  return list[idx];
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  const { data, error } = await supabase.from('contact_messages').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteContactMessage(id: string) {
-  const list = await getContactMessages();
-  const next = list.filter((m) => m.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy yêu cầu liên hệ");
-  await writeJson("contact-messages.json", next);
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('contact_messages').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 export async function countUnreadContactMessages() {
-  const list = await getContactMessages();
-  return list.filter((m) => !m.isRead).length;
+  const supabase = createServiceClient();
+  const { count, error } = await supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+  if (error) throw error;
+  return count || 0;
 }
 
-// ── Hero banners ──
-
-const DEFAULT_BANNERS: BannerRecord[] = [
-  {
-    id: "default-1",
-    title: "Giải pháp bao bì chuyên nghiệp",
-    subtitle:
-      "Màng co PVC · PE · POF · PET · Màng phức hợp — chất lượng ổn định, giao hàng toàn quốc",
-    badge: "Thành Phát Bao Bì",
-    cta: "Xem sản phẩm",
-    href: "/san-pham",
-    image: "",
-    gradient: "from-brand-800 via-brand-600 to-brand-500",
-    isActive: true,
-    sortOrder: 0,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
-  },
-  {
-    id: "default-2",
-    title: "In màng co nhiệt logo thương hiệu",
-    subtitle:
-      "Nâng tầm nhận diện · Bảo vệ sản phẩm · Tăng giá trị trên kệ hàng",
-    badge: "In ấn branding",
-    cta: "Tư vấn ngay",
-    href: "/lien-he",
-    image: "",
-    gradient: "from-brand-800 via-brand-600 to-sky-500",
-    isActive: true,
-    sortOrder: 1,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
-  },
-  {
-    id: "default-3",
-    title: "Cung cấp màng co số lượng lớn",
-    subtitle:
-      "Giá cạnh tranh · Tư vấn chọn loại màng · Hỗ trợ doanh nghiệp sản xuất",
-    badge: "B2B wholesale",
-    cta: "Liên hệ báo giá",
-    href: "/lien-he",
-    image: "",
-    gradient: "from-teal-800 via-teal-600 to-emerald-500",
-    isActive: true,
-    sortOrder: 2,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-01-01T00:00:00.000Z",
-  },
-];
-
-export async function getBanners(includeInactive = true) {
-  const list = await readJson<BannerRecord[]>("banners.json", DEFAULT_BANNERS);
-  // seed file if empty
-  if (!list.length) {
-    await writeJson("banners.json", DEFAULT_BANNERS);
-    return DEFAULT_BANNERS.filter((b) => includeInactive || b.isActive).sort(
-      (a, b) => a.sortOrder - b.sortOrder
-    );
+// ── Banners ──
+export async function getBanners(includeInactive = true): Promise<BannerRecord[]> {
+  const supabase = createServiceClient();
+  let query = supabase.from('banners').select('*').order('sort_order', { ascending: true });
+  if (!includeInactive) {
+    query = query.eq('is_active', true);
   }
-  const filtered = includeInactive ? list : list.filter((b) => b.isActive);
-  return filtered.sort((a, b) => a.sortOrder - b.sortOrder);
+  const { data, error } = await query;
+  if (error) {
+    console.warn("Banners table error", error.message);
+    return [];
+  }
+  return toCamel(data);
 }
 
-export async function getBannerById(id: string) {
-  return (await getBanners(true)).find((b) => b.id === id) || null;
+export async function getBannerById(id: string): Promise<BannerRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('banners').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
 }
 
-export async function createBanner(
-  input: Partial<BannerRecord> & { title: string }
-) {
-  const list = await getBanners(true);
-  const item: BannerRecord = {
-    id: randomUUID(),
-    title: input.title.trim(),
-    subtitle: (input.subtitle || "").trim(),
-    badge: (input.badge || "").trim(),
-    cta: (input.cta || "Xem thêm").trim(),
-    href: (input.href || "/san-pham").trim() || "/san-pham",
-    image: (input.image || "").trim(),
-    gradient:
-      (input.gradient || "from-brand-800 via-brand-600 to-brand-500").trim(),
-    isActive: input.isActive ?? true,
-    sortOrder: input.sortOrder ?? list.length,
-    createdAt: now(),
-    updatedAt: now(),
-  };
-  if (!item.title) throw new Error("Tiêu đề banner là bắt buộc");
-  list.push(item);
-  await writeJson("banners.json", list);
-  return item;
+export async function createBanner(input: Partial<BannerRecord> & { title: string }) {
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  const { data, error } = await supabase.from('banners').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function updateBanner(id: string, input: Partial<BannerRecord>) {
-  const list = await getBanners(true);
-  const idx = list.findIndex((b) => b.id === id);
-  if (idx < 0) throw new Error("Không tìm thấy banner");
-  list[idx] = {
-    ...list[idx],
-    ...input,
-    title: input.title?.trim() ?? list[idx].title,
-    subtitle: input.subtitle?.trim() ?? list[idx].subtitle,
-    badge: input.badge?.trim() ?? list[idx].badge,
-    cta: input.cta?.trim() ?? list[idx].cta,
-    href: input.href?.trim() || list[idx].href,
-    image: input.image !== undefined ? String(input.image).trim() : list[idx].image,
-    gradient: input.gradient?.trim() || list[idx].gradient,
-    updatedAt: now(),
-  };
-  if (!list[idx].title) throw new Error("Tiêu đề banner là bắt buộc");
-  await writeJson("banners.json", list);
-  return list[idx];
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  snakeInput.updated_at = new Date().toISOString();
+  const { data, error } = await supabase.from('banners').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
 }
 
 export async function deleteBanner(id: string) {
-  const list = await getBanners(true);
-  const next = list.filter((b) => b.id !== id);
-  if (next.length === list.length) throw new Error("Không tìm thấy banner");
-  await writeJson("banners.json", next);
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('banners').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
-// ── Public helpers ──
-
+// ── Public Helpers ──
 export async function getCategoryTree(): Promise<CategoryTree[]> {
   const cats = await getCategories();
   const subs = await getSubcategories();
@@ -760,5 +442,3 @@ export async function findCategoryOrSub(slug: string) {
   }
   return null;
 }
-
-export { slugify };

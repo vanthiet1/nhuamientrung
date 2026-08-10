@@ -20,42 +20,6 @@ export const runtime = "nodejs";
 
 const MAX_CV_BYTES = 5 * 1024 * 1024; // 5MB
 
-async function insertSupabaseContact(payload: {
-  name: string;
-  phone: string;
-  email: string | null;
-  subject: string | null;
-  content: string;
-}): Promise<number | string | null> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-
-  const res = await fetch(`${url}/rest/v1/contact_messages`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      apikey: key,
-      "Content-Type": "application/json",
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    console.warn("[contact] supabase insert:", res.status, text.slice(0, 200));
-    return null;
-  }
-
-  const data = (await res.json().catch(() => null)) as
-    | { id?: number | string }[]
-    | { id?: number | string }
-    | null;
-  if (Array.isArray(data) && data[0]?.id != null) return data[0].id;
-  if (data && !Array.isArray(data) && data.id != null) return data.id;
-  return null;
-}
 
 function clientIp(request: Request): string {
   return (
@@ -227,25 +191,6 @@ export async function POST(request: Request) {
       subject ||
       (type === "career" ? "Ứng tuyển / Gửi CV" : "Yêu cầu liên hệ");
 
-    let remoteId: number | string | null = null;
-    try {
-      remoteId = await insertSupabaseContact({
-        name,
-        phone,
-        email: email || null,
-        subject: `[${type === "career" ? "Tuyển dụng" : "Liên hệ"}] ${finalSubject}`,
-        content:
-          type === "career" && cvUrl
-            ? `${content}\n\nCV: ${cvUrl}`
-            : content,
-      });
-    } catch (e) {
-      console.warn(
-        "[contact] supabase unavailable:",
-        e instanceof Error ? e.message : e
-      );
-    }
-
     const item = await createContactMessage({
       name,
       phone,
@@ -255,7 +200,6 @@ export async function POST(request: Request) {
       type,
       cvUrl,
       cvFileName,
-      remoteId,
     });
 
     return NextResponse.json({ ok: true, id: item.id, type }, { status: 201 });
