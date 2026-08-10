@@ -5,6 +5,7 @@ import { Phone } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
 import CategorySidebar from "@/components/CategorySidebar";
 import ProductCard from "@/components/ProductCard";
+import ProductGallery from "@/components/ProductGallery";
 import NewsCard from "@/components/NewsCard";
 import InternalLinks from "@/components/InternalLinks";
 import Pagination from "@/components/Pagination";
@@ -193,13 +194,13 @@ export default async function ProductOrCategoryPage({
 
         <section className="section container-home">
           <div className="grid gap-8 lg:grid-cols-4">
-            <div className="lg:col-span-1">
+            <div className="order-2 lg:order-1 lg:col-span-1">
               <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 [scrollbar-width:thin]">
                 <CategorySidebar categories={categories} activeSlug={slug} />
               </div>
             </div>
 
-            <div className="lg:col-span-3">
+            <div className="order-1 lg:order-2 lg:col-span-3">
               {description ? (
                 <p className="mb-5 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm leading-relaxed text-slate-700 sm:text-[15px]">
                   {description}
@@ -366,7 +367,7 @@ export default async function ProductOrCategoryPage({
 
       <section className="section container-home">
         <div className="grid gap-8 lg:grid-cols-4">
-          <div className="lg:col-span-1">
+          <div className="order-2 lg:order-1 lg:col-span-1">
             <div className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 lg:pb-4 [scrollbar-width:thin]">
               <CategorySidebar categories={categories} activeSlug={slug} />
               {sidebarProducts.length > 0 && (
@@ -398,73 +399,39 @@ export default async function ProductOrCategoryPage({
             </div>
           </div>
 
-          <div className="space-y-8 lg:col-span-3">
+          <div className="order-1 lg:order-2 space-y-8 lg:col-span-3">
             <article className="card overflow-hidden">
-              <div className="relative flex min-h-[261px] items-center justify-center overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 sm:min-h-[325px] md:min-h-[421px]">
-                {coverImage ? (
-                  <SafeImage
-                    src={coverImage}
-                    alt={`${title} - ${company.shortName}`}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 75vw"
-                    className="object-contain bg-white p-2 sm:p-3"
-                    fallbackClassName="bg-white"
-                    unoptimized
-                  />
-                ) : (
+              <ProductGallery
+                coverImage={coverImage}
+                images={product.images || []}
+                title={title}
+                companyShortName={company.shortName}
+                headerContent={
                   <>
-                    <div className="pointer-events-none absolute inset-0 bg-grid-soft opacity-20" />
-                    <p className="relative px-4 text-center text-2xl font-extrabold text-white sm:text-3xl">
+                    <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
                       {title}
-                    </p>
+                    </h1>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                      {sku && (
+                        <span className="font-semibold text-sky-600">
+                          Mã SP: {sku}
+                        </span>
+                      )}
+                      {product.price && (
+                        <span className="font-semibold text-brand-700">
+                          Giá: {product.price}
+                        </span>
+                      )}
+                    </div>
+
+                    {description && (
+                      <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800 sm:text-[15px]">
+                        {description}
+                      </p>
+                    )}
                   </>
-                )}
-              </div>
-              <div className="p-6 sm:p-8">
-                <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
-                  {title}
-                </h1>
-                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-                  {sku && (
-                    <span className="font-semibold text-sky-600">
-                      Mã SP: {sku}
-                    </span>
-                  )}
-                  {product.price && (
-                    <span className="font-semibold text-brand-700">
-                      Giá: {product.price}
-                    </span>
-                  )}
-                </div>
-
-                {description && (
-                  <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800 sm:text-[15px]">
-                    {description}
-                  </p>
-                )}
-
-                {product.images && product.images.length > 1 && (
-                  <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-                    {product.images.slice(0, 8).map((img, imgIdx) => (
-                      <div
-                        key={img}
-                        className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white"
-                      >
-                        <SafeImage
-                          src={img}
-                          alt={`${title} — ảnh ${imgIdx + 1}`}
-                          fill
-                          sizes="80px"
-                          className="object-contain p-1"
-                          fallbackClassName="bg-slate-50"
-                          unoptimized
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+                }
+              >
                 {content && content !== description && (
                   <div className="mt-6">
                     <h2 className="text-base font-extrabold text-slate-900 sm:text-lg">
@@ -514,7 +481,7 @@ export default async function ProductOrCategoryPage({
                     Form báo giá online
                   </Link>
                 </p>
-              </div>
+              </ProductGallery>
             </article>
 
             {sameTypeProducts.length > 0 && (

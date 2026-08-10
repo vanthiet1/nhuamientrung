@@ -100,10 +100,10 @@ export default async function ProductsPage({ searchParams }: Props) {
 
       <section className="section container-home">
         <div className="grid gap-8 lg:grid-cols-4">
-          <div className="lg:col-span-1">
+          <div className="order-2 lg:order-1 lg:col-span-1">
             <CategorySidebar categories={categories} />
           </div>
-          <div className="lg:col-span-3">
+          <div className="order-1 lg:order-2 lg:col-span-3">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
               <p className="text-slate-600">
                 Hiển thị{" "}
