@@ -15,16 +15,16 @@ const MD_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
 /** Keyword → internal path (order matters: more specific first) */
 const KEYWORD_ROUTES: { test: RegExp; href: string }[] = [
-  { test: /màng\s*co\s*pvc.*bọc\s*quà|bọc\s*quà.*pvc|giỏ\s*quà/i, href: "/san-pham/mang-co-pvc" },
-  { test: /màng\s*co\s*pe.*thực\s*phẩm|pe\s*cho\s*thực\s*phẩm|màng\s*co\s*pe/i, href: "/san-pham/mang-co-pe" },
-  { test: /màng\s*co\s*pof|pof/i, href: "/san-pham/mang-co-pof" },
-  { test: /màng\s*co\s*pet|pet/i, href: "/san-pham/mang-co-pet" },
-  { test: /in\s*nhiệt|in\s*màng\s*co|logo/i, href: "/san-pham/mang-co-in-nhiet" },
-  { test: /phức\s*hợp|túi\s*đựng|gạo/i, href: "/san-pham/mang-phuc-hop" },
-  { test: /opp|bopp/i, href: "/san-pham/mang-opp-mang-bopp" },
-  { test: /màng\s*co\s*pvc|pvc/i, href: "/san-pham/mang-co-pvc" },
+  { test: /màng\s*co\s*pvc.*bọc\s*quà|bọc\s*quà.*pvc|giỏ\s*quà/i, href: "/danh-muc/mang-co-pvc" },
+  { test: /màng\s*co\s*pe.*thực\s*phẩm|pe\s*cho\s*thực\s*phẩm|màng\s*co\s*pe/i, href: "/danh-muc/mang-co-pe" },
+  { test: /màng\s*co\s*pof|pof/i, href: "/danh-muc/mang-co-pof" },
+  { test: /màng\s*co\s*pet|pet/i, href: "/danh-muc/mang-co-pet" },
+  { test: /in\s*nhiệt|in\s*màng\s*co|logo/i, href: "/danh-muc/mang-co-in-nhiet" },
+  { test: /phức\s*hợp|túi\s*đựng|gạo/i, href: "/danh-muc/mang-phuc-hop" },
+  { test: /opp|bopp/i, href: "/danh-muc/mang-opp-mang-bopp" },
+  { test: /màng\s*co\s*pvc|pvc/i, href: "/danh-muc/mang-co-pvc" },
   { test: /báo\s*giá|liên\s*hệ|tư\s*vấn/i, href: "/lien-he" },
-  { test: /màng\s*co|bao\s*bì|đóng\s*gói/i, href: "/san-pham" },
+  { test: /màng\s*co|bao\s*bì|đóng\s*gói/i, href: "/danh-muc" },
 ];
 
 export function resolveInternalHref(text: string): string {
@@ -32,7 +32,7 @@ export function resolveInternalHref(text: string): string {
   for (const rule of KEYWORD_ROUTES) {
     if (rule.test.test(t)) return rule.href;
   }
-  return "/san-pham";
+  return "/danh-muc";
 }
 
 export function extractMarkdownLinks(content: string): ContentLink[] {

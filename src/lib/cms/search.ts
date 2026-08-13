@@ -94,7 +94,7 @@ export async function searchSite(query: string, limit = 40): Promise<SearchHit[]
         slug: c.slug,
         title: c.name,
         description: c.description,
-        href: `/san-pham/${c.slug}`,
+        href: `/danh-muc/${c.slug}`,
         _score: sc + 2,
       });
     }
@@ -109,7 +109,7 @@ export async function searchSite(query: string, limit = 40): Promise<SearchHit[]
         slug: s.slug,
         title: s.name,
         description: s.description,
-        href: `/san-pham/${s.slug}`,
+        href: `/danh-muc/${s.slug}`,
         _score: sc + 1,
       });
     }

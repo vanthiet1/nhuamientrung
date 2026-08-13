@@ -1,9 +1,12 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
 import ImageUpload from "@/components/admin/ImageUpload";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import type {
   CategoryRecord,
   ProductRecord,
@@ -68,6 +71,7 @@ export default function EditProductPage() {
       setLoading(false);
       return;
     }
+    toast.success("Đã lưu thành công!");
     router.push("/admin/products");
     router.refresh();
   }
@@ -76,7 +80,7 @@ export default function EditProductPage() {
   if (!item) return <p className="text-red-600">{error}</p>;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-4xl">
       <h1 className="mb-4 text-xl font-extrabold text-slate-900 sm:mb-6 sm:text-2xl">
         Sửa sản phẩm
       </h1>
@@ -144,14 +148,11 @@ export default function EditProductPage() {
             rows={3}
           />
         </Field>
-        <Field label="Nội dung chi tiết">
-          <textarea
-            name="content"
-            defaultValue={item.content}
-            className={textareaClass}
-            rows={8}
-          />
-        </Field>
+        <RichTextEditor
+          name="content"
+          label="Nội dung chi tiết"
+          defaultValue={item.content}
+        />
         <ImageUpload
           name="image"
           folder="catalog"

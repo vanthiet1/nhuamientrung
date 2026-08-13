@@ -36,12 +36,16 @@ export default function SafeImage({
       <div
         className={
           fill
-            ? `absolute inset-0 ${fallbackClassName}`
-            : `block h-full w-full min-h-[2.5rem] min-w-[2.5rem] ${fallbackClassName}`
+            ? `absolute inset-0 flex items-center justify-center border border-dashed border-slate-200 ${fallbackClassName}`
+            : `flex items-center justify-center h-full w-full min-h-[4rem] min-w-[4rem] border border-dashed border-slate-200 ${fallbackClassName}`
         }
         aria-hidden
         role="presentation"
-      />
+      >
+        <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      </div>
     );
   }
 
@@ -82,10 +86,14 @@ export function SafeImg({
   if (!ok) {
     return (
       <div
-        className={`${className} ${fallbackClassName}`.trim()}
+        className={`flex items-center justify-center border border-dashed border-slate-200 ${className} ${fallbackClassName}`.trim()}
         aria-hidden
         role="presentation"
-      />
+      >
+        <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      </div>
     );
   }
 

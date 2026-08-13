@@ -12,7 +12,7 @@ import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 
 export const dynamic = "force-dynamic";
 
-const PER_PAGE = 12;
+const PER_PAGE = 8;
 
 type Props = {
   searchParams: Promise<{ page?: string }>;
@@ -21,12 +21,12 @@ type Props = {
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
-  const baseTitle = "Sản phẩm bao bì đóng gói Đà Nẵng";
+  const baseTitle = "Danh mục sản phẩm bao bì đóng gói Đà Nẵng";
   const title = page > 1 ? `${baseTitle} · Trang ${page}` : baseTitle;
   const description =
     "Danh mục bao bì & shrink film PVC, PE, POF, PET, OPP-BOPP tại Đà Nẵng. Xem đầy đủ sản phẩm và nhận báo giá nhanh.";
   const canonical =
-    page > 1 ? `${siteUrl}/san-pham?page=${page}` : `${siteUrl}/san-pham`;
+    page > 1 ? `${siteUrl}/danh-muc?page=${page}` : `${siteUrl}/danh-muc`;
 
   return {
     title,
@@ -52,7 +52,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default async function ProductsPage({ searchParams }: Props) {
+export default async function CategoriesPage({ searchParams }: Props) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
 
@@ -70,7 +70,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Sản phẩm bao bì – màng co nhiệt",
+    name: "Danh mục sản phẩm bao bì – màng co nhiệt",
     numberOfItems: total,
     itemListElement: paged.map((p, i) => ({
       "@type": "ListItem",
@@ -86,14 +86,14 @@ export default async function ProductsPage({ searchParams }: Props) {
         data={[
           breadcrumbJsonLd([
             { name: "Trang chủ", url: siteUrl },
-            { name: "Sản phẩm", url: `${siteUrl}/san-pham` },
+            { name: "Danh mục", url: `${siteUrl}/danh-muc` },
           ]),
           itemListJsonLd,
         ]}
       />
       <PageBanner
-        title="Sản phẩm"
-        breadcrumbs={[{ label: "Sản phẩm" }]}
+        title="Danh Mục"
+        breadcrumbs={[{ label: "Danh Mục" }]}
         subtitle="Toàn bộ màng co nhiệt & bao bì đóng gói — báo giá nhanh tại Đà Nẵng"
         wide
       />
@@ -140,6 +140,7 @@ export default async function ProductsPage({ searchParams }: Props) {
                       sku: p.sku,
                     }}
                     index={start + i}
+                    isProduct={true}
                   />
                 ))}
               </div>
@@ -148,7 +149,7 @@ export default async function ProductsPage({ searchParams }: Props) {
             <Pagination
               page={safePage}
               totalPages={totalPages}
-              basePath="/san-pham"
+              basePath="/danh-muc"
               param="page"
             />
           </div>

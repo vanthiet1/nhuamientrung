@@ -8,6 +8,8 @@ import type { CategoryTree } from "@/lib/cms/types";
 const ROUTE_LABELS: Record<string, string> = {
   "gioi-thieu": "Giới thiệu",
   "san-pham": "Sản phẩm",
+  "tat-ca-san-pham": "Tất cả sản phẩm",
+  "danh-muc": "Danh Mục",
   "tin-tuc": "Tin tức",
   "tuyen-dung": "Tuyển dụng",
   "lien-he": "Liên hệ",
@@ -71,13 +73,13 @@ export function buildBreadcrumbs(
       continue;
     }
 
-    // Product / category slug under /san-pham/...
-    if (segments[0] === "san-pham") {
+    // Product / category slug under /danh-muc/...
+    if (segments[0] === "danh-muc" || segments[0] === "san-pham") {
       const found = findCategoryLabel(categories, seg);
       if (found) {
         // Insert parent category when viewing a child slug directly
         if (found.parent) {
-          const parentPath = `/san-pham/${found.parent.slug}`;
+          const parentPath = `/danh-muc/${found.parent.slug}`;
           const hasParent = crumbs.some(
             (c) => c.href === parentPath || c.label === found.parent!.name
           );
@@ -116,7 +118,11 @@ export default function BreadcrumbBar({
 }) {
   const pathname = usePathname();
 
-  if (pathname === "/" || pathname.startsWith("/admin")) {
+  if (
+    pathname === "/" ||
+    pathname.startsWith("/admin") ||
+    (!items && (pathname.startsWith("/san-pham") || pathname.startsWith("/tat-ca-san-pham")))
+  ) {
     return null;
   }
 

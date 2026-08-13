@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
@@ -15,12 +15,34 @@ export default function HeaderSearch({
 }) {
   const router = useRouter();
   const [q, setQ] = useState(defaultValue);
+  const initialRender = useRef(true);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      const query = q.trim();
+      if (query) {
+        router.push(`/tim-kiem?q=${encodeURIComponent(query)}`);
+      } else {
+        router.push(`/tim-kiem`);
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(handler);
+  }, [q, router]);
 
   function submit(e?: FormEvent) {
     e?.preventDefault();
     const query = q.trim();
-    if (!query) return;
-    router.push(`/tim-kiem?q=${encodeURIComponent(query)}`);
+    if (query) {
+      router.push(`/tim-kiem?q=${encodeURIComponent(query)}`);
+    } else {
+      router.push(`/tim-kiem`);
+    }
     onSubmitExtra?.();
   }
 

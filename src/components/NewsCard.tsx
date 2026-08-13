@@ -57,7 +57,14 @@ export default function NewsCard({
             {item.title}
           </h3>
           <p className="mt-2 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-500">
-            {item.excerpt}
+            {item.excerpt
+              ? item.excerpt
+                  .replace(/rn/g, " ")
+                  .replace(/<[^>]*>?/gm, "")
+                  .replace(/&nbsp;/g, " ")
+                  .replace(/&amp;/g, "&")
+                  .trim()
+              : ""}
           </p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-brand-600 group-hover:text-accent-600">
             Đọc bài: {item.title.slice(0, 42)}
@@ -102,7 +109,14 @@ export default function NewsCard({
           {item.title}
         </h3>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 sm:text-[13px]">
-          {item.excerpt}
+          {item.excerpt
+            ? item.excerpt
+                .replace(/rn/g, " ")
+                .replace(/<[^>]*>?/gm, "")
+                .replace(/&nbsp;/g, " ")
+                .replace(/&amp;/g, "&")
+                .trim()
+            : ""}
         </p>
       </div>
     </Link>

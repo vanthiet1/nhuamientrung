@@ -1,10 +1,12 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
 import ImageUpload from "@/components/admin/ImageUpload";
-import ContentLinksEditor from "@/components/admin/ContentLinksEditor";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import type { NewsRecord } from "@/lib/cms/types";
 
 export default function EditNewsPage() {
@@ -47,6 +49,7 @@ export default function EditNewsPage() {
       setLoading(false);
       return;
     }
+    toast.success("Đã lưu thành công!");
     router.push("/admin/news");
     router.refresh();
   }
@@ -55,7 +58,7 @@ export default function EditNewsPage() {
   if (!item) return <p className="text-red-600">{error}</p>;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-7xl">
       <h1 className="mb-4 text-xl font-extrabold text-slate-900 sm:mb-6 sm:text-2xl">
         Sửa tin tức
       </h1>
@@ -69,15 +72,15 @@ export default function EditNewsPage() {
         <Field label="Slug">
           <input name="slug" defaultValue={item.slug} className={inputClass} />
         </Field>
-        <Field label="Mô tả ngắn">
-          <textarea name="excerpt" defaultValue={item.excerpt} className={textareaClass} rows={3} />
-        </Field>
-        <ContentLinksEditor
+        <RichTextEditor
+          name="excerpt"
+          label="Mô tả ngắn"
+          defaultValue={item.excerpt}
+        />
+        <RichTextEditor
           name="content"
           label="Nội dung"
           defaultValue={item.content}
-          rows={14}
-          hint="Link nội bộ dạng [chữ hiển thị](/san-pham/...). Sửa URL ở khung bên dưới."
         />
         <Field label="Ngày đăng">
           <input name="date" type="date" defaultValue={item.date} className={inputClass} />

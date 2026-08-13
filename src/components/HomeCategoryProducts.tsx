@@ -57,13 +57,17 @@ export default function HomeCategoryProducts({
                   {group.category.name}
                 </h3>
                 {group.category.description && (
-                  <p className="mt-1.5 max-w-3xl text-sm text-slate-500 line-clamp-2 sm:text-[15px]">
-                    {group.category.description}
+                  <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-500 sm:text-[15px]">
+                    {group.category.description
+                      .replace(/<[^>]*>?/gm, "")
+                      .replace(/&nbsp;/g, " ")
+                      .replace(/&amp;/g, "&")
+                      .trim()}
                   </p>
                 )}
               </div>
               <Link
-                href={`/san-pham/${group.category.slug}`}
+                href={`/danh-muc/${group.category.slug}`}
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 transition hover:text-sky-600"
                 aria-label={`Xem tất cả sản phẩm ${group.category.name}`}
               >
@@ -89,6 +93,7 @@ export default function HomeCategoryProducts({
                     sku: p.sku,
                   }}
                   index={gi * PRODUCTS_PER_CATEGORY + i}
+                  isProduct={true}
                 />
               ))}
             </div>
@@ -96,7 +101,7 @@ export default function HomeCategoryProducts({
             {group.products.length > PRODUCTS_PER_CATEGORY && (
               <div className="mt-5 text-center">
                 <Link
-                  href={`/san-pham/${group.category.slug}`}
+                  href={`/danh-muc/${group.category.slug}`}
                   className="btn-outline !text-xs"
                   aria-label={`Xem thêm sản phẩm trong ${group.category.name}`}
                 >

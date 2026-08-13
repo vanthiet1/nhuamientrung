@@ -3,7 +3,11 @@ type Crumb = { label: string; href?: string };
 /** Ẩn mô tả rác từ scrape (hotline, v.v.) */
 function sanitizeSubtitle(text?: string) {
   if (!text?.trim()) return undefined;
-  const t = text.trim();
+  const cleanHtml = text
+    .replace(/<[^>]*>?/gm, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&");
+  const t = cleanHtml.trim();
   if (/hot\s*line/i.test(t) && /\d{8,}/.test(t.replace(/\s/g, ""))) return undefined;
   if (/^hot\s*line/i.test(t)) return undefined;
   if (/0918\s*79\s*55\s*25/i.test(t) && t.length < 80) return undefined;

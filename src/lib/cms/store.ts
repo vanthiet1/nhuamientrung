@@ -85,6 +85,13 @@ export async function updateCategory(id: string, input: Partial<CategoryRecord>)
 
 export async function deleteCategory(id: string) {
   const supabase = createServiceClient();
+  
+  const { count: subCount } = await supabase.from('subcategories').select('*', { count: 'exact', head: true }).eq('category_id', id);
+  if (subCount && subCount > 0) throw new Error('Không thể xóa danh mục này vì vẫn còn danh mục con.');
+
+  const { count: prodCount } = await supabase.from('products').select('*', { count: 'exact', head: true }).eq('category_id', id);
+  if (prodCount && prodCount > 0) throw new Error('Không thể xóa danh mục này vì vẫn còn sản phẩm.');
+
   const { error } = await supabase.from('categories').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }
@@ -124,6 +131,10 @@ export async function updateSubcategory(id: string, input: Partial<SubcategoryRe
 
 export async function deleteSubcategory(id: string) {
   const supabase = createServiceClient();
+
+  const { count: prodCount } = await supabase.from('products').select('*', { count: 'exact', head: true }).eq('subcategory_id', id);
+  if (prodCount && prodCount > 0) throw new Error('Không thể xóa danh mục con này vì vẫn còn sản phẩm.');
+
   const { error } = await supabase.from('subcategories').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }

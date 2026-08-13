@@ -56,8 +56,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function renderContent(content: string) {
+  if (!content) return null;
+
+  // If content is already HTML (from RichTextEditor), render it directly
+  const hasHtml = /<\/[a-z]+>|<[a-z]+\s*\/>/i.test(content) || /<[a-z]+[^>]*>/i.test(content);
+  if (hasHtml) {
+    return (
+      <div 
+        className="prose prose-slate max-w-none prose-img:rounded-xl prose-img:m-0 prose-a:text-brand-600 hover:prose-a:text-sky-600 [&>h2]:mt-6 [&>h2]:mb-2 [&>h2]:text-lg [&>h2]:font-bold [&>h2]:text-slate-900"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+
+  // Clean up broken carriage returns ("rn") from old scraped text
+  const cleanStr = content
+    .replace(/rnrn/g, '\n\n')
+    .replace(/rn-/g, '\n-')
+    .replace(/rn([A-ZĐÀ-Ỹ])/g, '\n$1')
+    .replace(/rn$/, '\n');
+
   // Auto-link plain "Xem thêm" + keep existing markdown links
-  const enhanced = enhanceContentForDisplay(content);
+  const enhanced = enhanceContentForDisplay(cleanStr);
   const blocks = enhanced.trim().split(/\n\n+/);
   return blocks.map((block, i) => {
     const plainHeading = block.replace(/\*\*/g, "").trim();

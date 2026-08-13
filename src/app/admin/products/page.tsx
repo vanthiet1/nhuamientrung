@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import CrudTable from "@/components/admin/CrudTable";
 import type {
   CategoryRecord,
@@ -146,9 +147,10 @@ export default function AdminProductsPage() {
         });
         if (!res.ok) {
           const d = await res.json();
-          alert(d.error || "Xóa thất bại");
+          toast.error(d.error || "Xóa thất bại");
           return;
         }
+        toast.success("Xóa thành công!");
         await load();
         router.refresh();
       }}

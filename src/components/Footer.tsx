@@ -86,7 +86,8 @@ export default function Footer({
               {[
                 { href: "/", label: "Trang chủ" },
                 { href: "/gioi-thieu", label: "Giới thiệu" },
-                { href: "/san-pham", label: "Sản phẩm" },
+                { href: "/danh-muc", label: "Danh mục" },
+                { href: "/tat-ca-san-pham", label: "Tất cả sản phẩm" },
                 { href: "/tin-tuc", label: "Tin tức" },
                 { href: "/tuyen-dung", label: "Tuyển dụng" },
                 { href: "/lien-he", label: "Liên hệ" },
@@ -113,7 +114,7 @@ export default function Footer({
               {categories.slice(0, 7).map((cat) => (
                 <li key={cat.slug}>
                   <Link
-                    href={`/san-pham/${cat.slug}`}
+                    href={`/danh-muc/${cat.slug}`}
                     className="text-slate-400 transition hover:text-accent-400"
                   >
                     {cat.name}

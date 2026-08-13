@@ -29,7 +29,7 @@ export default function CategorySidebar({
               className="group/cat relative"
             >
               <Link
-                href={`/san-pham/${cat.slug}`}
+                href={`/danh-muc/${cat.slug}`}
                 className={`flex items-center justify-between gap-2 px-4 py-3 text-sm font-bold transition ${
                   isActive
                     ? "bg-accent-50 text-accent-600"
@@ -62,7 +62,7 @@ export default function CategorySidebar({
                     return (
                       <li key={child.slug}>
                         <Link
-                          href={`/san-pham/${child.slug}`}
+                          href={`/danh-muc/${child.slug}`}
                           className={`block border-l-2 py-2 pl-6 pr-4 text-xs transition ${
                             subActive
                               ? "border-accent-500 bg-white font-bold text-accent-600"

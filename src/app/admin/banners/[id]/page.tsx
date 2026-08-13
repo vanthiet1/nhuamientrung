@@ -1,5 +1,7 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -76,6 +78,7 @@ export default function EditBannerPage() {
       setLoading(false);
       return;
     }
+    toast.success("Đã lưu thành công!");
     router.push("/admin/banners");
     router.refresh();
   }

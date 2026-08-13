@@ -13,7 +13,8 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 const navLinks = [
   { href: "/", label: "Trang chủ" },
   { href: "/gioi-thieu", label: "Giới thiệu" },
-  { href: "/san-pham", label: "Sản phẩm", hasDropdown: true },
+  { href: "/danh-muc", label: "Danh mục", hasDropdown: true },
+  { href: "/tat-ca-san-pham", label: "Tất cả sản phẩm" },
   { href: "/tin-tuc", label: "Tin tức" },
   { href: "/tuyen-dung", label: "Tuyển dụng" },
   { href: "/lien-he", label: "Liên hệ" },
@@ -93,7 +94,7 @@ export default function Header({
                 >
                   <Link
                     href={link.href}
-                    className={`inline-flex items-center gap-1 rounded-lg px-3.5 py-2 text-[13px] font-bold uppercase tracking-wide transition-colors ${
+                    className={`inline-flex items-center gap-1 rounded-lg px-2 lg:px-3 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
                       isActive(link.href)
                         ? "bg-accent-50 text-accent-600"
                         : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
@@ -123,37 +124,34 @@ export default function Header({
                           Màng co & bao bì đóng gói
                         </p>
                       </div>
-                      <div className="grid grid-cols-2 gap-1.5 p-3.5 sm:gap-2 sm:p-4">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-6 p-6 sm:grid-cols-3">
                         {categories.map((cat) => (
-                          <div
-                            key={cat.slug}
-                            className="rounded-xl p-3.5 transition hover:bg-brand-50 sm:p-4"
-                          >
+                          <div key={cat.slug} className="group">
                             <Link
-                              href={`/san-pham/${cat.slug}`}
-                              className="text-base font-extrabold leading-snug text-brand-700 hover:text-accent-600 sm:text-[1.05rem]"
+                              href={`/danh-muc/${cat.slug}`}
+                              className="block text-[15px] font-extrabold leading-snug text-slate-800 transition-colors hover:text-brand-600"
                             >
                               {cat.name}
                             </Link>
-                            {cat.children && (
-                              <ul className="mt-2 space-y-1.5">
-                                {cat.children.slice(0, 3).map((child) => (
+                            {cat.children && cat.children.length > 0 && (
+                              <ul className="mt-2.5 flex flex-col gap-2">
+                                {cat.children.slice(0, 4).map((child) => (
                                   <li key={child.slug}>
                                     <Link
-                                      href={`/san-pham/${child.slug}`}
-                                      className="block text-sm leading-snug text-slate-600 hover:text-accent-600 sm:text-[0.95rem]"
+                                      href={`/danh-muc/${child.slug}`}
+                                      className="block text-[13.5px] text-slate-600 transition-colors hover:text-brand-600"
                                     >
-                                      • {child.name}
+                                      {child.name}
                                     </Link>
                                   </li>
                                 ))}
-                                {cat.children.length > 3 && (
+                                {cat.children.length > 4 && (
                                   <li>
                                     <Link
-                                      href={`/san-pham/${cat.slug}`}
-                                      className="text-sm font-bold text-accent-600 hover:underline"
+                                      href={`/danh-muc/${cat.slug}`}
+                                      className="inline-block text-[13px] font-semibold text-brand-600 hover:underline"
                                     >
-                                      + Xem thêm ({cat.children.length - 3})
+                                      Xem thêm ({cat.children.length - 4})
                                     </Link>
                                   </li>
                                 )}
@@ -164,7 +162,7 @@ export default function Header({
                       </div>
                       <div className="border-t border-slate-100 bg-slate-50 px-5 py-3.5 text-center">
                         <Link
-                          href="/san-pham"
+                          href="/danh-muc"
                           className="text-base font-bold text-accent-600 hover:underline"
                         >
                           Xem tất cả sản phẩm →
@@ -177,7 +175,7 @@ export default function Header({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`rounded-lg px-3.5 py-2 text-[13px] font-bold uppercase tracking-wide transition-colors ${
+                  className={`rounded-lg px-2 lg:px-3 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
                     isActive(link.href)
                       ? "bg-accent-50 text-accent-600"
                       : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
@@ -276,7 +274,7 @@ export default function Header({
                     {openParent === "products" && (
                       <div className="mb-2 ml-2 space-y-2 border-l-2 border-brand-200 pl-3">
                         <Link
-                          href="/san-pham"
+                          href="/danh-muc"
                           className="block py-1.5 text-sm font-bold text-accent-600"
                         >
                           Tất cả sản phẩm
@@ -284,7 +282,7 @@ export default function Header({
                         {categories.map((cat) => (
                           <div key={cat.slug}>
                             <Link
-                              href={`/san-pham/${cat.slug}`}
+                              href={`/danh-muc/${cat.slug}`}
                               className="block py-1 text-sm font-bold text-brand-700"
                             >
                               {cat.name}
@@ -292,7 +290,7 @@ export default function Header({
                             {cat.children?.map((child) => (
                               <Link
                                 key={child.slug}
-                                href={`/san-pham/${child.slug}`}
+                                href={`/danh-muc/${child.slug}`}
                                 className="block py-0.5 pl-3 text-xs text-slate-500"
                               >
                                 {child.name}

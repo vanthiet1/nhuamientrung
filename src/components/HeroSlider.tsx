@@ -15,7 +15,7 @@ const FALLBACK: Pick<
       "Màng co PVC · PE · POF · PET · Màng phức hợp — chất lượng ổn định, giao hàng toàn quốc",
     badge: "Thành Phát Bao Bì",
     cta: "Xem sản phẩm",
-    href: "/san-pham",
+    href: "/danh-muc",
     image: "",
     gradient: "from-brand-800 via-brand-600 to-brand-500",
   },
@@ -173,7 +173,7 @@ export default function HeroSlider({
             )}
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={slide.href || "/san-pham"}
+                href={slide.href || "/danh-muc"}
                 className="btn-primary"
                 aria-label={slide.cta || "Xem danh mục sản phẩm bao bì"}
               >

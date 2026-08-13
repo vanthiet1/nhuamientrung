@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import AdminShell from "@/components/admin/AdminShell";
+import Toaster from "@/components/admin/Toaster";
 import { ADMIN_COOKIE, verifySessionToken } from "@/lib/admin/auth";
 
 export const metadata: Metadata = {
@@ -27,5 +28,10 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  return <AdminShell username={session.username}>{children}</AdminShell>;
+  return (
+    <>
+      <Toaster />
+      <AdminShell username={session.username}>{children}</AdminShell>
+    </>
+  );
 }

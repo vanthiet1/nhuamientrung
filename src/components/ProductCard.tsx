@@ -26,11 +26,13 @@ export default function ProductCard({
   category,
   index = 0,
   size = "md",
+  isProduct = false,
 }: {
   category: CardItem;
   index?: number;
   /** lg = card to hơn (trang chủ) */
   size?: "md" | "lg";
+  isProduct?: boolean;
 }) {
   const theme = themes[index % themes.length];
   const lg = size === "lg";
@@ -41,9 +43,11 @@ export default function ProductCard({
     .map((w) => w[0])
     .join("")
     .toUpperCase();
+    
+  const href = isProduct ? `/san-pham/${category.slug}` : `/danh-muc/${category.slug}`;
 
   return (
-    <Link href={`/san-pham/${category.slug}`} className="card-hover group block overflow-hidden">
+    <Link href={href} className="card-hover group block overflow-hidden">
       <div
         className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${theme.gradient} ${
           lg ? "h-[213px] sm:h-[229px] md:h-[245px]" : "h-[181px] sm:h-[197px]"
@@ -101,7 +105,14 @@ export default function ProductCard({
             lg ? "text-sm sm:text-[15px]" : "text-sm"
           }`}
         >
-          {category.description}
+          {category.description
+            ? category.description
+                .replace(/rn/g, " ")
+                .replace(/<[^>]*>?/gm, "")
+                .replace(/&nbsp;/g, " ")
+                .replace(/&amp;/g, "&")
+                .trim()
+            : ""}
         </p>
         <div className={`flex items-center justify-between gap-2 ${lg ? "mt-4" : "mt-3"}`}>
           {category.children && category.children.length > 0 ? (

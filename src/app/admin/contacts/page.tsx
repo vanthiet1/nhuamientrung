@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   Mail,
   Phone,
@@ -90,9 +91,10 @@ export default function AdminContactsPage() {
     const res = await fetch(`/api/admin/contacts/${id}`, { method: "DELETE" });
     if (!res.ok) {
       const d = await res.json();
-      alert(d.error || "Xóa thất bại");
+      toast.error(d.error || "Xóa thất bại");
       return;
     }
+    toast.success("Xóa thành công!");
     setRows((prev) => prev.filter((r) => r.id !== id));
     notifyContactsUpdated();
     router.refresh();

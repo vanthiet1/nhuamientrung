@@ -247,7 +247,8 @@ body {
 
 .container-page {
   margin-inline: auto;
-  max-width: 80rem;
+  width: 100%;
+  max-width: 90rem;
   padding-inline: 1rem;
 }
 
@@ -274,6 +275,14 @@ body {
 }
 
 @media (min-width: 1024px) {
+  .container-home {
+    width: 90%;
+    max-width: 90%;
+    padding-inline: 0;
+  }
+}
+
+@media (min-width: 1536px) {
   .container-home {
     width: 80%;
     max-width: 80%;
@@ -438,4 +447,21 @@ html.translated-rtl body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+}
+
+/* Quill Editor Alignment Overrides */
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-align-justify {
+  text-align: justify;
+}
+.ql-align-center img {
+  margin: 0 auto;
+}
+.ql-align-right img {
+  margin-left: auto;
 }

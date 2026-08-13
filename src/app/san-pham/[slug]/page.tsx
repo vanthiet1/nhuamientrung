@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Phone, Eye } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
+import BreadcrumbBar from "@/components/BreadcrumbBar";
+import FaqAccordion from "@/components/FaqAccordion";
 import CategorySidebar from "@/components/CategorySidebar";
 import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/ProductGallery";
@@ -12,13 +14,10 @@ import InternalLinks from "@/components/InternalLinks";
 import Pagination from "@/components/Pagination";
 import ProductContactBox from "@/components/ProductContactBox";
 import ProductContent from "@/components/ProductContent";
-import SafeImage from "@/components/SafeImage";
 import JsonLd from "@/components/JsonLd";
 import { createClient } from "@/lib/supabase/server";
 import {
-  loadAllCategorySlugs,
   loadCategories,
-  loadCategoryLookup,
   loadNews,
   loadProductBySlug,
   loadProducts,
@@ -29,57 +28,28 @@ import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
 
 export const dynamic = "force-dynamic";
 
-const LIST_PER_PAGE = 12;
-const RELATED_PER_PAGE = 9;
+const RELATED_PER_PAGE = 8;
 const NEWS_PER_PAGE = 6;
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ sp?: string; np?: string; page?: string }>;
+  searchParams: Promise<{ sp?: string; np?: string }>;
 };
-
-export async function generateStaticParams() {
-  try {
-    const [catSlugs, products] = await Promise.all([
-      loadAllCategorySlugs(),
-      loadProducts(),
-    ]);
-    const slugs = new Set([
-      ...catSlugs,
-      ...products.map((p) => p.slug),
-    ]);
-    return [...slugs].map((slug) => ({ slug }));
-  } catch {
-    return [];
-  }
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  // Ưu tiên danh mục / danh mục con hơn sản phẩm (tránh nhầm trang list)
-  const found = await loadCategoryLookup(slug);
-  const product = found ? null : await loadProductBySlug(slug);
+  const product = await loadProductBySlug(slug);
 
-  const name =
-    found?.type === "category"
-      ? found.category.name
-      : found?.type === "subcategory"
-        ? found.subcategory.name
-        : product?.name || "Sản phẩm";
+  if (!product) {
+    return { title: "Không tìm thấy sản phẩm" };
+  }
 
-  const description =
-    found?.type === "category"
-      ? found.category.description
-      : found?.type === "subcategory"
-        ? found.subcategory.description
-        : product?.description || `Sản phẩm bao bì ${company.shortName}`;
-
-  const title = found
-    ? `${name} | Danh mục bao bì Đà Nẵng`
-    : `${name} | Mua tại Đà Nẵng`;
-  const keywords = productKeywords(name, product?.sku || undefined);
+  const name = product.name;
+  const description = product.description || `Sản phẩm bao bì ${company.shortName}`;
+  const title = `${name} | Mua tại Đà Nẵng`;
+  const keywords = productKeywords(name, product.sku || undefined);
   const url = `${siteUrl}/san-pham/${slug}`;
-  const image = product?.image || "/logo.png";
+  const image = product.image || "/logo.png";
 
   return {
     title,
@@ -103,166 +73,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductOrCategoryPage({
+export default async function ProductPage({
   params,
   searchParams,
 }: Props) {
   const { slug } = await params;
   const sp = await searchParams;
-  const listPage = Math.max(1, parseInt(sp.page || sp.sp || "1", 10) || 1);
   const productPage = Math.max(1, parseInt(sp.sp || "1", 10) || 1);
   const newsPage = Math.max(1, parseInt(sp.np || "1", 10) || 1);
 
-  const categories = await loadCategories();
-  const found = await loadCategoryLookup(slug);
-  // Chỉ lấy product khi KHÔNG phải danh mục / danh mục con
-  const product = found ? null : await loadProductBySlug(slug);
-  const newsItems = await loadNews();
-
-  if (!found && !product) notFound();
-
-  const isListing =
-    found?.type === "category" || found?.type === "subcategory";
-
-  // ─── Trang DANH MỤC / DANH MỤC CON: grid sản phẩm ───
-  if (isListing && found) {
-    const isCategory = found.type === "category";
-    const title = isCategory
-      ? found.category.name
-      : found.subcategory.name;
-    const description = isCategory
-      ? found.category.description
-      : found.subcategory.description;
-
-    const breadcrumbs: { label: string; href?: string }[] = [
-      { label: "Sản phẩm", href: "/san-pham" },
-    ];
-    if (!isCategory && found.parent) {
-      breadcrumbs.push({
-        label: found.parent.name,
-        href: `/san-pham/${found.parent.slug}`,
-      });
-    }
-    breadcrumbs.push({ label: title });
-
-    const listProducts = isCategory
-      ? await loadProducts({ categoryId: found.category.id })
-      : await loadProducts({ subcategoryId: found.subcategory.id });
-
-    const total = listProducts.length;
-    const totalPages = Math.max(1, Math.ceil(total / LIST_PER_PAGE));
-    const safePage = Math.min(listPage, totalPages);
-    const start = (safePage - 1) * LIST_PER_PAGE;
-    const paged = listProducts.slice(start, start + LIST_PER_PAGE);
-
-    const jsonLdList: Record<string, unknown>[] = [
-      breadcrumbJsonLd([
-        { name: "Trang chủ", url: siteUrl },
-        { name: "Sản phẩm", url: `${siteUrl}/san-pham` },
-        ...(found.type === "subcategory" && found.parent
-          ? [
-              {
-                name: found.parent.name,
-                url: `${siteUrl}/san-pham/${found.parent.slug}`,
-              },
-            ]
-          : []),
-        { name: title, url: `${siteUrl}/san-pham/${slug}` },
-      ]),
-      {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: title,
-        numberOfItems: total,
-        itemListElement: paged.map((p, i) => ({
-          "@type": "ListItem",
-          position: start + i + 1,
-          name: p.name,
-          url: `${siteUrl}/san-pham/${p.slug}`,
-        })),
-      },
-    ];
-
-    return (
-      <>
-        <JsonLd data={jsonLdList} />
-        <PageBanner
-          title={title}
-          breadcrumbs={breadcrumbs}
-          subtitle={description}
-          wide
-          asH1
-        />
-
-        <section className="section container-home">
-          <div className="grid gap-8 lg:grid-cols-4">
-            <div className="order-2 lg:order-1 lg:col-span-1">
-              <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 [scrollbar-width:thin]">
-                <CategorySidebar categories={categories} activeSlug={slug} />
-              </div>
-            </div>
-
-            <div className="order-1 lg:order-2 lg:col-span-3">
-              {description ? (
-                <p className="mb-5 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm leading-relaxed text-slate-700 sm:text-[15px]">
-                  {description}
-                </p>
-              ) : null}
-
-              <div className="mb-5 flex flex-wrap items-end justify-between gap-2">
-                <h2 className="text-lg font-extrabold text-slate-900 sm:text-xl">
-                  Sản phẩm trong {title}
-                </h2>
-                <p className="text-sm text-slate-500">
-                  {total === 0
-                    ? "0 sản phẩm"
-                    : `Hiển thị ${start + 1}–${Math.min(start + LIST_PER_PAGE, total)} / ${total}`}
-                  {totalPages > 1 && ` · Trang ${safePage}/${totalPages}`}
-                </p>
-              </div>
-
-              {paged.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-14 text-center text-slate-500">
-                  Chưa có sản phẩm trong danh mục này.
-                  <div className="mt-4">
-                    <Link href="/san-pham" className="btn-outline !text-xs">
-                      Xem tất cả sản phẩm
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {paged.map((p, i) => (
-                    <ProductCard
-                      key={p.id}
-                      category={{
-                        slug: p.slug,
-                        name: p.name,
-                        description: p.description,
-                        image: p.image,
-                        sku: p.sku,
-                      }}
-                      index={start + i}
-                    />
-                  ))}
-                </div>
-              )}
-
-              <Pagination
-                page={safePage}
-                totalPages={totalPages}
-                basePath={`/san-pham/${slug}`}
-                param="page"
-              />
-            </div>
-          </div>
-        </section>
-      </>
-    );
-  }
-
-  // ─── Trang CHI TIẾT SẢN PHẨM ───
+  const product = await loadProductBySlug(slug);
   if (!product) notFound();
+
+  const categories = await loadCategories();
+  const newsItems = await loadNews();
 
   let viewCount = product.views || 0;
   try {
@@ -276,30 +100,36 @@ export default async function ProductOrCategoryPage({
   }
 
   const title = product.name;
-  const description = product.description;
+  const description = product.description 
+    ? product.description.replace(/rnrn/g, '<br /><br />').replace(/rn-/g, '<br />-').replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1').replace(/rn$/, '').replace(/rn/g, ' ')
+    : "";
   const content = product.content || product.description;
   const coverImage = product.image || "";
   const sku = product.sku || "";
 
-  // Breadcrumb: Sản phẩm → (danh mục) → (danh mục con) → SP
-  const breadcrumbs: { label: string; href?: string }[] = [
-    { label: "Sản phẩm", href: "/san-pham" },
-  ];
+  // Breadcrumb: Trang chủ → Tên danh mục → SP
+  const breadcrumbs: { label: string; href?: string }[] = [];
   if (product.categoryId) {
     const cat = categories.find((c) => c.id === product.categoryId);
     if (cat) {
-      breadcrumbs.push({
-        label: cat.name,
-        href: `/san-pham/${cat.slug}`,
-      });
       if (product.subcategoryId && cat.children) {
         const sub = cat.children.find((s) => s.id === product.subcategoryId);
         if (sub) {
           breadcrumbs.push({
             label: sub.name,
-            href: `/san-pham/${sub.slug}`,
+            href: `/danh-muc/${sub.slug}`,
+          });
+        } else {
+          breadcrumbs.push({
+            label: cat.name,
+            href: `/danh-muc/${cat.slug}`,
           });
         }
+      } else {
+        breadcrumbs.push({
+          label: cat.name,
+          href: `/danh-muc/${cat.slug}`,
+        });
       }
     }
   }
@@ -348,7 +178,6 @@ export default async function ProductOrCategoryPage({
   const jsonLdList: Record<string, unknown>[] = [
     breadcrumbJsonLd([
       { name: "Trang chủ", url: siteUrl },
-      { name: "Sản phẩm", url: `${siteUrl}/san-pham` },
       ...breadcrumbs
         .filter((b) => b.href)
         .map((b) => ({
@@ -367,9 +196,25 @@ export default async function ProductOrCategoryPage({
     }),
   ];
 
+  const productFaqItems = [
+    {
+      question: `Sản phẩm ${product.name} này dùng để làm gì?`,
+      answer: `Sản phẩm ${product.name} thường được ứng dụng rộng rãi trong việc đóng gói bao bì chuyên nghiệp. Nếu bạn cần bọc kín, tạo tính thẩm mỹ hoặc bảo vệ hàng hóa khỏi bụi bẩn, đây là lựa chọn tối ưu tại Bao Bì Thành Phát.`
+    },
+    {
+      question: "Có an toàn khi bọc trực tiếp thực phẩm không?",
+      answer: "Tùy thuộc vào vật liệu. Ví dụ màng co POF và màng ghép phức hợp được đánh giá rất an toàn khi dùng cho ngành thực phẩm, bánh kẹo. Liên hệ ngay Hotline của Thành Phát để được tư vấn chất liệu chuẩn Food Grade phù hợp nhất cho sản phẩm của bạn."
+    },
+    {
+      question: `Công ty có hỗ trợ in logo thương hiệu lên ${product.name} không?`,
+      answer: "Có! Bao Bì Thành Phát hỗ trợ in ấn logo, thông tin thương hiệu trực tiếp lên bề mặt vật liệu với công nghệ in ống đồng chất lượng cao, mực in sắc nét không phai, đáp ứng các tiêu chuẩn xuất khẩu."
+    }
+  ];
+
   return (
     <>
       <JsonLd data={jsonLdList} />
+      <BreadcrumbBar items={breadcrumbs} />
       <PageBanner
         title={title}
         breadcrumbs={breadcrumbs}
@@ -382,7 +227,7 @@ export default async function ProductOrCategoryPage({
         <div className="grid gap-8 lg:grid-cols-4">
           <div className="order-2 lg:order-1 lg:col-span-1">
             <div className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1 lg:pb-4 [scrollbar-width:thin]">
-              <CategorySidebar categories={categories} activeSlug={slug} />
+              <CategorySidebar categories={categories} />
               {sidebarProducts.length > 0 && (
                 <InternalLinks
                   title="Sản phẩm cùng loại"
@@ -442,9 +287,10 @@ export default async function ProductOrCategoryPage({
                     </div>
 
                     {description && (
-                      <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800 sm:text-[15px]">
-                        {description}
-                      </p>
+                      <div 
+                        className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800 sm:text-[15px] [&_p]:mb-2 [&_p:last-child]:mb-0 [&_h2]:text-base [&_h2]:font-bold [&_h3]:text-sm [&_h3]:font-bold"
+                        dangerouslySetInnerHTML={{ __html: description }}
+                      />
                     )}
                   </>
                 }
@@ -485,7 +331,7 @@ export default async function ProductOrCategoryPage({
                   <strong>bao bì đóng gói Đà Nẵng</strong> — giao hàng toàn
                   quốc.{" "}
                   <Link
-                    href="/san-pham"
+                    href="/danh-muc"
                     className="font-semibold text-brand-600 hover:underline"
                   >
                     Danh mục bao bì Thành Phát
@@ -526,6 +372,7 @@ export default async function ProductOrCategoryPage({
                         sku: p.sku,
                       }}
                       index={i}
+                      isProduct={true}
                     />
                   ))}
                 </div>
@@ -583,6 +430,10 @@ export default async function ProductOrCategoryPage({
             )}
           </div>
         </div>
+      </section>
+
+      <section className="bg-slate-50 border-t border-slate-200">
+        <FaqAccordion items={productFaqItems} title={`Câu hỏi thường gặp về ${product.name}`} />
       </section>
     </>
   );

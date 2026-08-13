@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Search } from "lucide-react";
 import { useConfirm } from "@/components/admin/ConfirmDialog";
 
 export type Column<T> = {
@@ -24,6 +25,7 @@ export default function CrudTable<T extends { id: string }>({
   emptyText = "Chưa có dữ liệu",
   basePath,
   deleteMessage = "Bạn chắc chắn muốn xóa mục này? Thao tác không thể hoàn tác.",
+  searchKey,
 }: {
   title: string;
   description?: string;
@@ -36,9 +38,25 @@ export default function CrudTable<T extends { id: string }>({
   /** Override edit path base, default = createHref without /new */
   basePath?: string;
   deleteMessage?: string;
+  searchKey?: (row: T) => string;
 }) {
   const confirm = useConfirm();
+  const [searchQuery, setSearchQuery] = useState("");
   const editBase = basePath || createHref.replace(/\/new$/, "");
+
+  const filteredRows = useMemo(() => {
+    if (!searchQuery.trim()) return rows;
+    const q = searchQuery.toLowerCase();
+    return rows.filter((row) => {
+      if (searchKey) return searchKey(row).toLowerCase().includes(q);
+      return Object.values(row).some(
+        (val) =>
+          val &&
+          (typeof val === "string" || typeof val === "number") &&
+          String(val).toLowerCase().includes(q)
+      );
+    });
+  }, [rows, searchQuery, searchKey]);
 
   async function handleDelete(id: string) {
     const ok = await confirm({
@@ -63,23 +81,35 @@ export default function CrudTable<T extends { id: string }>({
             <p className="mt-1 text-sm text-slate-500">{description}</p>
           )}
         </div>
-        <Link
-          href={createHref}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow hover:bg-brand-700 sm:w-auto"
-        >
-          <Plus className="h-4 w-4" />
-          {createLabel}
-        </Link>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Tìm kiếm..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 py-2 pl-9 pr-4 text-sm outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:w-64"
+            />
+          </div>
+          <Link
+            href={createHref}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow hover:bg-brand-700 sm:w-auto sm:py-2.5"
+          >
+            <Plus className="h-4 w-4" />
+            {createLabel}
+          </Link>
+        </div>
       </div>
 
       {/* Mobile card list */}
       <div className="space-y-3 md:hidden">
-        {rows.length === 0 && (
+        {filteredRows.length === 0 && (
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-400 shadow-sm">
             {emptyText}
           </div>
         )}
-        {rows.map((row) => {
+        {filteredRows.map((row) => {
           const mobileCols = columns.filter((c) => !c.hideOnMobile);
           const primary = mobileCols[0] || columns[0];
           const rest = mobileCols.slice(1);
@@ -146,7 +176,7 @@ export default function CrudTable<T extends { id: string }>({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {rows.length === 0 && (
+              {filteredRows.length === 0 && (
                 <tr>
                   <td
                     colSpan={columns.length + 1}
@@ -156,7 +186,7 @@ export default function CrudTable<T extends { id: string }>({
                   </td>
                 </tr>
               )}
-              {rows.map((row) => (
+              {filteredRows.map((row) => (
                 <tr key={row.id} className="hover:bg-slate-50/80">
                   {columns.map((c) => (
                     <td

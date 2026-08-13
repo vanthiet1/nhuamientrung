@@ -14,6 +14,7 @@ import HomeNewsScroll from "@/components/HomeNewsScroll";
 import PartnersSlider from "@/components/PartnersSlider";
 import CategorySidebar from "@/components/CategorySidebar";
 import SectionHeading from "@/components/ui/SectionHeading";
+import FaqAccordion from "@/components/FaqAccordion";
 import { company } from "@/lib/data/company";
 import { partners } from "@/lib/data/partners";
 import {
@@ -212,6 +213,34 @@ export default async function HomePage({ searchParams }: Props) {
           />
         </section>
       )}
+
+      <section className="bg-white border-t border-slate-100">
+        <FaqAccordion
+          title="Câu hỏi thường gặp về Bao Bì Thành Phát"
+          items={[
+            {
+              question: "Bao bì Thành Phát hoạt động ở đâu và có giao hàng toàn quốc không?",
+              answer: "Xưởng sản xuất và văn phòng chính của chúng tôi đặt tại Đà Nẵng. Chúng tôi hỗ trợ giao hàng toàn quốc (đặc biệt các tỉnh miền Trung - Tây Nguyên) với thời gian nhanh chóng, thông qua các chành xe và đơn vị vận chuyển uy tín."
+            },
+            {
+              question: "Công ty có xưởng sản xuất trực tiếp không hay là thương mại?",
+              answer: "Thành Phát tự hào sở hữu xưởng sản xuất và gia công trực tiếp không qua trung gian. Do đó, chúng tôi luôn đảm bảo mức giá cạnh tranh nhất và kiểm soát chặt chẽ chất lượng từng lô hàng màng co xuất xưởng."
+            },
+            {
+              question: "Tôi có thể yêu cầu gửi mẫu dùng thử trước khi đặt số lượng lớn không?",
+              answer: "Hoàn toàn được. Chúng tôi luôn khuyến khích khách hàng test mẫu màng co thực tế trên sản phẩm của mình để chọn được kích thước, độ dày và chất liệu phù hợp nhất. Liên hệ ngay Hotline để nhận mẫu miễn phí."
+            },
+            {
+              question: "Thành Phát có cung cấp hóa đơn VAT không?",
+              answer: "Có. Chúng tôi cung cấp đầy đủ hóa đơn chứng từ hợp lệ (Hóa đơn điện tử VAT) cho các doanh nghiệp, công ty, xưởng sản xuất theo đúng quy định của pháp luật."
+            },
+            {
+              question: "Công ty có hỗ trợ máy khò nhiệt hoặc máy rút màng co không?",
+              answer: "Bên cạnh việc cung cấp màng co, chúng tôi còn tư vấn kỹ thuật và hỗ trợ khách hàng tìm mua/sử dụng các loại máy khò màng co cầm tay, máy co màng tự động phù hợp với quy mô sản xuất của bạn."
+            }
+          ]}
+        />
+      </section>
 
       <section className="relative overflow-hidden bg-gradient-to-r from-brand-700 via-brand-600 to-sky-500">
         <div className="pointer-events-none absolute inset-0 bg-grid-soft opacity-20" />

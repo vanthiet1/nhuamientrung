@@ -39,7 +39,16 @@ type Block =
   | { type: "paragraph"; text: string };
 
 function parseContent(content: string): Block[] {
-  const lines = content.split("\n");
+  const cleanStr = content
+    .replace(/\[caption[^\]]*\]/g, "")
+    .replace(/\[\/caption\]/g, "")
+    .replace(/(?:rn){2,}/g, "\n\n")
+    .replace(/rn-/g, "\n-")
+    .replace(/rn([A-ZĐÀ-Ỹ0-9])/g, "\n$1")
+    .replace(/rn$/, "\n")
+    .replace(/rn/g, " ");
+
+  const lines = cleanStr.split("\n");
   const blocks: Block[] = [];
   let i = 0;
 
@@ -254,6 +263,28 @@ function TableWrap({
 
 export default function ProductContent({ content }: { content: string }) {
   if (!content?.trim()) return null;
+
+  // Simple heuristic: if it contains HTML tags, render directly.
+  const hasHtml = /<\/[a-z]+>|<[a-z]+\s*\/>/i.test(content) || /<[a-z]+[^>]*>/i.test(content);
+
+  if (hasHtml) {
+    // Cleanup old scraped artifacts like rn, rnrn, and WordPress shortcodes
+    const cleanStr = content
+      .replace(/(?:rn){2,}/g, "<br /><br />") // multiple rn -> double break
+      .replace(/rn-/g, "<br />-")
+      .replace(/rn([A-ZĐÀ-Ỹ0-9])/g, "<br />$1")
+      .replace(/rn$/, "<br />")
+      .replace(/rn/g, " ") // any leftover rn -> space
+      .replace(/\[caption[^\]]*\]/g, "")
+      .replace(/\[\/caption\]/g, "");
+
+    return (
+      <div 
+        className="product-content mt-6 text-sm leading-relaxed text-slate-600 sm:text-[15px] prose prose-slate max-w-none prose-img:rounded-xl prose-img:m-0 [&>h2]:text-base [&>h2]:font-extrabold [&>h2]:text-slate-900 [&>h2]:sm:text-lg [&>h3]:text-base [&>h3]:font-bold [&>h3]:text-slate-900"
+        dangerouslySetInnerHTML={{ __html: cleanStr }} 
+      />
+    );
+  }
 
   const blocks = parseContent(content);
 

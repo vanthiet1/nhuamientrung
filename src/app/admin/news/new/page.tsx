@@ -1,10 +1,12 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
 import ImageUpload from "@/components/admin/ImageUpload";
-import ContentLinksEditor from "@/components/admin/ContentLinksEditor";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { slugify } from "@/lib/slugify";
 
 export default function NewNewsPage() {
@@ -39,6 +41,7 @@ export default function NewNewsPage() {
       setLoading(false);
       return;
     }
+    toast.success("Đã lưu thành công!");
     router.push("/admin/news");
     router.refresh();
   }
@@ -46,7 +49,7 @@ export default function NewNewsPage() {
   const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-7xl">
       <h1 className="mb-4 text-xl font-extrabold text-slate-900 sm:mb-6 sm:text-2xl">
         Thêm tin tức
       </h1>
@@ -98,10 +101,11 @@ export default function NewNewsPage() {
             </button>
           )}
         </Field>
-        <Field label="Mô tả ngắn">
-          <textarea name="excerpt" className={textareaClass} rows={3} />
-        </Field>
-        <ContentLinksEditor name="content" label="Nội dung" rows={12} />
+        <RichTextEditor
+          name="excerpt"
+          label="Mô tả ngắn"
+        />
+        <RichTextEditor name="content" label="Nội dung" />
         <Field label="Ngày đăng">
           <input name="date" type="date" defaultValue={today} className={inputClass} />
         </Field>

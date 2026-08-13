@@ -48,6 +48,9 @@ create table public.products (
   content text not null default '',
   sku text not null default '',
   image text not null default '',
+  price text not null default 'Liên hệ',
+  views int,
+  images jsonb not null default '[]'::jsonb,
   source_url text not null default '',
   sort_order int not null default 0,
   is_active boolean not null default true,
@@ -57,6 +60,8 @@ create table public.products (
 create index products_category_id_idx on public.products(category_id);
 create index products_subcategory_id_idx on public.products(subcategory_id);
 create index products_is_active_idx on public.products(is_active);
+create unique index products_sku_unique_nonempty_idx on public.products (lower(sku)) where sku <> '';
+comment on column public.products.sku is 'Mã sản phẩm (SKU)';
 
 create table public.news (
   id uuid primary key default gen_random_uuid(),

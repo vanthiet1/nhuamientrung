@@ -1,5 +1,7 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
@@ -30,6 +32,7 @@ export default function NewCategoryPage() {
       setLoading(false);
       return;
     }
+    toast.success("Đã lưu thành công!");
     router.push("/admin/categories");
     router.refresh();
   }
