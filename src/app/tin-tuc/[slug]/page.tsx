@@ -212,7 +212,7 @@ export default async function NewsDetailPage({ params }: Props) {
           <svg className="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           <Link href="/tin-tuc" className="font-medium text-slate-600 transition hover:text-brand-600">Tin tức</Link>
           <svg className="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-          <span className="truncate font-semibold text-brand-600 max-w-[200px] sm:max-w-xs">{item.title}</span>
+          <span className="font-semibold text-brand-600">{item.title}</span>
         </nav>
       </div>
 

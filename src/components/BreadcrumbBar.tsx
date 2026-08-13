@@ -154,13 +154,13 @@ export default function BreadcrumbBar({
               {c.href && !isLast ? (
                 <Link
                   href={c.href}
-                  className="truncate font-medium text-slate-600 transition hover:text-brand-600"
+                  className="font-medium text-slate-600 transition hover:text-brand-600"
                 >
                   {c.label}
                 </Link>
               ) : (
                 <span
-                  className="truncate font-semibold text-brand-700"
+                  className="font-semibold text-brand-700"
                   aria-current="page"
                 >
                   {c.label}

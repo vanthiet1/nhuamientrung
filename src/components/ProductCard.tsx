@@ -48,7 +48,7 @@ export default function ProductCard({
   const href = isProduct ? `/san-pham/${category.slug}` : `/danh-muc/${category.slug}`;
 
   return (
-    <Link href={href} className="card-hover group block overflow-hidden">
+    <Link href={href} className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/60 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-brand-500/50">
       <div
         className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${theme.gradient} ${
           lg ? "h-[213px] sm:h-[229px] md:h-[245px]" : "h-[181px] sm:h-[197px]"
@@ -60,15 +60,15 @@ export default function ProductCard({
             alt={`${category.name}${category.sku ? ` — mã ${category.sku}` : ""} — Bao Bì Thành Phát`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition duration-300 group-hover:scale-105"
+            className="object-cover transition duration-500 group-hover:scale-110"
             fallbackClassName="bg-white"
             unoptimized
           />
         ) : (
           <>
             <div className="pointer-events-none absolute inset-0 opacity-30">
-              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full border-8 border-white/40" />
-              <div className="absolute -bottom-6 -left-6 h-20 w-20 rounded-full border-4 border-white/30" />
+              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full border-8 border-white/40 transition-transform duration-500 group-hover:scale-125" />
+              <div className="absolute -bottom-6 -left-6 h-20 w-20 rounded-full border-4 border-white/30 transition-transform duration-500 group-hover:scale-150" />
             </div>
             <span
               className={`relative font-black tracking-tight text-white/90 drop-shadow-sm ${
@@ -79,14 +79,14 @@ export default function ProductCard({
             </span>
           </>
         )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <span className="absolute right-3 top-3 rounded-full bg-white/90 p-1.5 text-brand-700 opacity-0 shadow transition group-hover:opacity-100">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 transition duration-300 group-hover:opacity-40" />
+        <span className="absolute right-3 top-3 rounded-full bg-white p-2 text-brand-600 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 group-hover:shadow-brand-500/25">
           <ArrowUpRight className={lg ? "h-5 w-5" : "h-4 w-4"} />
         </span>
       </div>
       <div className={lg ? "p-5 sm:p-6" : "p-4 sm:p-5"}>
         <h3
-          className={`font-bold text-slate-900 transition group-hover:text-brand-600 ${
+          className={`font-bold text-slate-900 transition-colors group-hover:text-brand-600 ${
             lg ? "text-base leading-snug sm:text-lg" : "text-sm sm:text-base"
           }`}
         >
@@ -114,18 +114,22 @@ export default function ProductCard({
                 .trim()
             : ""}
         </p>
-        <div className={`flex items-center gap-2 ${lg ? "mt-4" : "mt-3"}`}>
-          {category.children && category.children.length > 0 && (
+        <div className={`flex items-center gap-2 ${lg ? "mt-5" : "mt-4"}`}>
+          {category.children && category.children.length > 0 ? (
             <span
               className={`rounded-full font-bold ${theme.soft} ${
-                lg ? "px-3 py-1 text-xs" : "px-2.5 py-0.5 text-[11px]"
+                lg ? "px-3 py-1.5 text-xs" : "px-2.5 py-1 text-[11px]"
               }`}
             >
               {category.children.length} danh mục con
             </span>
+          ) : (
+            <span className={`inline-flex items-center justify-center rounded-xl border-2 border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600 transition-all duration-300 group-hover:border-brand-200 group-hover:bg-brand-50 group-hover:text-brand-700`}>
+              Nhận báo giá
+            </span>
           )}
           <span
-            className={`ml-auto font-bold text-brand-600 transition group-hover:text-sky-600 ${
+            className={`ml-auto font-bold text-slate-400 transition-colors group-hover:text-brand-600 ${
               lg ? "text-sm sm:text-base" : "text-sm"
             }`}
           >

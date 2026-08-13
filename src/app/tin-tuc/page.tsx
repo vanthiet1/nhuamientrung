@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import NewsCard from "@/components/NewsCard";
 import EmptyState from "@/components/EmptyState";
+import Pagination from "@/components/Pagination";
 import { loadNews } from "@/lib/data/public";
 
 export const dynamic = "force-dynamic";
@@ -21,9 +22,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function NewsPage() {
+type Props = {
+  searchParams: Promise<{ page?: string }>;
+};
+
+const PER_PAGE = 8;
+
+export default async function NewsPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+
   const newsItems = await loadNews();
   const [featured, ...rest] = newsItems;
+
+  const topNews = rest.slice(0, 4);
+  const otherNews = rest.slice(4);
+
+  const total = otherNews.length;
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  const safePage = Math.min(page, Math.max(1, totalPages));
+  const start = (safePage - 1) * PER_PAGE;
+  const pagedOtherNews = otherNews.slice(start, start + PER_PAGE);
 
   return (
     <>
@@ -43,21 +62,31 @@ export default async function NewsPage() {
                 <NewsCard item={featured} featured />
               </div>
               <div className="flex flex-col gap-3 lg:col-span-3">
-                {rest.slice(0, 4).map((item) => (
+                {topNews.map((item) => (
                   <NewsCard key={item.slug} item={item} />
                 ))}
               </div>
             </div>
 
-            {rest.length > 4 && (
-              <div className="mt-12">
+            {otherNews.length > 0 && (
+              <div className="mt-12" id="bai-viet-khac">
                 <h2 className="mb-5 text-xl font-extrabold text-slate-900">
                   Bài viết khác
                 </h2>
-                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {rest.slice(4).map((item) => (
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {pagedOtherNews.map((item) => (
                     <NewsCard key={item.slug} item={item} featured />
                   ))}
+                </div>
+                
+                <div className="mt-8">
+                  <Pagination 
+                    page={safePage} 
+                    totalPages={totalPages} 
+                    basePath="/tin-tuc" 
+                    param="page" 
+                    hash="bai-viet-khac" 
+                  />
                 </div>
               </div>
             )}

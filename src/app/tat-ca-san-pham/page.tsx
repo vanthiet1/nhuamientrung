@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageBanner from "@/components/PageBanner";
+import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import Pagination from "@/components/Pagination";
 import EmptyState from "@/components/EmptyState";
@@ -10,13 +10,15 @@ import { company } from "@/lib/data/company";
 import { primaryKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import BreadcrumbBar from "@/components/BreadcrumbBar";
+import ProductsClientTools from "@/components/ProductsClientTools";
+import { ArrowRight, ChevronRight, PackageSearch } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-const PER_PAGE = 8;
+const PER_PAGE = 12; // Tăng lên 12 cho chẵn 3 cột hoặc 4 cột
 
 type Props = {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; category?: string; sort?: string }>;
 };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -56,17 +58,58 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function ProductsPage({ searchParams }: Props) {
   const sp = await searchParams;
   const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+  const q = (sp.q || "").toLowerCase();
+  const catSlug = sp.category || "";
+  const sort = sp.sort || "newest";
 
-  const [categories, products] = await Promise.all([
+  const [categories, allProducts] = await Promise.all([
     loadCategories(),
     loadProducts(),
   ]);
 
-  const total = products.length;
+  // Map to flat categories for Sidebar
+  const catStats = categories.flatMap((c) => {
+    const list = [{ name: c.name, slug: c.slug, count: 0 }];
+    if (c.children) {
+      c.children.forEach(child => list.push({ name: child.name, slug: child.slug, count: 0 }));
+    }
+    return list;
+  });
+
+  // Calculate counts
+  allProducts.forEach(p => {
+    const cat = catStats.find(c => c.slug === p.category_slug);
+    if (cat) cat.count++;
+  });
+
+  const activeCategories = catStats.filter(c => c.count > 0).sort((a, b) => b.count - a.count);
+
+  // Filter products
+  let filtered = allProducts;
+  if (catSlug) {
+    filtered = filtered.filter(p => p.category_slug === catSlug);
+  }
+  if (q) {
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      (p.sku && p.sku.toLowerCase().includes(q))
+    );
+  }
+
+  // Sort products
+  if (sort === "name_asc") {
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sort === "name_desc") {
+    filtered.sort((a, b) => b.name.localeCompare(a.name));
+  } else {
+    // "newest" is default (usually they come ordered from DB by created_at desc)
+  }
+
+  const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * PER_PAGE;
-  const paged = products.slice(start, start + PER_PAGE);
+  const paged = filtered.slice(start, start + PER_PAGE);
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -82,7 +125,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   };
 
   const breadcrumbs = [
-    { label: "Sản phẩm", href: "/tat-ca-san-pham" },
+    { label: "Tất cả sản phẩm", href: "/tat-ca-san-pham" },
   ];
 
   const faqItems = [
@@ -116,63 +159,99 @@ export default async function ProductsPage({ searchParams }: Props) {
         ]}
       />
       
-      <BreadcrumbBar items={breadcrumbs} />
-      
-      <PageBanner
-        title="Tất Cả Sản Phẩm"
-        subtitle="Danh sách toàn bộ sản phẩm màng co & bao bì đóng gói"
-        wide
-      />
-
-      <section className="bg-white pb-6 pt-10 sm:pb-8 sm:pt-12">
-        <div className="container-page prose prose-slate max-w-4xl prose-headings:text-slate-900 prose-a:text-brand-600">
-          <h2 className="text-2xl font-extrabold sm:text-3xl">Giải pháp bao bì màng co chất lượng tại Đà Nẵng</h2>
-          <p>
-            Bao Bì Thành Phát tự hào là đơn vị hàng đầu tại khu vực Miền Trung - Tây Nguyên chuyên cung cấp các giải pháp đóng gói toàn diện. Danh mục sản phẩm đa dạng của chúng tôi bao gồm <strong>màng co PVC, PE, POF, PET</strong>, và các loại bao bì màng ghép phức hợp cao cấp.
+      {/* Hero Section Redesign */}
+      <section className="relative overflow-hidden bg-slate-900 pb-16 pt-20 lg:pb-24 lg:pt-28">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+          <div className="absolute -left-[20%] top-0 h-96 w-96 rounded-full bg-brand-500/30 blur-[120px]"></div>
+          <div className="absolute -right-[20%] bottom-0 h-96 w-96 rounded-full bg-sky-500/30 blur-[120px]"></div>
+        </div>
+        <div className="container-page relative z-10 text-center">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-500/10 px-4 py-1.5 text-sm font-semibold text-brand-300">
+            <PackageSearch className="h-4 w-4" />
+            Khám phá danh mục sản phẩm
+          </span>
+          <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Tất Cả Sản Phẩm
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+            Giải pháp bao bì màng co chất lượng cao tại Miền Trung - Tây Nguyên. Đa dạng mẫu mã, cắt sẵn theo yêu cầu, đáp ứng mọi nhu cầu đóng gói.
           </p>
-          <p>
-            Dù bạn đang sản xuất nước đóng chai, chế biến thực phẩm, hay gia công mỹ phẩm, chúng tôi luôn có sản phẩm phù hợp. Với lợi thế <strong>xưởng sản xuất trực tiếp không qua trung gian</strong>, Bao Bì Thành Phát cam kết mang đến:
-          </p>
-          <ul>
-            <li>Chất lượng màng co đồng đều, độ dẻo dai và khả năng chịu lực vượt trội.</li>
-            <li>Chi phí tối ưu nhất cho cả khách mua lẻ và doanh nghiệp mua số lượng lớn.</li>
-            <li>Hỗ trợ gia công cắt sẵn, ép cong, in ấn logo thương hiệu sắc nét.</li>
-            <li>Giao hàng hỏa tốc nội thành Đà Nẵng và gửi chành xe toàn quốc.</li>
-          </ul>
         </div>
       </section>
 
-      <section className="section container-home">
-        <div className="mx-auto w-full">
-          <div>
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
-              <p className="text-slate-600">
-                Hiển thị{" "}
-                <strong className="text-slate-900">
-                  {total === 0
-                    ? 0
-                    : `${start + 1}–${Math.min(start + PER_PAGE, total)}`}
-                </strong>{" "}
-                / {total} sản phẩm
-                {totalPages > 1 && (
-                  <span className="text-slate-400">
-                    {" "}
-                    · Trang {safePage}/{totalPages}
-                  </span>
-                )}
-              </p>
-            </div>
+      <BreadcrumbBar items={breadcrumbs} />
 
-            {paged.length === 0 ? (
-              <EmptyState
-                title="Chưa có sản phẩm"
-                description="Danh sách sản phẩm đang được cập nhật."
-              />
-            ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {paged.map((p, i) => {
-                  // or they just mean a category label on the card? The card already has it inside `ProductCard` technically? No.
-                  return (
+      <section className="section bg-slate-50">
+        <div className="container-home">
+          <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
+            
+            {/* Sidebar (Desktop) */}
+            <aside className="hidden w-64 shrink-0 lg:block">
+              <div className="sticky top-24 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200/60">
+                <h3 className="mb-4 text-lg font-bold text-slate-900">Danh mục sản phẩm</h3>
+                <ul className="space-y-1">
+                  <li>
+                    <Link
+                      href="/tat-ca-san-pham"
+                      className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
+                        !catSlug ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      }`}
+                    >
+                      <span>Tất cả</span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-500">
+                        {allProducts.length}
+                      </span>
+                    </Link>
+                  </li>
+                  {activeCategories.map((c) => {
+                    const isActive = catSlug === c.slug;
+                    return (
+                      <li key={c.slug}>
+                        <Link
+                          href={`/tat-ca-san-pham?category=${c.slug}`}
+                          className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
+                            isActive ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                          }`}
+                        >
+                          <span className="truncate pr-2">{c.name}</span>
+                          <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold ${
+                            isActive ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-500"
+                          }`}>
+                            {c.count}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </aside>
+
+            {/* Main Content */}
+            <div className="flex-1">
+              <ProductsClientTools categories={activeCategories} total={allProducts.length} />
+
+              <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
+                <p className="text-slate-600">
+                  Hiển thị{" "}
+                  <strong className="text-slate-900">
+                    {total === 0
+                      ? 0
+                      : `${start + 1}–${Math.min(start + PER_PAGE, total)}`}
+                  </strong>{" "}
+                  / {total} sản phẩm
+                </p>
+              </div>
+
+              {paged.length === 0 ? (
+                <EmptyState
+                  title="Không tìm thấy sản phẩm nào"
+                  description="Thử thay đổi từ khóa tìm kiếm hoặc chọn danh mục khác."
+                />
+              ) : (
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {paged.map((p, i) => (
                     <ProductCard
                       key={p.id}
                       category={{
@@ -185,22 +264,23 @@ export default async function ProductsPage({ searchParams }: Props) {
                       index={start + i}
                       isProduct={true}
                     />
-                  );
-                })}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
 
-            <Pagination
-              page={safePage}
-              totalPages={totalPages}
-              basePath="/tat-ca-san-pham"
-              param="page"
-            />
+              <Pagination
+                page={safePage}
+                totalPages={totalPages}
+                basePath="/tat-ca-san-pham"
+                param="page"
+              />
+            </div>
+
           </div>
         </div>
       </section>
 
-      <section className="bg-slate-50 border-t border-slate-200">
+      <section className="bg-white border-t border-slate-200">
         <FaqAccordion items={faqItems} title="Câu hỏi thường gặp về Bao Bì & Màng Co" />
       </section>
     </>
