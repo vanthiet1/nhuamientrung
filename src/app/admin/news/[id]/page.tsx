@@ -8,6 +8,7 @@ import { Field, FormActions, inputClass, textareaClass } from "@/components/admi
 import ImageUpload from "@/components/admin/ImageUpload";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import type { NewsRecord } from "@/lib/cms/types";
+import { cleanRawContent } from "@/lib/cms/content-links";
 
 export default function EditNewsPage() {
   const { id } = useParams<{ id: string }>();
@@ -75,12 +76,12 @@ export default function EditNewsPage() {
         <RichTextEditor
           name="excerpt"
           label="Mô tả ngắn"
-          defaultValue={item.excerpt}
+          defaultValue={cleanRawContent(item.excerpt || "", false).replace(/<[^>]*>/g, "").trim()}
         />
         <RichTextEditor
           name="content"
           label="Nội dung"
-          defaultValue={item.content}
+          defaultValue={cleanRawContent(item.content || "", false)}
         />
         <Field label="Ngày đăng">
           <input name="date" type="date" defaultValue={item.date} className={inputClass} />

@@ -17,6 +17,7 @@ import { newsKeywords, siteUrl } from "@/lib/seo/keywords";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { company } from "@/lib/data/company";
 import {
+  cleanRawContent,
   enhanceContentForDisplay,
   inlineToHtml,
 } from "@/lib/cms/content-links";
@@ -58,19 +59,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function renderContent(content: string) {
   if (!content) return null;
 
-  // Pre-clean "rn" (carriage returns lost in scrape) from the raw string
-  let cleanStr = content
-    .replace(/>rn</g, '><')
-    .replace(/>\s*rn\s*</g, '><')
-    .replace(/>rn/g, '>')
-    .replace(/rn</g, '<')
-    .replace(/rnrn/g, '<br /><br />')
-    .replace(/rn-/g, '<br />-')
-    .replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1')
-    .replace(/rn /g, '<br /> ')
-    .replace(/rn$/, '');
+  // Use centralized cleaner (strips rn, outer div wrappers, entities)
+  let cleanStr = cleanRawContent(content, false);
 
-  // If content is already HTML (from RichTextEditor), render it directly
+  // If content is HTML (from RichTextEditor or scraped), render it directly
   const hasHtml = /<\/[a-z]+>|<[a-z]+\s*\/>/i.test(cleanStr) || /<[a-z]+[^>]*>/i.test(cleanStr);
   if (hasHtml) {
     return (
@@ -207,6 +199,22 @@ export default async function NewsDetailPage({ params }: Props) {
         ]}
         asH1={false}
       />
+      {/* Breadcrumb có tiêu đề đúng dấu, ghi đè lên auto-breadcrumb từ slug */}
+      <div className="border-b border-slate-200/80 bg-slate-50">
+        <nav
+          aria-label="Breadcrumb"
+          className="container-page flex flex-wrap items-center gap-1 py-2.5 text-xs text-slate-500 sm:text-sm"
+        >
+          <Link href="/" className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-brand-600">
+            <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span>Trang chủ</span>
+          </Link>
+          <svg className="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          <Link href="/tin-tuc" className="font-medium text-slate-600 transition hover:text-brand-600">Tin tức</Link>
+          <svg className="h-3.5 w-3.5 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          <span className="truncate font-semibold text-brand-600 max-w-[200px] sm:max-w-xs">{item.title}</span>
+        </nav>
+      </div>
 
       <section className="section container-page">
         <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
@@ -235,7 +243,7 @@ export default async function NewsDetailPage({ params }: Props) {
                 {item.title}
               </h1>
               <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800">
-                {item.excerpt}
+                {cleanRawContent(item.excerpt, false).replace(/<[^>]*>/g, '').trim()}
               </p>
               <div className="article-content mt-6">
                 {renderContent(item.content)}

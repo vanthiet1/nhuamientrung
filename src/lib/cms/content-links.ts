@@ -21,22 +21,41 @@ const MD_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 export function cleanRawContent(content: string, asHtml: boolean = false): string {
   if (!content) return "";
   
-  let cleanStr = content
-    .replace(/>rn</g, '><')
+  let s = content;
+
+  // 1. Normalize literal "rn" (broken \r\n from old scrapes)
+  // Must run BEFORE HTML tag logic so we catch all positions
+  s = s
+    // rn between tags: <tag>rn<tag> → <tag><tag>
     .replace(/>\s*rn\s*</g, '><')
-    .replace(/>rn/g, '>')
-    .replace(/rn</g, '<')
-    .replace(/rnrn/g, '<br /><br />')
-    .replace(/rn-/g, '<br />-')
-    .replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1')
-    .replace(/rn /g, '<br /> ')
-    .replace(/rn$/, '');
-    
-  if (!asHtml) {
-    cleanStr = cleanStr.replace(/<br \/>/g, '\n');
+    // rn right before a closing tag: rn</tag> → </tag>
+    .replace(/rn(<\/)/g, '$1')
+    // rn right after opening tag: >rn → >
+    .replace(/(>)rn/g, '$1')
+    // remaining rn sequences → newline (we'll convert later)
+    .replace(/rnrn+/g, '\n\n')
+    .replace(/rn/g, '\n');
+
+  // 2. Strip outer wrapper divs that were scraped from the source CMS
+  // e.g. <div class="main-tit">...</div> <div class="content">...</div>
+  s = s
+    .replace(/<div[^>]*class=["'][^"']*main-tit[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi, '$1')
+    .replace(/<div[^>]*class=["'][^"']*content[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi, '$1');
+
+  // 3. Clean up HTML entities left over
+  s = s
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ');
+
+  // 4. Remove multiple blank lines
+  s = s.replace(/\n{3,}/g, '\n\n').trim();
+
+  if (asHtml) {
+    // Convert \n to <br /> for HTML output
+    s = s.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br />');
   }
   
-  return cleanStr;
+  return s;
 }
 
 /** Keyword → internal path (order matters: more specific first) */

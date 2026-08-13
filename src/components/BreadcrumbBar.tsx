@@ -121,7 +121,9 @@ export default function BreadcrumbBar({
   if (
     pathname === "/" ||
     pathname.startsWith("/admin") ||
-    (!items && (pathname.startsWith("/san-pham") || pathname.startsWith("/tat-ca-san-pham")))
+    (!items && (pathname.startsWith("/san-pham") || pathname.startsWith("/tat-ca-san-pham"))) ||
+    // News detail has its own inline breadcrumb with proper Vietnamese title
+    (!items && /^\/tin-tuc\/.+/.test(pathname))
   ) {
     return null;
   }
