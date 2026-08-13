@@ -114,8 +114,8 @@ export default function ProductCard({
                 .trim()
             : ""}
         </p>
-        <div className={`flex items-center justify-between gap-2 ${lg ? "mt-4" : "mt-3"}`}>
-          {category.children && category.children.length > 0 ? (
+        <div className={`flex items-center gap-2 ${lg ? "mt-4" : "mt-3"}`}>
+          {category.children && category.children.length > 0 && (
             <span
               className={`rounded-full font-bold ${theme.soft} ${
                 lg ? "px-3 py-1 text-xs" : "px-2.5 py-0.5 text-[11px]"
@@ -123,21 +123,13 @@ export default function ProductCard({
             >
               {category.children.length} danh mục con
             </span>
-          ) : (
-            <span
-              className={`font-medium text-slate-400 ${
-                lg ? "text-xs sm:text-sm" : "text-[11px]"
-              }`}
-            >
-              Chi tiết sản phẩm
-            </span>
           )}
           <span
-            className={`font-bold text-brand-600 transition group-hover:text-sky-600 ${
+            className={`ml-auto font-bold text-brand-600 transition group-hover:text-sky-600 ${
               lg ? "text-sm sm:text-base" : "text-sm"
             }`}
           >
-            Chi tiết {category.name.split(" ").slice(0, 3).join(" ")} →
+            Chi tiết →
           </span>
         </div>
       </div>

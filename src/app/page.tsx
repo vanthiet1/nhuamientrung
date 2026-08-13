@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
+import HomeImageSlider from "@/components/HomeImageSlider";
 import HomeCategoryProducts from "@/components/HomeCategoryProducts";
 import HomeNewsScroll from "@/components/HomeNewsScroll";
 import PartnersSlider from "@/components/PartnersSlider";
@@ -126,18 +127,8 @@ export default async function HomePage({ searchParams }: Props) {
             </div>
             
             <div className="relative">
-              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 sm:aspect-[3/2] lg:aspect-[4/5]">
-                {banners && banners.length > 0 && banners[0].image ? (
-                  <img
-                    src={banners[0].image}
-                    alt="Nhà máy sản xuất Bao Bì Thành Phát"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-100 to-brand-50">
-                    <Factory className="h-24 w-24 text-brand-200" />
-                  </div>
-                )}
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-900/5 sm:aspect-[3/2] lg:aspect-[4/5] p-2">
+                <HomeImageSlider images={allProducts.map(p => p.image || "").filter(Boolean)} />
               </div>
               <div className="absolute -bottom-6 -left-6 hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-xl sm:block">
                 <div className="flex items-center gap-4">

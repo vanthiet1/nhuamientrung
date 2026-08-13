@@ -301,26 +301,30 @@ export default async function ProductPage({
                   </>
                 }
               >
-                {content && content !== description && (
-                  <div className="mt-8">
-                    <ProductTabs 
-                      reviewCount={reviews.length}
-                      descriptionNode={
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                          <h2 className="text-base font-extrabold text-slate-900 sm:text-lg mb-4">
-                            Mô tả chi tiết {title}
-                          </h2>
+                <div className="mt-8">
+                  <ProductTabs 
+                    reviewCount={reviews.length}
+                    descriptionNode={
+                      <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <h2 className="text-base font-extrabold text-slate-900 sm:text-lg mb-4">
+                          Mô tả chi tiết {title}
+                        </h2>
+                        {content && content !== description ? (
                           <ProductContent content={content} />
-                        </div>
-                      }
-                      reviewsNode={
-                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                          <ProductReviews productId={product.id} initialReviews={reviews} />
-                        </div>
-                      }
-                    />
-                  </div>
-                )}
+                        ) : (
+                          <p className="text-sm text-slate-600 italic">
+                            Chưa có bài viết mô tả chi tiết cho sản phẩm này.
+                          </p>
+                        )}
+                      </div>
+                    }
+                    reviewsNode={
+                      <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <ProductReviews productId={product.id} initialReviews={reviews} />
+                      </div>
+                    }
+                  />
+                </div>
 
                 <ProductContactBox />
 

@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Field, FormActions, inputClass, textareaClass } from "@/components/admin/FormField";
 import ImageUpload from "@/components/admin/ImageUpload";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { cleanRawContent } from "@/lib/cms/content-links";
 import type {
   CategoryRecord,
   ProductRecord,
@@ -143,9 +144,15 @@ export default function EditProductPage() {
         <Field label="Mô tả ngắn">
           <textarea
             name="description"
-            defaultValue={item.description}
+            defaultValue={item.description
+              ? cleanRawContent(item.description, false)
+                  .replace(/<[^>]*>?/gm, "")
+                  .replace(/&nbsp;/g, " ")
+                  .replace(/&amp;/g, "&")
+                  .trim()
+              : ""}
             className={textareaClass}
-            rows={3}
+            rows={5}
           />
         </Field>
         <RichTextEditor
