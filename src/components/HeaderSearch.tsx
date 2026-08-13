@@ -114,7 +114,7 @@ export default function HeaderSearch({
                   {r.title}
                 </p>
                 <p className="truncate text-[11px] text-slate-500">
-                  {r.type === 'product' ? 'Sản phẩm' : r.type === 'news' ? 'Tin tức' : 'Danh mục'}
+                  Sản phẩm
                 </p>
               </div>
             </Link>
@@ -140,7 +140,7 @@ export default function HeaderSearch({
             onFocus={() => {
               if (q.trim()) setIsOpen(true);
             }}
-            placeholder="Tìm sản phẩm, tin tức..."
+            placeholder="Tìm kiếm sản phẩm..."
             className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-500/15"
           />
         </div>
@@ -161,7 +161,7 @@ export default function HeaderSearch({
           onFocus={() => {
             if (q.trim()) setIsOpen(true);
           }}
-          placeholder="Tìm sản phẩm, tin tức..."
+          placeholder="Tìm kiếm sản phẩm..."
           className="w-[11rem] rounded-full border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-500/15 xl:w-[14rem] 2xl:w-[16rem]"
         />
       </div>
