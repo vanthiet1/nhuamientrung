@@ -27,7 +27,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const description =
     "Tổng hợp tất cả sản phẩm bao bì & shrink film PVC, PE, POF, PET tại Đà Nẵng. Xem đầy đủ sản phẩm và nhận báo giá nhanh.";
   const canonical =
-    page > 1 ? `${siteUrl}/san-pham?page=${page}` : `${siteUrl}/san-pham`;
+    page > 1 ? `${siteUrl}/tat-ca-san-pham?page=${page}` : `${siteUrl}/tat-ca-san-pham`;
 
   return {
     title,
@@ -82,7 +82,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   };
 
   const breadcrumbs = [
-    { label: "Sản phẩm", href: "/san-pham" },
+    { label: "Sản phẩm", href: "/tat-ca-san-pham" },
   ];
 
   const faqItems = [
@@ -110,7 +110,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         data={[
           breadcrumbJsonLd([
             { name: "Trang chủ", url: siteUrl },
-            { name: "Sản phẩm", url: `${siteUrl}/san-pham` },
+            { name: "Sản phẩm", url: `${siteUrl}/tat-ca-san-pham` },
           ]),
           itemListJsonLd,
         ]}
@@ -193,7 +193,7 @@ export default async function ProductsPage({ searchParams }: Props) {
             <Pagination
               page={safePage}
               totalPages={totalPages}
-              basePath="/san-pham"
+              basePath="/tat-ca-san-pham"
               param="page"
             />
           </div>
