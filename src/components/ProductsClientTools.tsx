@@ -114,12 +114,7 @@ export default function ProductsClientTools({
           </div>
         </div>
       </div>
-      
-      {isPending && (
-        <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-slate-100">
-          <div className="h-full w-1/3 animate-[slide_1.5s_ease-in-out_infinite] rounded-full bg-brand-500"></div>
-        </div>
-      )}
+
     </div>
   );
 }

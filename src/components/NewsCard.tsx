@@ -63,6 +63,8 @@ export default function NewsCard({
                   .replace(/<[^>]*>?/gm, "")
                   .replace(/&nbsp;/g, " ")
                   .replace(/&amp;/g, "&")
+                  .replace(/rn/g, " ")
+                  .replace(/\s+/g, " ")
                   .trim()
               : ""}
           </p>
@@ -114,6 +116,8 @@ export default function NewsCard({
                 .replace(/<[^>]*>?/gm, "")
                 .replace(/&nbsp;/g, " ")
                 .replace(/&amp;/g, "&")
+                .replace(/rn/g, " ")
+                .replace(/\s+/g, " ")
                 .trim()
             : ""}
         </p>

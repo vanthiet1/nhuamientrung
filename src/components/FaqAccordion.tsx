@@ -17,7 +17,7 @@ export default function FaqAccordion({
   title?: string;
   items: FaqItem[];
 }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (!items || items.length === 0) return null;
 

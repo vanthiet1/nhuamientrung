@@ -122,40 +122,50 @@ export default function Header({
                         </p>
                       </div>
                       <div className="grid grid-cols-2 gap-x-6 gap-y-6 p-6 sm:grid-cols-3">
-                        {categories.map((cat) => (
-                          <div key={cat.slug} className="group">
-                            <Link
-                              href={`/danh-muc/${cat.slug}`}
-                              className="block text-[15px] font-extrabold leading-snug text-slate-800 transition-colors hover:text-brand-600"
-                            >
-                              {cat.name}
-                            </Link>
-                            {cat.children && cat.children.length > 0 && (
-                              <ul className="mt-2.5 flex flex-col gap-2">
-                                {cat.children.slice(0, 4).map((child) => (
-                                  <li key={child.slug}>
-                                    <Link
-                                      href={`/danh-muc/${child.slug}`}
-                                      className="block text-[13.5px] text-slate-600 transition-colors hover:text-brand-600"
-                                    >
-                                      {child.name}
-                                    </Link>
-                                  </li>
-                                ))}
-                                {cat.children.length > 4 && (
-                                  <li>
-                                    <Link
-                                      href={`/danh-muc/${cat.slug}`}
-                                      className="inline-block text-[13px] font-semibold text-brand-600 hover:underline"
-                                    >
-                                      Xem thêm ({cat.children.length - 4})
-                                    </Link>
-                                  </li>
-                                )}
-                              </ul>
-                            )}
-                          </div>
-                        ))}
+                        {categories.map((cat) => {
+                          const isCatActive = pathname === `/danh-muc/${cat.slug}` || pathname.startsWith(`/danh-muc/${cat.slug}/`);
+                          return (
+                            <div key={cat.slug} className="group">
+                              <Link
+                                href={`/danh-muc/${cat.slug}`}
+                                className={`block text-[15px] font-extrabold leading-snug transition-colors hover:text-brand-600 ${
+                                  isCatActive ? "text-brand-600" : "text-slate-800"
+                                }`}
+                              >
+                                {cat.name}
+                              </Link>
+                              {cat.children && cat.children.length > 0 && (
+                                <ul className="mt-2.5 flex flex-col gap-2">
+                                  {cat.children.slice(0, 4).map((child) => {
+                                    const isChildActive = pathname === `/danh-muc/${child.slug}` || pathname.startsWith(`/danh-muc/${child.slug}/`);
+                                    return (
+                                      <li key={child.slug}>
+                                        <Link
+                                          href={`/danh-muc/${child.slug}`}
+                                          className={`block text-[13.5px] transition-colors hover:text-brand-600 ${
+                                            isChildActive ? "text-brand-600 font-semibold" : "text-slate-600"
+                                          }`}
+                                        >
+                                          {child.name}
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
+                                  {cat.children.length > 4 && (
+                                    <li>
+                                      <Link
+                                        href={`/danh-muc/${cat.slug}`}
+                                        className="inline-block text-[13px] font-semibold text-brand-600 hover:underline"
+                                      >
+                                        Xem thêm ({cat.children.length - 4})
+                                      </Link>
+                                    </li>
+                                  )}
+                                </ul>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                       <div className="border-t border-slate-100 bg-slate-50 px-5 py-3.5 text-center">
                         <Link
@@ -276,25 +286,35 @@ export default function Header({
                         >
                           Tất cả sản phẩm
                         </Link>
-                        {categories.map((cat) => (
-                          <div key={cat.slug}>
-                            <Link
-                              href={`/danh-muc/${cat.slug}`}
-                              className="block py-1 text-sm font-bold text-brand-700"
-                            >
-                              {cat.name}
-                            </Link>
-                            {cat.children?.map((child) => (
+                        {categories.map((cat) => {
+                          const isCatActive = pathname === `/danh-muc/${cat.slug}` || pathname.startsWith(`/danh-muc/${cat.slug}/`);
+                          return (
+                            <div key={cat.slug}>
                               <Link
-                                key={child.slug}
-                                href={`/danh-muc/${child.slug}`}
-                                className="block py-0.5 pl-3 text-xs text-slate-500"
+                                href={`/danh-muc/${cat.slug}`}
+                                className={`block py-1 text-sm font-bold ${
+                                  isCatActive ? "text-brand-600" : "text-brand-700"
+                                }`}
                               >
-                                {child.name}
+                                {cat.name}
                               </Link>
-                            ))}
-                          </div>
-                        ))}
+                              {cat.children?.map((child) => {
+                                const isChildActive = pathname === `/danh-muc/${child.slug}` || pathname.startsWith(`/danh-muc/${child.slug}/`);
+                                return (
+                                  <Link
+                                    key={child.slug}
+                                    href={`/danh-muc/${child.slug}`}
+                                    className={`block py-0.5 pl-3 text-xs ${
+                                      isChildActive ? "text-brand-600 font-semibold" : "text-slate-500"
+                                    }`}
+                                  >
+                                    {child.name}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>

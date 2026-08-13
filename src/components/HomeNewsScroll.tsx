@@ -16,6 +16,17 @@ function formatDate(iso: string) {
   }
 }
 
+function stripHtml(html: string) {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>?/gm, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/rn/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function NewsRow({ item }: { item: NewsCardItem }) {
   const hasImage = Boolean(item.image);
   return (
@@ -49,7 +60,7 @@ function NewsRow({ item }: { item: NewsCardItem }) {
         </h3>
         {item.excerpt && (
           <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">
-            {item.excerpt}
+            {stripHtml(item.excerpt)}
           </p>
         )}
       </div>
@@ -142,7 +153,7 @@ export default function HomeNewsScroll({
           </div>
           <div className="flex flex-1 flex-col p-5">
             <p className="line-clamp-3 text-sm leading-relaxed text-slate-500">
-              {featured.excerpt}
+              {stripHtml(featured.excerpt)}
             </p>
             <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-brand-600 group-hover:text-accent-600">
               Đọc bài nổi bật: {featured.title.slice(0, 36)}
