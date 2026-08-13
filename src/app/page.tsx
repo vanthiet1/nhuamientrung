@@ -127,7 +127,7 @@ export default async function HomePage({ searchParams }: Props) {
             
             <div className="relative">
               <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 sm:aspect-[3/2] lg:aspect-[4/5]">
-                {banners && banners.length > 0 ? (
+                {banners && banners.length > 0 && banners[0].image ? (
                   <img
                     src={banners[0].image}
                     alt="Nhà máy sản xuất Bao Bì Thành Phát"

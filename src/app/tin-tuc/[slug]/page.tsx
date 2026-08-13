@@ -58,23 +58,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function renderContent(content: string) {
   if (!content) return null;
 
+  // Pre-clean "rn" (carriage returns lost in scrape) from the raw string
+  let cleanStr = content
+    .replace(/>rn</g, '><')
+    .replace(/>\s*rn\s*</g, '><')
+    .replace(/>rn/g, '>')
+    .replace(/rn</g, '<')
+    .replace(/rnrn/g, '<br /><br />')
+    .replace(/rn-/g, '<br />-')
+    .replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1')
+    .replace(/rn /g, '<br /> ')
+    .replace(/rn$/, '');
+
   // If content is already HTML (from RichTextEditor), render it directly
-  const hasHtml = /<\/[a-z]+>|<[a-z]+\s*\/>/i.test(content) || /<[a-z]+[^>]*>/i.test(content);
+  const hasHtml = /<\/[a-z]+>|<[a-z]+\s*\/>/i.test(cleanStr) || /<[a-z]+[^>]*>/i.test(cleanStr);
   if (hasHtml) {
     return (
       <div 
         className="prose prose-slate max-w-none prose-img:rounded-xl prose-img:m-0 prose-a:text-brand-600 hover:prose-a:text-sky-600 [&>h2]:mt-6 [&>h2]:mb-2 [&>h2]:text-lg [&>h2]:font-bold [&>h2]:text-slate-900"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: cleanStr }}
       />
     );
   }
 
-  // Clean up broken carriage returns ("rn") from old scraped text
-  const cleanStr = content
-    .replace(/rnrn/g, '\n\n')
-    .replace(/rn-/g, '\n-')
-    .replace(/rn([A-ZĐÀ-Ỹ])/g, '\n$1')
-    .replace(/rn$/, '\n');
+  // Fallback for plain text: revert <br /> back to \n for markdown processing
+  cleanStr = cleanStr.replace(/<br \/>/g, '\n');
 
   // Auto-link plain "Xem thêm" + keep existing markdown links
   const enhanced = enhanceContentForDisplay(cleanStr);

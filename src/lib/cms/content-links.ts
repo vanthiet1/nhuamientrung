@@ -13,6 +13,32 @@ export type ContentLink = {
 
 const MD_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
+/**
+ * Cleans up raw text from database scrapes, mostly dealing with broken "rn" (carriage returns).
+ * @param content The raw content string
+ * @param asHtml If true, keeps <br /> tags. If false, converts them back to \n
+ */
+export function cleanRawContent(content: string, asHtml: boolean = false): string {
+  if (!content) return "";
+  
+  let cleanStr = content
+    .replace(/>rn</g, '><')
+    .replace(/>\s*rn\s*</g, '><')
+    .replace(/>rn/g, '>')
+    .replace(/rn</g, '<')
+    .replace(/rnrn/g, '<br /><br />')
+    .replace(/rn-/g, '<br />-')
+    .replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1')
+    .replace(/rn /g, '<br /> ')
+    .replace(/rn$/, '');
+    
+  if (!asHtml) {
+    cleanStr = cleanStr.replace(/<br \/>/g, '\n');
+  }
+  
+  return cleanStr;
+}
+
 /** Keyword → internal path (order matters: more specific first) */
 const KEYWORD_ROUTES: { test: RegExp; href: string }[] = [
   { test: /màng\s*co\s*pvc.*bọc\s*quà|bọc\s*quà.*pvc|giỏ\s*quà/i, href: "/danh-muc/mang-co-pvc" },

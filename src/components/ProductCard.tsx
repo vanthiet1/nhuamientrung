@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { CategoryTree } from "@/lib/cms/types";
 import SafeImage from "@/components/SafeImage";
+import { cleanRawContent } from "@/lib/cms/content-links";
 
 const themes = [
   { gradient: "from-brand-600 to-brand-800", soft: "bg-brand-50 text-brand-700" },
@@ -106,8 +107,7 @@ export default function ProductCard({
           }`}
         >
           {category.description
-            ? category.description
-                .replace(/rn/g, " ")
+            ? cleanRawContent(category.description, false)
                 .replace(/<[^>]*>?/gm, "")
                 .replace(/&nbsp;/g, " ")
                 .replace(/&amp;/g, "&")

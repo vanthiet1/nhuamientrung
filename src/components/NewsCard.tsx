@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
 import SafeImage from "@/components/SafeImage";
+import { cleanRawContent } from "@/lib/cms/content-links";
 
 export type NewsCardItem = {
   slug: string;
@@ -56,10 +57,9 @@ export default function NewsCard({
           <h3 className="mt-2 line-clamp-2 text-lg font-bold text-slate-900 transition group-hover:text-brand-600">
             {item.title}
           </h3>
-          <p className="mt-2 flex-1 line-clamp-3 text-sm leading-relaxed text-slate-500">
+          <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-slate-500">
             {item.excerpt
-              ? item.excerpt
-                  .replace(/rn/g, " ")
+              ? cleanRawContent(item.excerpt, false)
                   .replace(/<[^>]*>?/gm, "")
                   .replace(/&nbsp;/g, " ")
                   .replace(/&amp;/g, "&")
@@ -110,8 +110,7 @@ export default function NewsCard({
         </h3>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 sm:text-[13px]">
           {item.excerpt
-            ? item.excerpt
-                .replace(/rn/g, " ")
+            ? cleanRawContent(item.excerpt, false)
                 .replace(/<[^>]*>?/gm, "")
                 .replace(/&nbsp;/g, " ")
                 .replace(/&amp;/g, "&")

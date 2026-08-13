@@ -1,3 +1,6 @@
+import { ChevronDown, FileText } from "lucide-react";
+import { cleanRawContent } from "@/lib/cms/content-links";
+
 /**
  * Render product content: plain text + auto tables from scraped pipe layout
  * e.g.
@@ -39,14 +42,9 @@ type Block =
   | { type: "paragraph"; text: string };
 
 function parseContent(content: string): Block[] {
-  const cleanStr = content
+  let cleanStr = cleanRawContent(content, false)
     .replace(/\[caption[^\]]*\]/g, "")
-    .replace(/\[\/caption\]/g, "")
-    .replace(/(?:rn){2,}/g, "\n\n")
-    .replace(/rn-/g, "\n-")
-    .replace(/rn([A-ZĐÀ-Ỹ0-9])/g, "\n$1")
-    .replace(/rn$/, "\n")
-    .replace(/rn/g, " ");
+    .replace(/\[\/caption\]/g, "");
 
   const lines = cleanStr.split("\n");
   const blocks: Block[] = [];
@@ -269,12 +267,7 @@ export default function ProductContent({ content }: { content: string }) {
 
   if (hasHtml) {
     // Cleanup old scraped artifacts like rn, rnrn, and WordPress shortcodes
-    const cleanStr = content
-      .replace(/(?:rn){2,}/g, "<br /><br />") // multiple rn -> double break
-      .replace(/rn-/g, "<br />-")
-      .replace(/rn([A-ZĐÀ-Ỹ0-9])/g, "<br />$1")
-      .replace(/rn$/, "<br />")
-      .replace(/rn/g, " ") // any leftover rn -> space
+    const cleanStr = cleanRawContent(content, true)
       .replace(/\[caption[^\]]*\]/g, "")
       .replace(/\[\/caption\]/g, "");
 

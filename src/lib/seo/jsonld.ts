@@ -66,14 +66,6 @@ export function websiteJsonLd() {
       name: company.name,
       logo: `${siteUrl}/logo.png`,
     },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteUrl}/tim-kiem?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 

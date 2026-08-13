@@ -159,7 +159,7 @@ export default function Header({
                       </div>
                       <div className="border-t border-slate-100 bg-slate-50 px-5 py-3.5 text-center">
                         <Link
-                          href="/danh-muc"
+                          href="/tat-ca-san-pham"
                           className="text-base font-bold text-accent-600 hover:underline"
                         >
                           Xem tất cả sản phẩm →

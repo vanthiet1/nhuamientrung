@@ -16,6 +16,7 @@ import {
 import { company } from "@/lib/data/company";
 import { productKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { cleanRawContent } from "@/lib/cms/content-links";
 
 export const dynamic = "force-dynamic";
 
@@ -96,12 +97,7 @@ export default async function CategoryPage({
     : found.subcategory.description;
 
   if (description) {
-    description = description
-      .replace(/rnrn/g, "<br /><br />")
-      .replace(/rn-/g, "<br />-")
-      .replace(/rn([A-ZĐÀ-Ỹ])/g, "<br />$1")
-      .replace(/rn$/, "")
-      .replace(/rn/g, " ");
+    description = cleanRawContent(description, true);
   }
 
   const breadcrumbs: { label: string; href?: string }[] = [

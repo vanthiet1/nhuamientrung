@@ -25,6 +25,7 @@ import {
 import { company } from "@/lib/data/company";
 import { productKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
+import { cleanRawContent } from "@/lib/cms/content-links";
 
 export const dynamic = "force-dynamic";
 
@@ -101,7 +102,7 @@ export default async function ProductPage({
 
   const title = product.name;
   const description = product.description 
-    ? product.description.replace(/rnrn/g, '<br /><br />').replace(/rn-/g, '<br />-').replace(/rn([A-ZĐÀ-Ỹ])/g, '<br />$1').replace(/rn$/, '').replace(/rn/g, ' ')
+    ? cleanRawContent(product.description, true)
     : "";
   const content = product.content || product.description;
   const coverImage = product.image || "";
