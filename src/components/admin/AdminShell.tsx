@@ -33,9 +33,6 @@ const nav = [
   { href: "/admin/contacts", label: "Liên hệ", icon: MessageSquareText },
 ];
 
-/** Poll interval for unread contact badge (ms) */
-const UNREAD_POLL_MS = 5000;
-
 export default function AdminShell({
   children,
   username,
@@ -79,14 +76,10 @@ export default function AdminShell({
     }
   }, []);
 
-  // Realtime-ish: poll + focus + custom event from contacts page
+  // Fetch unread data on focus, visibility change, or custom event
   useEffect(() => {
     fetchUnread();
     fetchPendingReviews();
-    const id = window.setInterval(() => {
-      fetchUnread();
-      fetchPendingReviews();
-    }, UNREAD_POLL_MS);
 
     const onFocus = () => {
       fetchUnread();
@@ -105,12 +98,11 @@ export default function AdminShell({
     window.addEventListener("admin-contacts-updated", onCustom);
 
     return () => {
-      window.clearInterval(id);
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("admin-contacts-updated", onCustom);
     };
-  }, [fetchUnread]);
+  }, [fetchUnread, fetchPendingReviews]);
 
   // Refresh badge when navigating contacts
   useEffect(() => {
