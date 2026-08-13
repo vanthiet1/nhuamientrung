@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
 import { withAdmin, jsonOk, jsonError } from "@/lib/cms/api-helpers";
 import {

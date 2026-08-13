@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { withAdmin, jsonOk } from "@/lib/cms/api-helpers";
 import {
   deleteProduct,

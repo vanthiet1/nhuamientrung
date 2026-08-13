@@ -30,7 +30,7 @@ import { productKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
 import { cleanRawContent } from "@/lib/cms/content-links";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const RELATED_PER_PAGE = 8;
 const NEWS_PER_PAGE = 6;

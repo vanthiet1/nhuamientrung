@@ -6,7 +6,7 @@ import EmptyState from "@/components/EmptyState";
 import { loadCareers } from "@/lib/data/public";
 import { company } from "@/lib/data/company";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Tuyển dụng Bao Bì Thành Phát Đà Nẵng",

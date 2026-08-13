@@ -22,7 +22,7 @@ import {
   inlineToHtml,
 } from "@/lib/cms/content-links";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ slug: string }> };
 

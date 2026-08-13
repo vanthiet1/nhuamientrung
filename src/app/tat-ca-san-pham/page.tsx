@@ -14,7 +14,7 @@ import BreadcrumbBar from "@/components/BreadcrumbBar";
 import ProductsClientTools from "@/components/ProductsClientTools";
 import { ArrowRight, ChevronRight, PackageSearch } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const PER_PAGE = 12; // Tăng lên 12 cho chẵn 3 cột hoặc 4 cột
 

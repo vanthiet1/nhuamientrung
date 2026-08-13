@@ -5,7 +5,7 @@ import EmptyState from "@/components/EmptyState";
 import Pagination from "@/components/Pagination";
 import { loadNews } from "@/lib/data/public";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Tin tức màng co & bao bì",

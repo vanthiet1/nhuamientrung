@@ -18,7 +18,7 @@ import { productKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { cleanRawContent } from "@/lib/cms/content-links";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const LIST_PER_PAGE = 8;
 

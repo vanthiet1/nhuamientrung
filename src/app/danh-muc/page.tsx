@@ -10,7 +10,7 @@ import { company } from "@/lib/data/company";
 import { primaryKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const PER_PAGE = 8;
 
