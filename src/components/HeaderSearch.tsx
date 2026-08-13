@@ -30,7 +30,7 @@ export default function HeaderSearch({
   const [results, setResults] = useState<SearchHit[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLFormElement>(null);
   const initialRender = useRef(true);
 
   // Close dropdown when clicking outside
