@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import Pagination from "@/components/Pagination";
+import PageBanner from "@/components/PageBanner";
 import EmptyState from "@/components/EmptyState";
 import FaqAccordion from "@/components/FaqAccordion";
 import JsonLd from "@/components/JsonLd";
@@ -69,17 +70,23 @@ export default async function ProductsPage({ searchParams }: Props) {
 
   // Map to flat categories for Sidebar
   const catStats = categories.flatMap((c) => {
-    const list = [{ name: c.name, slug: c.slug, count: 0 }];
+    const list = [{ name: c.name, slug: c.slug, id: c.id, count: 0 }];
     if (c.children) {
-      c.children.forEach(child => list.push({ name: child.name, slug: child.slug, count: 0 }));
+      c.children.forEach(child => list.push({ name: child.name, slug: child.slug, id: child.id, count: 0 }));
     }
     return list;
   });
 
   // Calculate counts
   allProducts.forEach(p => {
-    const cat = catStats.find(c => c.slug === p.category_slug);
-    if (cat) cat.count++;
+    if (p.categoryId) {
+      const c = catStats.find(x => x.id === p.categoryId);
+      if (c) c.count++;
+    }
+    if (p.subcategoryId) {
+      const c = catStats.find(x => x.id === p.subcategoryId);
+      if (c) c.count++;
+    }
   });
 
   const activeCategories = catStats.filter(c => c.count > 0).sort((a, b) => b.count - a.count);
@@ -87,7 +94,13 @@ export default async function ProductsPage({ searchParams }: Props) {
   // Filter products
   let filtered = allProducts;
   if (catSlug) {
-    filtered = filtered.filter(p => p.category_slug === catSlug);
+    const targetCat = catStats.find(c => c.slug === catSlug);
+    if (targetCat) {
+      filtered = filtered.filter(p => p.categoryId === targetCat.id || p.subcategoryId === targetCat.id);
+    } else {
+      // invalid slug
+      filtered = [];
+    }
   }
   if (q) {
     filtered = filtered.filter(p => 
@@ -101,8 +114,11 @@ export default async function ProductsPage({ searchParams }: Props) {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
   } else if (sort === "name_desc") {
     filtered.sort((a, b) => b.name.localeCompare(a.name));
+  } else if (sort === "oldest") {
+    filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   } else {
-    // "newest" is default (usually they come ordered from DB by created_at desc)
+    // "newest" is default
+    filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   const total = filtered.length;
@@ -159,28 +175,14 @@ export default async function ProductsPage({ searchParams }: Props) {
         ]}
       />
       
-      {/* Hero Section Redesign */}
-      <section className="relative overflow-hidden bg-slate-900 pb-16 pt-20 lg:pb-24 lg:pt-28">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-          <div className="absolute -left-[20%] top-0 h-96 w-96 rounded-full bg-brand-500/30 blur-[120px]"></div>
-          <div className="absolute -right-[20%] bottom-0 h-96 w-96 rounded-full bg-sky-500/30 blur-[120px]"></div>
-        </div>
-        <div className="container-page relative z-10 text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-500/10 px-4 py-1.5 text-sm font-semibold text-brand-300">
-            <PackageSearch className="h-4 w-4" />
-            Khám phá danh mục sản phẩm
-          </span>
-          <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Tất Cả Sản Phẩm
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Giải pháp bao bì màng co chất lượng cao tại Miền Trung - Tây Nguyên. Đa dạng mẫu mã, cắt sẵn theo yêu cầu, đáp ứng mọi nhu cầu đóng gói.
-          </p>
-        </div>
-      </section>
-
-      <BreadcrumbBar items={breadcrumbs} />
+      {/* Hero Section Redesign Reverted to PageBanner */}
+      <PageBanner
+        title="Tất Cả Sản Phẩm"
+        breadcrumbs={breadcrumbs}
+        subtitle="Giải pháp bao bì màng co chất lượng cao tại Đà Nẵng. Đa dạng mẫu mã, cắt sẵn theo yêu cầu, đáp ứng mọi nhu cầu đóng gói."
+        wide
+        asH1
+      />
 
       <section className="section bg-slate-50">
         <div className="container-home">
@@ -194,6 +196,7 @@ export default async function ProductsPage({ searchParams }: Props) {
                   <li>
                     <Link
                       href="/tat-ca-san-pham"
+                      scroll={false}
                       className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
                         !catSlug ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                       }`}
@@ -210,6 +213,7 @@ export default async function ProductsPage({ searchParams }: Props) {
                       <li key={c.slug}>
                         <Link
                           href={`/tat-ca-san-pham?category=${c.slug}`}
+                          scroll={false}
                           className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
                             isActive ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                           }`}

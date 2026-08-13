@@ -39,7 +39,7 @@ export default function ProductsClientTools({
     });
 
     startTransition(() => {
-      router.push(`/tat-ca-san-pham?${params.toString()}`);
+      router.push(`/tat-ca-san-pham?${params.toString()}`, { scroll: false });
     });
   };
 
@@ -106,6 +106,7 @@ export default function ProductsClientTools({
               className="appearance-none rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-10 text-sm font-medium text-slate-700 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
             >
               <option value="newest">Mới nhất</option>
+              <option value="oldest">Cũ nhất</option>
               <option value="name_asc">Tên A-Z</option>
               <option value="name_desc">Tên Z-A</option>
             </select>
