@@ -117,11 +117,8 @@ export default function Header({
                   >
                     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card-hover">
                       <div className="border-b border-slate-100 bg-gradient-to-r from-brand-600 to-brand-700 px-5 py-3.5 sm:px-6">
-                        <p className="text-sm font-bold uppercase tracking-wider text-white/85">
+                        <p className="text-base font-bold uppercase tracking-wider text-white sm:text-lg">
                           Danh mục sản phẩm
-                        </p>
-                        <p className="mt-0.5 text-base font-semibold text-white sm:text-lg">
-                          Màng co & bao bì đóng gói
                         </p>
                       </div>
                       <div className="grid grid-cols-2 gap-x-6 gap-y-6 p-6 sm:grid-cols-3">

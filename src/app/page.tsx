@@ -78,6 +78,83 @@ export default async function HomePage({ searchParams }: Props) {
         </div>
       </section>
 
+      {/* SEO Content / About Us */}
+      <section className="bg-white py-14 sm:py-20">
+        <div className="container-home">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Bao Bì Thành Phát <br className="hidden sm:block" />
+                <span className="text-brand-600">Giải pháp màng co toàn diện</span>
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+                Với kinh nghiệm nhiều năm trong lĩnh vực sản xuất và phân phối bao bì, chúng tôi tự hào là đối tác tin cậy của hàng ngàn doanh nghiệp tại <strong>Miền Trung - Tây Nguyên</strong>. Thành Phát chuyên cung cấp màng co PVC, POF, PE và các dịch vụ gia công in ấn chất lượng cao.
+              </p>
+              
+              <ul className="mt-8 space-y-4">
+                {[
+                  {
+                    title: "Chất lượng vượt trội",
+                    desc: "Màng co có độ bền dai, tỷ lệ co nhiệt chuẩn xác giúp ôm sát và bảo vệ sản phẩm tuyệt đối."
+                  },
+                  {
+                    title: "Xưởng sản xuất trực tiếp",
+                    desc: "Không qua trung gian, mang đến mức giá sỉ tận gốc và chiết khấu hấp dẫn cho đơn hàng lớn."
+                  },
+                  {
+                    title: "Hỗ trợ tận tâm & Tốc độ",
+                    desc: "Tư vấn kỹ thuật tận nơi, giao hàng hỏa tốc nội thành Đà Nẵng và gửi chành xe toàn quốc."
+                  }
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+                      <BadgeCheck className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900">{item.title}</h3>
+                      <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8">
+                <Link href="/gioi-thieu" className="btn-primary">
+                  Tìm hiểu thêm về chúng tôi
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-100 sm:aspect-[3/2] lg:aspect-[4/5]">
+                {banners && banners.length > 0 ? (
+                  <img
+                    src={banners[0].image}
+                    alt="Nhà máy sản xuất Bao Bì Thành Phát"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-100 to-brand-50">
+                    <Factory className="h-24 w-24 text-brand-200" />
+                  </div>
+                )}
+              </div>
+              <div className="absolute -bottom-6 -left-6 hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-xl sm:block">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-white">
+                    <Sparkles className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-black text-slate-900">1000+</p>
+                    <p className="text-sm font-medium text-slate-500">Đối tác tin dùng</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Danh mục + sidebar + sản phẩm + phân trang */}
       <section
         id="danh-muc-san-pham"
@@ -213,6 +290,60 @@ export default async function HomePage({ searchParams }: Props) {
           />
         </section>
       )}
+
+
+      {/* Testimonials */}
+      <section className="section bg-slate-50 border-t border-slate-200">
+        <div className="container-home">
+          <SectionHeading
+            eyebrow="Đánh giá"
+            title="Khách hàng nói về chúng tôi"
+            description="Sự hài lòng của đối tác chính là thước đo thành công của Bao Bì Thành Phát"
+          />
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                name: "Anh Hoàng",
+                role: "Chủ xưởng sản xuất nước đóng chai",
+                text: "Tôi đã nhập màng co lốc chai của Thành Phát hơn 2 năm nay. Chất lượng màng rất đồng đều, co ôm sát chai không bị nhăn móp. Đặc biệt giá cả luôn ổn định và giao hàng cực kỳ nhanh chóng khi tôi cần gấp.",
+                rating: 5
+              },
+              {
+                name: "Chị Ngọc",
+                role: "Quản lý công ty mỹ phẩm",
+                text: "Công ty hỗ trợ tư vấn và in ấn màng co POF rất nhiệt tình. Màng co trong suốt, mỏng nhưng rất dai, làm cho hộp mỹ phẩm của bên tôi trông cao cấp hẳn lên. Hỗ trợ gửi mẫu test tận nơi rất chu đáo.",
+                rating: 5
+              },
+              {
+                name: "Anh Tuấn",
+                role: "Cửa hàng bách hóa tổng hợp",
+                text: "Bên mình thường xuyên lấy túi zipper và băng keo trong số lượng lớn. Hàng của Thành Phát dùng rất bền, keo dính chắc. Điểm cộng lớn nhất là chính sách công nợ linh hoạt và hỗ trợ chành xe về tỉnh rất thuận tiện.",
+                rating: 5
+              }
+            ].map((t, i) => (
+              <div key={i} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                <div className="flex items-center gap-1 text-amber-400">
+                  {Array.from({ length: t.rating }).map((_, idx) => (
+                    <svg key={idx} className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="mt-4 text-slate-700 leading-relaxed italic">"{t.text}"</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-brand-700 font-bold">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">{t.name}</h4>
+                    <p className="text-xs text-slate-500">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="bg-white border-t border-slate-100">
         <FaqAccordion
