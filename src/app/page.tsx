@@ -126,20 +126,9 @@ export default async function HomePage({ searchParams }: Props) {
               </div>
             </div>
             
-            <div className="relative">
-              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-900/5 sm:aspect-[3/2] lg:aspect-[4/5] p-2">
+            <div className="relative lg:pl-12">
+              <div className="mx-auto aspect-square max-w-md overflow-hidden rounded-3xl bg-white p-4 shadow-2xl ring-1 ring-slate-900/5 lg:mr-0 lg:max-w-lg lg:aspect-[4/3]">
                 <HomeImageSlider images={allProducts.map(p => p.image || "").filter(Boolean)} />
-              </div>
-              <div className="absolute -bottom-6 -left-6 hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-xl sm:block">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-white">
-                    <Sparkles className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black text-slate-900">1000+</p>
-                    <p className="text-sm font-medium text-slate-500">Đối tác tin dùng</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
