@@ -73,11 +73,15 @@ export default function EditNewsPage() {
         <Field label="Slug">
           <input name="slug" defaultValue={item.slug} className={inputClass} />
         </Field>
-        <RichTextEditor
-          name="excerpt"
-          label="Mô tả ngắn"
-          defaultValue={cleanRawContent(item.excerpt || "", false).replace(/<[^>]*>/g, "").trim()}
-        />
+        <Field label="Mô tả ngắn">
+          <textarea
+            name="excerpt"
+            rows={3}
+            defaultValue={cleanRawContent(item.excerpt || "", false).replace(/<[^>]*>/g, "").trim()}
+            className={inputClass}
+            placeholder="Nhập mô tả ngắn (tùy chọn)..."
+          ></textarea>
+        </Field>
         <RichTextEditor
           name="content"
           label="Nội dung"

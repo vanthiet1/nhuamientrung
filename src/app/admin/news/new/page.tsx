@@ -101,10 +101,14 @@ export default function NewNewsPage() {
             </button>
           )}
         </Field>
-        <RichTextEditor
-          name="excerpt"
-          label="Mô tả ngắn"
-        />
+        <Field label="Mô tả ngắn">
+          <textarea
+            name="excerpt"
+            rows={3}
+            className={inputClass}
+            placeholder="Nhập mô tả ngắn (tùy chọn)..."
+          ></textarea>
+        </Field>
         <RichTextEditor name="content" label="Nội dung" />
         <Field label="Ngày đăng">
           <input name="date" type="date" defaultValue={today} className={inputClass} />
