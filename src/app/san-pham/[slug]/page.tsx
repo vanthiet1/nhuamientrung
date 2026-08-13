@@ -22,6 +22,9 @@ import {
   loadProductBySlug,
   loadProducts,
 } from "@/lib/data/public";
+import { getApprovedReviews } from "@/lib/cms/reviews";
+import ProductTabs from "@/components/ProductTabs";
+import ProductReviews from "@/components/ProductReviews";
 import { company } from "@/lib/data/company";
 import { productKeywords, siteUrl } from "@/lib/seo/keywords";
 import { breadcrumbJsonLd, productJsonLd } from "@/lib/seo/jsonld";
@@ -110,6 +113,8 @@ export default async function ProductPage({
 
   // Breadcrumb: Trang chủ → Tên danh mục → SP
   const breadcrumbs: { label: string; href?: string }[] = [];
+
+  const reviews = await getApprovedReviews(product.id);
   if (product.categoryId) {
     const cat = categories.find((c) => c.id === product.categoryId);
     if (cat) {
@@ -297,17 +302,29 @@ export default async function ProductPage({
                 }
               >
                 {content && content !== description && (
-                  <div className="mt-6">
-                    <h2 className="text-base font-extrabold text-slate-900 sm:text-lg">
-                      Mô tả chi tiết {title}
-                    </h2>
-                    <ProductContent content={content} />
+                  <div className="mt-8">
+                    <ProductTabs 
+                      reviewCount={reviews.length}
+                      descriptionNode={
+                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                          <h2 className="text-base font-extrabold text-slate-900 sm:text-lg mb-4">
+                            Mô tả chi tiết {title}
+                          </h2>
+                          <ProductContent content={content} />
+                        </div>
+                      }
+                      reviewsNode={
+                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                          <ProductReviews productId={product.id} initialReviews={reviews} />
+                        </div>
+                      }
+                    />
                   </div>
                 )}
 
                 <ProductContactBox />
 
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="mt-8 flex flex-wrap gap-3">
                   <Link
                     href="/lien-he"
                     className="btn-primary"

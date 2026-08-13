@@ -15,6 +15,7 @@ import {
   ExternalLink,
   Menu,
   X,
+  Star,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
@@ -26,6 +27,7 @@ const nav = [
   { href: "/admin/categories", label: "Danh mục", icon: FolderTree },
   { href: "/admin/subcategories", label: "Danh mục con", icon: Layers },
   { href: "/admin/products", label: "Sản phẩm", icon: Package },
+  { href: "/admin/reviews", label: "Đánh giá", icon: Star },
   { href: "/admin/news", label: "Tin tức", icon: Newspaper },
   { href: "/admin/careers", label: "Tuyển dụng", icon: Briefcase },
   { href: "/admin/contacts", label: "Liên hệ", icon: MessageSquareText },
@@ -45,6 +47,7 @@ export default function AdminShell({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [unreadContacts, setUnreadContacts] = useState(0);
+  const [pendingReviews, setPendingReviews] = useState(0);
 
   const fetchUnread = useCallback(async () => {
     try {
@@ -61,14 +64,39 @@ export default function AdminShell({
     }
   }, []);
 
+  const fetchPendingReviews = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/reviews/pending", {
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (typeof data.count === "number") {
+        setPendingReviews(data.count);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   // Realtime-ish: poll + focus + custom event from contacts page
   useEffect(() => {
     fetchUnread();
-    const id = window.setInterval(fetchUnread, UNREAD_POLL_MS);
+    fetchPendingReviews();
+    const id = window.setInterval(() => {
+      fetchUnread();
+      fetchPendingReviews();
+    }, UNREAD_POLL_MS);
 
-    const onFocus = () => fetchUnread();
+    const onFocus = () => {
+      fetchUnread();
+      fetchPendingReviews();
+    };
     const onVis = () => {
-      if (document.visibilityState === "visible") fetchUnread();
+      if (document.visibilityState === "visible") {
+        fetchUnread();
+        fetchPendingReviews();
+      }
     };
     const onCustom = () => fetchUnread();
 
@@ -89,7 +117,10 @@ export default function AdminShell({
     if (pathname.startsWith("/admin/contacts")) {
       fetchUnread();
     }
-  }, [pathname, fetchUnread]);
+    if (pathname.startsWith("/admin/reviews")) {
+      fetchPendingReviews();
+    }
+  }, [pathname, fetchUnread, fetchPendingReviews]);
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -143,6 +174,11 @@ export default function AdminShell({
       {nav.map((item) => {
         const active = isActive(item.href, item.exact);
         const isContacts = item.href === "/admin/contacts";
+        const isReviews = item.href === "/admin/reviews";
+        
+        const count = isContacts ? unreadContacts : isReviews ? pendingReviews : 0;
+        const hasNotification = count > 0;
+
         return (
           <Link
             key={item.href}
@@ -159,12 +195,12 @@ export default function AdminShell({
             <span className="relative shrink-0">
               <item.icon className="h-4 w-4" />
               {/* Dot on icon when collapsed feel / mobile compact */}
-              {isContacts && unreadContacts > 0 && !active && (
+              {hasNotification && !active && (
                 <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 ring-2 ring-slate-900" />
               )}
             </span>
             <span className="min-w-0 flex-1 truncate">{item.label}</span>
-            {isContacts && badge(unreadContacts, active)}
+            {hasNotification && badge(count, active)}
           </Link>
         );
       })}
@@ -224,9 +260,9 @@ export default function AdminShell({
                 aria-label="Mở menu"
               >
                 <Menu className="h-5 w-5" />
-                {unreadContacts > 0 && (
+                {(unreadContacts > 0 || pendingReviews > 0) && (
                   <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-extrabold text-white">
-                    {unreadContacts > 9 ? "9+" : unreadContacts}
+                    {(unreadContacts + pendingReviews) > 9 ? "9+" : (unreadContacts + pendingReviews)}
                   </span>
                 )}
               </button>
@@ -236,6 +272,15 @@ export default function AdminShell({
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {pendingReviews > 0 && (
+                <Link
+                  href="/admin/reviews"
+                  className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-600 ring-1 ring-red-100"
+                >
+                  <Star className="h-3.5 w-3.5" />
+                  {pendingReviews}
+                </Link>
+              )}
               {unreadContacts > 0 && (
                 <Link
                   href="/admin/contacts"

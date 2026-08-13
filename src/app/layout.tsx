@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import SiteChrome from "@/components/SiteChrome";
 import JsonLd from "@/components/JsonLd";
+import { Toaster } from "react-hot-toast";
 import { company } from "@/lib/data/company";
 import { loadCategories } from "@/lib/data/public";
 import { defaultSeo, siteUrl } from "@/lib/seo/keywords";
@@ -75,6 +76,7 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-background text-foreground" suppressHydrationWarning>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        <Toaster position="top-right" />
         <SiteChrome categories={categories}>{children}</SiteChrome>
       </body>
     </html>

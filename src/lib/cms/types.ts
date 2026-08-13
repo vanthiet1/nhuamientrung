@@ -116,3 +116,16 @@ export type CategoryTree = {
   id?: string;
   children?: CategoryTree[];
 };
+
+export type ProductReviewRecord = {
+  id: string;
+  product_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  content: string;
+  rating: number;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  updated_at: string;
+};
