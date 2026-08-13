@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${siteUrl}/san-pham`,
+      url: `${siteUrl}/tat-ca-san-pham`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
 
     categoryUrls = catSlugs.map((slug) => ({
-      url: `${siteUrl}/san-pham/${slug}`,
+      url: `${siteUrl}/danh-muc/${slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,

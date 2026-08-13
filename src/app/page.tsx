@@ -243,35 +243,6 @@ export default async function HomePage({ searchParams }: Props) {
         </div>
       </section>
 
-      {featuredNews && (
-        <section className="section container-home">
-          <SectionHeading
-            eyebrow="Cập nhật"
-            title="Tin tức"
-            description="Tin mới từ ngành màng co & bao bì — ảnh và tiêu đề cập nhật"
-            href="/tin-tuc"
-            linkLabel="Xem tất cả tin tức bao bì →"
-          />
-          <HomeNewsScroll
-            featured={{
-              slug: featuredNews.slug,
-              title: featuredNews.title,
-              excerpt: featuredNews.excerpt,
-              date: featuredNews.date,
-              image: featuredNews.image,
-            }}
-            items={scrollNews.map((n) => ({
-              slug: n.slug,
-              title: n.title,
-              excerpt: n.excerpt,
-              date: n.date,
-              image: n.image,
-            }))}
-          />
-        </section>
-      )}
-
-
       {/* Testimonials */}
       <section className="section bg-slate-50 border-t border-slate-200">
         <div className="container-home">
@@ -324,6 +295,34 @@ export default async function HomePage({ searchParams }: Props) {
           </div>
         </div>
       </section>
+
+      {featuredNews && (
+        <section className="section container-home border-t border-slate-200">
+          <SectionHeading
+            eyebrow="Cập nhật"
+            title="Tin tức"
+            description="Tin mới từ ngành màng co & bao bì — ảnh và tiêu đề cập nhật"
+            href="/tin-tuc"
+            linkLabel="Xem tất cả tin tức bao bì →"
+          />
+          <HomeNewsScroll
+            featured={{
+               slug: featuredNews.slug,
+               title: featuredNews.title,
+               excerpt: featuredNews.excerpt,
+               date: featuredNews.date,
+               image: featuredNews.image,
+            }}
+            items={scrollNews.map((n) => ({
+              slug: n.slug,
+              title: n.title,
+              excerpt: n.excerpt,
+              date: n.date,
+              image: n.image,
+            }))}
+          />
+        </section>
+      )}
 
       <section className="bg-white border-t border-slate-100">
         <FaqAccordion

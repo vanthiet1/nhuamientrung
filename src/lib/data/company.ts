@@ -8,7 +8,7 @@ export const company = {
   email: "contact@baobithanhphat.com",
   bankAccount: "115002948432",
   bankName: "Ngân hàng TMCP Công Thương Việt Nam - CN Đà Nẵng",
-  zaloUrl: "https://zalo.me/02363725379",
+  zaloUrl: "https://zalo.me/0935909747",
   hotline: "0236 3725379",
   /** Meta description — giữ ~120–155 ký tự (chuẩn SEO) */
   description:
