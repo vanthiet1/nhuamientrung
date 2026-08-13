@@ -155,12 +155,12 @@ export default async function CategoryPage({
   
   const categoryFaqItems = [
     {
-      question: `Ưu điểm nổi bật của các sản phẩm thuộc danh mục ${category.name} là gì?`,
-      answer: `Các sản phẩm ${category.name} tại Bao Bì Thành Phát được sản xuất từ nguyên liệu nhựa nguyên sinh chất lượng cao, mang lại độ dai, độ bóng và khả năng bảo vệ hàng hóa tuyệt vời. Chúng tôi cam kết chất lượng đồng đều trên từng lô hàng, giúp quá trình đóng gói của bạn mượt mà và tối ưu nhất.`
+      question: `Ưu điểm nổi bật của các sản phẩm thuộc danh mục ${title} là gì?`,
+      answer: `Các sản phẩm ${title} tại Bao Bì Thành Phát được sản xuất từ nguyên liệu nhựa nguyên sinh chất lượng cao, mang lại độ dai, độ bóng và khả năng bảo vệ hàng hóa tuyệt vời. Chúng tôi cam kết chất lượng đồng đều trên từng lô hàng, giúp quá trình đóng gói của bạn mượt mà và tối ưu nhất.`
     },
     {
-      question: `Thành Phát có nhận sản xuất ${category.name} theo yêu cầu riêng không?`,
-      answer: `Có, chúng tôi hỗ trợ tùy chỉnh kích thước, độ dày và quy cách đóng gói (dạng cuộn, dạng túi, cắt sẵn) của các loại ${category.name} sao cho vừa vặn nhất với sản phẩm của bạn. Đội ngũ kỹ thuật sẽ tư vấn miễn phí để giúp bạn chọn được quy cách tiết kiệm chi phí nhất.`
+      question: `Thành Phát có nhận sản xuất ${title} theo yêu cầu riêng không?`,
+      answer: `Có, chúng tôi hỗ trợ tùy chỉnh kích thước, độ dày và quy cách đóng gói (dạng cuộn, dạng túi, cắt sẵn) của các loại ${title} sao cho vừa vặn nhất với sản phẩm của bạn. Đội ngũ kỹ thuật sẽ tư vấn miễn phí để giúp bạn chọn được quy cách tiết kiệm chi phí nhất.`
     },
     {
       question: "Nếu đặt mua số lượng lớn thì chính sách giá và vận chuyển như thế nào?",
@@ -249,7 +249,7 @@ export default async function CategoryPage({
       </section>
 
       <section className="bg-slate-50 border-t border-slate-200">
-        <FaqAccordion items={categoryFaqItems} title={`Câu hỏi thường gặp về ${category.name}`} />
+        <FaqAccordion items={categoryFaqItems} title={`Câu hỏi thường gặp về ${title}`} />
       </section>
     </>
   );

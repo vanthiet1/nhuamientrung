@@ -111,7 +111,7 @@ export default function RichTextEditor({
 
   return (
     <div className="space-y-2">
-      <Field label={label} hint={hint} />
+      <Field label={label} hint={hint}>
       
       {/* Hidden input to ensure native form submission picks up the data */}
       <input type="hidden" name={name} value={content} />
@@ -149,6 +149,7 @@ export default function RichTextEditor({
         <div className="p-0">
           {mode === "visual" ? (
             <ReactQuill
+              // @ts-expect-error Next.js dynamic component strips ref type but forwards it at runtime
               ref={quillRef}
               theme="snow"
               value={content}
@@ -166,6 +167,7 @@ export default function RichTextEditor({
           )}
         </div>
       </div>
+      </Field>
       
       {/* Global overrides to make Quill match the UI theme */}
       <style dangerouslySetInnerHTML={{__html: `
