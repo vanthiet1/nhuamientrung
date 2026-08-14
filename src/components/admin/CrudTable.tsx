@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Pencil, Trash2, Plus, Search } from "lucide-react";
+import { Pencil, Trash2, Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useConfirm } from "@/components/admin/ConfirmDialog";
 
 export type Column<T> = {
@@ -26,6 +26,7 @@ export default function CrudTable<T extends { id: string }>({
   basePath,
   deleteMessage = "Bạn chắc chắn muốn xóa mục này? Thao tác không thể hoàn tác.",
   searchKey,
+  pageSize = 10,
 }: {
   title: string;
   description?: string;
@@ -39,9 +40,11 @@ export default function CrudTable<T extends { id: string }>({
   basePath?: string;
   deleteMessage?: string;
   searchKey?: (row: T) => string;
+  pageSize?: number;
 }) {
   const confirm = useConfirm();
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const editBase = basePath || createHref.replace(/\/new$/, "");
 
   const filteredRows = useMemo(() => {
@@ -57,6 +60,12 @@ export default function CrudTable<T extends { id: string }>({
       );
     });
   }, [rows, searchQuery, searchKey]);
+
+  const totalPages = Math.ceil(filteredRows.length / pageSize);
+  const paginatedRows = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredRows.slice(startIndex, startIndex + pageSize);
+  }, [filteredRows, currentPage, pageSize]);
 
   async function handleDelete(id: string) {
     const ok = await confirm({
@@ -88,7 +97,10 @@ export default function CrudTable<T extends { id: string }>({
               type="text"
               placeholder="Tìm kiếm..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
               className="w-full rounded-xl border border-slate-200 py-2 pl-9 pr-4 text-sm outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:w-64"
             />
           </div>
@@ -104,12 +116,12 @@ export default function CrudTable<T extends { id: string }>({
 
       {/* Mobile card list */}
       <div className="space-y-3 md:hidden">
-        {filteredRows.length === 0 && (
+        {paginatedRows.length === 0 && (
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-400 shadow-sm">
             {emptyText}
           </div>
         )}
-        {filteredRows.map((row) => {
+        {paginatedRows.map((row) => {
           const mobileCols = columns.filter((c) => !c.hideOnMobile);
           const primary = mobileCols[0] || columns[0];
           const rest = mobileCols.slice(1);
@@ -176,7 +188,7 @@ export default function CrudTable<T extends { id: string }>({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredRows.length === 0 && (
+              {paginatedRows.length === 0 && (
                 <tr>
                   <td
                     colSpan={columns.length + 1}
@@ -186,7 +198,7 @@ export default function CrudTable<T extends { id: string }>({
                   </td>
                 </tr>
               )}
-              {filteredRows.map((row) => (
+              {paginatedRows.map((row) => (
                 <tr key={row.id} className="hover:bg-slate-50/80">
                   {columns.map((c) => (
                     <td
@@ -223,6 +235,68 @@ export default function CrudTable<T extends { id: string }>({
           </table>
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-5 sm:flex-row">
+          <div className="text-sm text-slate-500">
+            Hiển thị <span className="font-semibold text-slate-700">{(currentPage - 1) * pageSize + 1}</span> đến <span className="font-semibold text-slate-700">{Math.min(currentPage * pageSize, filteredRows.length)}</span> trong tổng <span className="font-semibold text-slate-700">{filteredRows.length}</span> mục
+          </div>
+          <nav aria-label="Phân trang" className="flex items-center gap-1.5">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-bold transition ${
+                currentPage === 1
+                  ? "pointer-events-none border-slate-100 text-slate-300"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:text-brand-600"
+              }`}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            
+            {/* Page numbers */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((p) => {
+                if (totalPages <= 5) return true;
+                if (currentPage <= 3) return p <= 5;
+                if (currentPage >= totalPages - 2) return p >= totalPages - 4;
+                return p >= currentPage - 1 && p <= currentPage + 1;
+              })
+              .map((p, index, array) => (
+                <React.Fragment key={p}>
+                  {index > 0 && p - array[index - 1] > 1 && (
+                    <span className="inline-flex h-9 w-6 items-center justify-center text-slate-400">
+                      ...
+                    </span>
+                  )}
+                  <button
+                    onClick={() => setCurrentPage(p)}
+                    className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg border px-2.5 text-sm font-bold transition ${
+                      currentPage === p
+                        ? "border-brand-600 bg-brand-600 text-white shadow-sm"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:text-brand-600"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                </React.Fragment>
+              ))}
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-bold transition ${
+                currentPage === totalPages
+                  ? "pointer-events-none border-slate-100 text-slate-300"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:text-brand-600"
+              }`}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </nav>
+        </div>
+      )}
     </div>
   );
 }

@@ -149,7 +149,7 @@ export default function HeroSlider({
           <div
             className={`absolute inset-0 ${
               hasImage
-                ? "bg-gradient-to-r from-black/75 via-black/50 to-black/30"
+                ? "bg-gradient-to-r from-black/50 via-black/30 to-transparent"
                 : "bg-gradient-to-t from-black/25 via-transparent to-black/10"
             }`}
           />
