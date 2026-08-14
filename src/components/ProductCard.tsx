@@ -50,7 +50,9 @@ export default function ProductCard({
   return (
     <Link href={href} className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/60 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-brand-500/50">
       <div
-        className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${theme.gradient} ${
+        className={`relative flex items-center justify-center overflow-hidden ${
+          category.image ? "bg-slate-100" : `bg-gradient-to-br ${theme.gradient}`
+        } ${
           lg ? "h-[213px] sm:h-[229px] md:h-[245px]" : "h-[181px] sm:h-[197px]"
         }`}
       >
@@ -83,24 +85,22 @@ export default function ProductCard({
         <span className="absolute right-3 top-3 rounded-full bg-white p-2 text-brand-600 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 group-hover:shadow-brand-500/25">
           <ArrowUpRight className={lg ? "h-5 w-5" : "h-4 w-4"} />
         </span>
+        
+        {/* Overlay button on hover */}
+        <div className="absolute inset-x-0 bottom-0 translate-y-full opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="flex w-full items-center justify-center bg-[#395c8c]/95 py-3 px-4 text-sm font-bold text-white backdrop-blur">
+            NHẬN BÁO GIÁ
+          </div>
+        </div>
       </div>
       <div className={lg ? "p-5 sm:p-6" : "p-4 sm:p-5"}>
         <h3
-          className={`font-bold text-slate-900 transition-colors group-hover:text-brand-600 ${
+          className={`font-bold uppercase text-[#0a3f6b] ${
             lg ? "text-base leading-snug sm:text-lg" : "text-sm sm:text-base"
           }`}
         >
           {category.name}
         </h3>
-        {category.sku && (
-          <p
-            className={`mt-1 font-semibold text-sky-600 ${
-              lg ? "text-xs sm:text-sm" : "text-[11px]"
-            }`}
-          >
-            Mã SP: {category.sku}
-          </p>
-        )}
         <p
           className={`mt-2 line-clamp-2 leading-relaxed text-slate-500 ${
             lg ? "text-sm sm:text-[15px]" : "text-sm"
@@ -124,12 +124,12 @@ export default function ProductCard({
               {category.children.length} danh mục con
             </span>
           ) : (
-            <span className={`inline-flex items-center justify-center rounded-xl border-2 border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600 transition-all duration-300 group-hover:border-brand-200 group-hover:bg-brand-50 group-hover:text-brand-700`}>
+            <span className={`inline-flex items-center justify-center rounded-full bg-[#0a3f6b] px-4 py-2 text-xs font-bold text-white transition-all duration-300 hover:bg-[#072a48]`}>
               Nhận báo giá
             </span>
           )}
           <span
-            className={`ml-auto font-bold text-slate-400 transition-colors group-hover:text-brand-600 ${
+            className={`ml-auto font-bold text-[#0a3f6b] transition-colors hover:text-[#072a48] ${
               lg ? "text-sm sm:text-base" : "text-sm"
             }`}
           >

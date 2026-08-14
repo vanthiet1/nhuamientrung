@@ -236,7 +236,7 @@ export function freeConsultantReply(
     /^(xin chao|chao|hello|hi|hey)\b/.test(t) ||
     (t.length < 12 && /chao|hello|hi/.test(t))
   ) {
-    return `Xin chào! Mình là **ChatBot tư vấn** của ${company.shortName}. Bạn có thể hỏi: màng PVC/PE/POF dùng cho hàng gì, báo giá, giao hàng…`;
+    return `Xin chào! Mình là **ChatBot tư vấn** của ${company.shortName}. Bạn có thể hỏi về các sản phẩm: Màng co (PVC/PE/POF), Màng phức hợp, In bao bì, Xốp hơi, Băng keo, báo giá, giao hàng…`;
   }
 
   // ── Liên hệ ──

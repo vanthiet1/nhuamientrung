@@ -94,9 +94,9 @@ export default function Header({
                 >
                   <Link
                     href={link.href}
-                    className={`inline-flex items-center gap-1 rounded-lg px-2 lg:px-3 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                    className={`inline-flex items-center gap-1 rounded-full px-3 lg:px-4 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
                       isActive(link.href)
-                        ? "bg-accent-50 text-accent-600"
+                        ? "bg-sky-50 text-sky-600"
                         : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
                     }`}
                   >
@@ -121,51 +121,33 @@ export default function Header({
                           Danh mục sản phẩm
                         </p>
                       </div>
-                      <div className="grid grid-cols-2 gap-x-6 gap-y-6 p-6 sm:grid-cols-3">
-                        {categories.map((cat) => {
-                          const isCatActive = pathname === `/danh-muc/${cat.slug}` || pathname.startsWith(`/danh-muc/${cat.slug}/`);
-                          return (
-                            <div key={cat.slug} className="group">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-5 p-6 sm:grid-cols-3">
+                        {(() => {
+                          const allLinks = categories.reduce((acc, cat) => {
+                            acc.push({ name: cat.name, slug: cat.slug, isParent: true });
+                            if (cat.children) {
+                              cat.children.forEach(child => {
+                                acc.push({ name: child.name, slug: child.slug, isParent: false });
+                              });
+                            }
+                            return acc;
+                          }, [] as { name: string; slug: string; isParent: boolean }[]);
+
+                          return allLinks.map((link, idx) => {
+                            const isActive = pathname === `/danh-muc/${link.slug}` || pathname.startsWith(`/danh-muc/${link.slug}/`);
+                            return (
                               <Link
-                                href={`/danh-muc/${cat.slug}`}
-                                className={`block text-[15px] font-extrabold leading-snug transition-colors hover:text-brand-600 ${
-                                  isCatActive ? "text-brand-600" : "text-slate-800"
+                                key={`${link.slug}-${idx}`}
+                                href={`/danh-muc/${link.slug}`}
+                                className={`block text-[14px] font-bold leading-snug transition-colors hover:text-brand-600 ${
+                                  isActive ? "text-brand-600" : "text-slate-800"
                                 }`}
                               >
-                                {cat.name}
+                                {link.name}
                               </Link>
-                              {cat.children && cat.children.length > 0 && (
-                                <ul className="mt-2.5 flex flex-col gap-2">
-                                  {cat.children.slice(0, 4).map((child) => {
-                                    const isChildActive = pathname === `/danh-muc/${child.slug}` || pathname.startsWith(`/danh-muc/${child.slug}/`);
-                                    return (
-                                      <li key={child.slug}>
-                                        <Link
-                                          href={`/danh-muc/${child.slug}`}
-                                          className={`block text-[13.5px] transition-colors hover:text-brand-600 ${
-                                            isChildActive ? "text-brand-600 font-semibold" : "text-slate-600"
-                                          }`}
-                                        >
-                                          {child.name}
-                                        </Link>
-                                      </li>
-                                    );
-                                  })}
-                                  {cat.children.length > 4 && (
-                                    <li>
-                                      <Link
-                                        href={`/danh-muc/${cat.slug}`}
-                                        className="inline-block text-[13px] font-semibold text-brand-600 hover:underline"
-                                      >
-                                        Xem thêm ({cat.children.length - 4})
-                                      </Link>
-                                    </li>
-                                  )}
-                                </ul>
-                              )}
-                            </div>
-                          );
-                        })}
+                            );
+                          });
+                        })()}
                       </div>
                       <div className="border-t border-slate-100 bg-slate-50 px-5 py-3.5 text-center">
                         <Link
@@ -182,9 +164,9 @@ export default function Header({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`rounded-lg px-2 lg:px-3 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                  className={`rounded-full px-3 lg:px-4 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
                     isActive(link.href)
-                      ? "bg-accent-50 text-accent-600"
+                      ? "bg-sky-50 text-sky-600"
                       : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
                   }`}
                 >
@@ -202,8 +184,8 @@ export default function Header({
             </div>
             <Link
               href="/lien-he"
-              className="btn-primary hidden lg:inline-flex"
-              style={{ padding: "0.5rem 1rem", fontSize: "0.75rem" }}
+              className="btn-primary hidden lg:inline-flex !rounded-full bg-brand-800 hover:bg-brand-900"
+              style={{ padding: "0.5rem 1.25rem", fontSize: "0.75rem" }}
             >
               Báo giá
             </Link>
@@ -260,7 +242,7 @@ export default function Header({
                 <LanguageSwitcher variant="light" />
               </div>
             </div>
-            <nav className="container-page flex flex-col gap-0.5 pb-3">
+            <nav className="container-page flex flex-col gap-0.5 pb-32">
               {navLinks.map((link) =>
                 link.hasDropdown ? (
                   <div key={link.href} className="rounded-xl">
@@ -332,7 +314,7 @@ export default function Header({
                   </Link>
                 )
               )}
-              <Link href="/lien-he" className="btn-primary mt-2 w-full">
+              <Link href="/lien-he" className="btn-primary mt-4 w-full">
                 Yêu cầu báo giá
               </Link>
             </nav>

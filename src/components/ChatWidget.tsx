@@ -45,7 +45,7 @@ const QUICK = [
 const WELCOME: ChatLine = {
   id: "welcome",
   role: "assistant",
-  content: `Xin chào! Mình là **ChatBot tư vấn** của ${company.shortName}. Hỏi PVC/PE/POF, sản phẩm, giao hàng hoặc báo giá. Cần người thật: gọi ${company.phone} hoặc Chat Zalo.`,
+  content: `Xin chào! Mình là **ChatBot tư vấn** của ${company.shortName}. Hỏi thông tin về Màng co, Màng phức hợp, In bao bì, Xốp hơi, Băng keo, giao hàng hoặc báo giá. Cần người thật: gọi ${company.phone} hoặc Chat Zalo.`,
 };
 
 export default function ChatWidget() {
@@ -357,7 +357,7 @@ export default function ChatWidget() {
           >
             💬 ChatBot tư vấn
             <span className="mt-0.5 block text-[11px] font-medium text-slate-500">
-              PVC / PE / POF · Báo giá · Giao hàng
+              Màng co · Màng phức hợp · In bao bì · Xốp hơi · Băng keo
             </span>
           </button>
         )}

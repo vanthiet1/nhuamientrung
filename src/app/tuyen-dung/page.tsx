@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MapPin, Briefcase, Banknote } from "lucide-react";
+import { 
+  MapPin, 
+  Briefcase, 
+  Banknote, 
+  Users, 
+  Lightbulb, 
+  TrendingUp, 
+  Heart, 
+  ShieldCheck, 
+  GraduationCap, 
+  ClipboardCheck, 
+  MessageCircle, 
+  UserPlus, 
+  CheckCircle2 
+} from "lucide-react";
 import PageBanner from "@/components/PageBanner";
 import EmptyState from "@/components/EmptyState";
 import { loadCareers } from "@/lib/data/public";
@@ -9,12 +23,15 @@ import { company } from "@/lib/data/company";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Tuyển dụng Bao Bì Thành Phát Đà Nẵng",
-  description: `Tuyển dụng tại ${company.shortName} — Đà Nẵng. Gửi CV ${company.email} hoặc gọi ${company.phone}.`,
+  title: "Tuyển dụng & Việc làm Bao Bì Thành Phát tại Đà Nẵng",
+  description: `Môi trường làm việc năng động, phúc lợi hấp dẫn tại ${company.shortName}. Đang tuyển dụng các vị trí kỹ thuật in, vận hành máy màng co, kinh doanh bao bì tại Đà Nẵng.`,
   keywords: [
     "tuyển dụng bao bì Đà Nẵng",
     "việc làm màng co",
     "tuyển dụng Bao Bì Thành Phát",
+    "việc làm khu công nghiệp Đà Nẵng",
+    "tuyển kỹ thuật vận hành máy in",
+    "tuyển nhân viên kinh doanh bao bì"
   ],
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com"}/tuyen-dung`,
@@ -33,20 +50,86 @@ export default async function CareersPage() {
       />
 
       <section className="section container-page">
-        <div className="card mb-8 max-w-3xl p-6 sm:p-8">
+        {/* Why Choose Us */}
+        <div className="mb-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-brand-600">
+              <Users className="h-6 w-6" />
+            </div>
+            <h3 className="mb-2 text-lg font-bold text-slate-900">Môi trường năng động</h3>
+            <p className="text-sm leading-relaxed text-slate-600">
+              Đội ngũ trẻ trung, sáng tạo, đề cao tinh thần làm việc nhóm và tôn trọng sự khác biệt của mỗi cá nhân.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+              <Heart className="h-6 w-6" />
+            </div>
+            <h3 className="mb-2 text-lg font-bold text-slate-900">Phúc lợi hấp dẫn</h3>
+            <p className="text-sm leading-relaxed text-slate-600">
+              Lương thưởng cạnh tranh, BHXH đầy đủ, khám sức khỏe định kỳ, du lịch hàng năm và các khoản phụ cấp đa dạng.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+              <TrendingUp className="h-6 w-6" />
+            </div>
+            <h3 className="mb-2 text-lg font-bold text-slate-900">Lộ trình thăng tiến</h3>
+            <p className="text-sm leading-relaxed text-slate-600">
+              Được đào tạo bài bản về kiến thức bao bì đóng gói. Cơ hội thăng tiến rõ ràng cho người có năng lực.
+            </p>
+          </div>
+        </div>
+
+        {/* Hiring Process */}
+        <div className="mb-12 rounded-3xl bg-slate-50 p-6 sm:p-10">
+          <h2 className="mb-8 text-center text-2xl font-bold text-slate-900">Quy trình tuyển dụng</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm">
+                <ClipboardCheck className="h-7 w-7" />
+              </div>
+              <h4 className="mb-1 font-bold text-slate-900">1. Nộp hồ sơ</h4>
+              <p className="text-xs text-slate-500">Gửi CV qua Email/Zalo</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm">
+                <MessageCircle className="h-7 w-7" />
+              </div>
+              <h4 className="mb-1 font-bold text-slate-900">2. Phỏng vấn</h4>
+              <p className="text-xs text-slate-500">Trao đổi trực tiếp 1-1</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm">
+                <UserPlus className="h-7 w-7" />
+              </div>
+              <h4 className="mb-1 font-bold text-slate-900">3. Nhận việc</h4>
+              <p className="text-xs text-slate-500">Thỏa thuận lương thưởng</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-emerald-500 shadow-sm">
+                <CheckCircle2 className="h-7 w-7" />
+              </div>
+              <h4 className="mb-1 font-bold text-slate-900">4. Đào tạo</h4>
+              <p className="text-xs text-slate-500">Hội nhập văn hóa công ty</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card mb-8 p-6 sm:p-8">
           <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
-            Cơ hội nghề nghiệp
+            Cơ hội nghề nghiệp đang mở
           </h2>
           <p className="mt-3 leading-relaxed text-slate-600">
-            Chúng tôi chào đón ứng viên nhiệt huyết trong lĩnh vực bao bì – đóng
-            gói. Gửi CV về{" "}
+            Chúng tôi chào đón ứng viên nhiệt huyết tham gia phát triển ngành công nghiệp sản xuất bao bì – đóng
+            gói tại miền Trung. Gửi CV ngay về{" "}
             <a
               href={`mailto:${company.email}`}
               className="font-bold text-brand-600 hover:text-sky-600"
             >
               {company.email}
             </a>{" "}
-            hoặc gọi{" "}
+            hoặc gọi điện thoại trực tiếp đến phòng nhân sự{" "}
             <a
               href={`tel:${company.phoneRaw}`}
               className="font-bold text-brand-600 hover:text-sky-600"

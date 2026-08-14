@@ -174,25 +174,25 @@ export default function HeroSlider({
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={slide.href || "/danh-muc"}
-                className="btn-primary"
-                aria-label={slide.cta || "Xem danh mục sản phẩm bao bì"}
+                className="btn-primary !rounded-full bg-brand-700 hover:bg-brand-800"
+                aria-label={slide.cta || "Tư vấn ngay"}
               >
-                {slide.cta || "Xem sản phẩm bao bì"}
+                {slide.cta || "TƯ VẤN NGAY"}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/gioi-thieu"
-                className="btn-secondary !text-white"
-                aria-label="Giới thiệu Bao Bì Thành Phát"
+                href="/lien-he"
+                className="btn-secondary !text-white !rounded-full !border-white/30 hover:!bg-white/10"
+                aria-label="Báo giá nhanh - Miễn phí"
               >
-                Giới thiệu Thành Phát
+                BÁO GIÁ NHANH - MIỄN PHÍ
               </Link>
               <Link
                 href="/lien-he"
-                className="btn-secondary !text-white"
-                aria-label="Nhận báo giá bao bì miễn phí"
+                className="btn-secondary !text-white !rounded-full !border-white/30 hover:!bg-white/10"
+                aria-label="Báo giá nhanh"
               >
-                Nhận báo giá
+                BÁO GIÁ NHANH
               </Link>
             </div>
           </div>

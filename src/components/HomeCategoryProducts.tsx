@@ -1,12 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import Pagination from "@/components/Pagination";
 import type { CategoryTree } from "@/lib/cms/types";
 import type { ProductRecord } from "@/lib/cms/types";
 
-const CATEGORIES_PER_PAGE = 3;
-const PRODUCTS_PER_CATEGORY = 8;
+const PRODUCTS_PER_PAGE = 8;
 
 export type CategoryWithProducts = {
   category: CategoryTree;
@@ -15,22 +16,15 @@ export type CategoryWithProducts = {
 
 export default function HomeCategoryProducts({
   groups,
-  page,
 }: {
   groups: CategoryWithProducts[];
-  page: number;
+  page?: number;
 }) {
-  // Only categories that have products
   const withProducts = groups.filter((g) => g.products.length > 0);
-  const totalPages = Math.max(
-    1,
-    Math.ceil(withProducts.length / CATEGORIES_PER_PAGE)
-  );
-  const current = Math.min(Math.max(1, page), totalPages);
-  const start = (current - 1) * CATEGORIES_PER_PAGE;
-  const pageGroups = withProducts.slice(start, start + CATEGORIES_PER_PAGE);
+  const [activeTab, setActiveTab] = useState(withProducts[0]?.category.id);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  if (pageGroups.length === 0) {
+  if (withProducts.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-slate-500">
         Chưa có sản phẩm để hiển thị.
@@ -38,88 +32,100 @@ export default function HomeCategoryProducts({
     );
   }
 
+  const activeGroup =
+    withProducts.find((g) => g.category.id === activeTab) || withProducts[0];
+  
+  const totalPages = Math.ceil(activeGroup.products.length / PRODUCTS_PER_PAGE);
+  const items = activeGroup.products.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
   return (
-    <div className="space-y-12">
-      {pageGroups.map((group, gi) => {
-        const items = group.products.slice(0, PRODUCTS_PER_CATEGORY);
-        return (
-          <div
-            key={group.category.slug}
-            className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7 lg:p-8"
+    <div className="space-y-10">
+      {/* Tabs */}
+      <div className="flex w-full overflow-x-auto gap-3 pb-4 md:flex-wrap md:justify-center scrollbar-none">
+        {withProducts.map((group) => {
+          const isActive = group.category.id === activeTab;
+          return (
+            <button
+              key={group.category.id}
+              onClick={() => {
+                setActiveTab(group.category.id);
+                setCurrentPage(1);
+              }}
+              className={`shrink-0 rounded-full border px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-bold uppercase transition-all ${
+                isActive
+                  ? "border-[#1a2a4b] bg-[#1a2a4b] text-white shadow-md"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+              }`}
+            >
+              {group.category.name}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {items.map((p, i) => (
+          <ProductCard
+            size="lg"
+            key={p.id}
+            category={{
+              slug: p.slug,
+              name: p.name,
+              description: p.description,
+              image: p.image,
+              sku: p.sku,
+            }}
+            index={i}
+            isProduct={true}
+          />
+        ))}
+      </div>
+      
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-10 flex items-center justify-center gap-2">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
+            aria-label="Trang trước"
           >
-            {/* Category title on top */}
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-5">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-600">
-                  Danh mục
-                </p>
-                <h3 className="mt-1 text-xl font-extrabold text-brand-700 sm:text-2xl lg:text-[1.65rem]">
-                  {group.category.name}
-                </h3>
-                {group.category.description && (
-                  <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-500 sm:text-[15px]">
-                    {group.category.description
-                      .replace(/<[^>]*>?/gm, "")
-                      .replace(/&nbsp;/g, " ")
-                      .replace(/&amp;/g, "&")
-                      .trim()}
-                  </p>
-                )}
-              </div>
-              <Link
-                href={`/danh-muc/${group.category.slug}`}
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 transition hover:text-sky-600"
-                aria-label={`Xem tất cả sản phẩm ${group.category.name}`}
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          {Array.from({ length: totalPages }).map((_, i) => {
+            const p = i + 1;
+            return (
+              <button
+                key={p}
+                onClick={() => setCurrentPage(p)}
+                className={`flex h-10 w-10 items-center justify-center rounded-lg border font-semibold transition-colors ${
+                  currentPage === p
+                    ? "border-[#1a2a4b] bg-[#1a2a4b] text-white"
+                    : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                }`}
               >
-                Xem {group.category.name}
-                <span className="text-slate-400 font-medium">
-                  ({group.products.length})
-                </span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            {/* Products under category (3 cols khi có sidebar trang chủ) */}
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {items.map((p, i) => (
-                <ProductCard
-                  size="lg"
-                  key={p.id}
-                  category={{
-                    slug: p.slug,
-                    name: p.name,
-                    description: p.description,
-                    image: p.image,
-                    sku: p.sku,
-                  }}
-                  index={gi * PRODUCTS_PER_CATEGORY + i}
-                  isProduct={true}
-                />
-              ))}
-            </div>
-
-            {group.products.length > PRODUCTS_PER_CATEGORY && (
-              <div className="mt-5 text-center">
-                <Link
-                  href={`/danh-muc/${group.category.slug}`}
-                  className="btn-outline !text-xs"
-                  aria-label={`Xem thêm sản phẩm trong ${group.category.name}`}
-                >
-                  +{group.products.length - PRODUCTS_PER_CATEGORY} sản phẩm{" "}
-                  {group.category.name}
-                </Link>
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      <Pagination
-        page={current}
-        totalPages={totalPages}
-        basePath="/"
-        hash="danh-muc-san-pham"
-      />
+                {p}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
+            aria-label="Trang sau"
+          >
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

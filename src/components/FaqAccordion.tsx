@@ -22,26 +22,31 @@ export default function FaqAccordion({
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="mx-auto w-full max-w-4xl pt-8 pb-12">
+    <div className="mx-auto w-full max-w-4xl pt-8 pb-16">
       <JsonLd data={[faqPageJsonLd(items)]} />
-      <h2 className="mb-6 text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">
-        {title}
-      </h2>
-      <div className="space-y-3">
+      <div className="text-center mb-10">
+        <h2 className="text-2xl font-bold uppercase text-slate-900 sm:text-3xl">
+          {title}
+        </h2>
+        <div className="mx-auto mt-4 h-0.5 w-16 bg-[#395c8c]"></div>
+      </div>
+      <div className="space-y-0">
         {items.map((item, i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-brand-300 hover:shadow-md"
+            className={`border-b border-slate-200 bg-white transition-all ${
+              i === 0 ? "border-t" : ""
+            }`}
           >
             <button
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              className="flex w-full items-center justify-between px-5 py-4 text-left font-bold text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 sm:px-6 sm:py-5"
+              className="flex w-full items-center justify-between py-4 text-left font-bold text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:py-5"
               aria-expanded={openIndex === i}
             >
               <span className="pr-4 text-base sm:text-lg">{item.question}</span>
               <span
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-transform duration-300 ${
-                  openIndex === i ? "rotate-180 bg-brand-100 text-brand-600" : ""
+                className={`flex shrink-0 items-center justify-center text-slate-500 transition-transform duration-300 ${
+                  openIndex === i ? "rotate-180 text-[#395c8c]" : ""
                 }`}
               >
                 <ChevronDown className="h-5 w-5" />
@@ -53,7 +58,7 @@ export default function FaqAccordion({
               }`}
             >
               <div className="overflow-hidden">
-                <div className="border-t border-slate-100 bg-slate-50/50 px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-600 sm:px-6 sm:pb-6 sm:text-base">
+                <div className="pb-5 pt-1 text-sm leading-relaxed text-slate-600 sm:pb-6 sm:text-base">
                   {item.answer.split('\n').map((line, li) => (
                     <span key={li}>
                       {line}
