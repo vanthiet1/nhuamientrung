@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { CategoryTree } from "@/lib/cms/types";
 import SafeImage from "@/components/SafeImage";
 import { cleanRawContent } from "@/lib/cms/content-links";
+import { company } from "@/lib/data/company";
 
 const themes = [
   { gradient: "from-brand-600 to-brand-800", soft: "bg-brand-50 text-brand-700" },
@@ -88,9 +91,17 @@ export default function ProductCard({
         
         {/* Overlay button on hover */}
         <div className="absolute inset-x-0 bottom-0 translate-y-full opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
-          <div className="flex w-full items-center justify-center bg-[#395c8c]/95 py-3 px-4 text-sm font-bold text-white backdrop-blur">
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(company.zaloUrl, "_blank", "noopener,noreferrer");
+            }}
+            className="flex w-full items-center justify-center bg-[#395c8c]/95 py-3 px-4 text-sm font-bold text-white backdrop-blur"
+          >
             NHẬN BÁO GIÁ
-          </div>
+          </button>
         </div>
       </div>
       <div className={lg ? "p-5 sm:p-6" : "p-4 sm:p-5"}>
@@ -124,9 +135,17 @@ export default function ProductCard({
               {category.children.length} danh mục con
             </span>
           ) : (
-            <span className={`inline-flex items-center justify-center rounded-full bg-[#0a3f6b] px-4 py-2 text-xs font-bold text-white transition-all duration-300 hover:bg-[#072a48]`}>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(company.zaloUrl, "_blank", "noopener,noreferrer");
+              }}
+              className={`inline-flex items-center justify-center rounded-full bg-[#0a3f6b] px-4 py-2 text-xs font-bold text-white transition-all duration-300 hover:bg-[#072a48]`}
+            >
               Nhận báo giá
-            </span>
+            </button>
           )}
           <span
             className={`ml-auto font-bold text-[#0a3f6b] transition-colors hover:text-[#072a48] ${

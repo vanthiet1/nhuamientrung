@@ -401,7 +401,11 @@ body {
 }
 
 body > .skiptranslate,
-.goog-te-gadget {
+.goog-te-gadget,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+div[id^="goog-gt-"],
+div.VIpgJd-ZVi9od-ORHb-OEVmcd {
   display: none !important;
 }
 
