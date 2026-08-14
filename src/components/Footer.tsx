@@ -117,14 +117,10 @@ export default function Footer({
       </div>
 
       <div className="border-t border-white/10 bg-[#111c33]">
-        <div className="container-page flex flex-col items-center justify-between gap-4 py-6 text-sm text-slate-400 sm:flex-row">
+        <div className="container-page flex flex-col items-center justify-center py-6 text-sm text-slate-400">
           <p>
-            © {new Date().getFullYear()} {company.shortName}. Đã đăng ký bản quyền.
+            © {new Date().getFullYear()} {company.shortName}. Thiết kế bởi Webcodeby.
           </p>
-          <div className="flex gap-6">
-            <Link href="#" className="hover:text-white">Chính sách bảo mật</Link>
-            <Link href="#" className="hover:text-white">Điều khoản dịch vụ</Link>
-          </div>
         </div>
       </div>
     </footer>
