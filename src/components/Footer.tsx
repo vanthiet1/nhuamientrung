@@ -27,9 +27,7 @@ export default function Footer({
               Cung cấp giải pháp bao bì chuyên nghiệp, chất lượng cao với dịch vụ tận tâm.
             </p>
             <div className="mb-6 flex gap-3">
-              <a href={company.facebook || "#"} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-brand-500" title="Facebook">
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
-              </a>
+
               <a href={company.zaloUrl} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-brand-500" title="Zalo">
                 <span className="font-extrabold text-[12px] tracking-tight mt-0.5">Zalo</span>
               </a>
@@ -69,9 +67,7 @@ export default function Footer({
             <ul className="space-y-4 text-sm">
               {[
                 { href: "/gioi-thieu", label: "Giới thiệu" },
-                { href: "#ban-lanh-dao", label: "Ban lãnh đạo" },
                 { href: "/tuyen-dung", label: "Tuyển dụng" },
-                { href: "#chinh-sach", label: "Chính sách pháp lý" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link

@@ -109,7 +109,7 @@ export default function Header({
                   </Link>
 
                   <div
-                    className={`absolute left-1/2 top-full z-50 w-[min(94vw,880px)] -translate-x-1/2 pt-3 transition-all duration-200 ${
+                    className={`absolute left-1/2 top-full z-50 w-[min(94vw,880px)] -translate-x-[20%] xl:-translate-x-1/4 pt-3 transition-all duration-200 ${
                       productOpen
                         ? "visible translate-y-0 opacity-100"
                         : "invisible -translate-y-1 opacity-0 pointer-events-none"
