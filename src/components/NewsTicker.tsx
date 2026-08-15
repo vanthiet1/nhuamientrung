@@ -65,7 +65,7 @@ export default function NewsTicker({ items }: { items: NewsItem[] }) {
       />
       <div
         ref={trackRef}
-        className="flex h-[184px] flex-col gap-6 overflow-y-auto overscroll-contain scroll-smooth scrollbar-none"
+        className="flex h-[288px] flex-col gap-6 overflow-y-auto overscroll-contain scroll-smooth scrollbar-none"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
