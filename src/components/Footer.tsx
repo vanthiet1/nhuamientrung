@@ -4,6 +4,10 @@ import {
   MapPin,
   Phone,
   ArrowRight,
+  FileText,
+  CreditCard,
+  Globe,
+  PhoneCall
 } from "lucide-react";
 import { company } from "@/lib/data/company";
 import type { CategoryTree } from "@/lib/cms/types";
@@ -109,6 +113,39 @@ export default function Footer({
                 <span>
                   <span className="block text-slate-400">Địa chỉ:</span>
                   <span className="text-white">{company.address}</span>
+                </span>
+              </li>
+              <li className="flex gap-4">
+                <FileText className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
+                <span>
+                  <span className="block text-slate-400">Mã số thuế:</span>
+                  <span className="text-white">{company.taxCode}</span>
+                </span>
+              </li>
+              <li className="flex gap-4">
+                <CreditCard className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
+                <span>
+                  <span className="block text-slate-400">Tài khoản ngân hàng:</span>
+                  <span className="text-white block">{company.bankAccount}</span>
+                  <span className="text-white text-xs mt-0.5 block">{company.bankName}</span>
+                </span>
+              </li>
+              <li className="flex gap-4">
+                <PhoneCall className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
+                <span>
+                  <span className="block text-slate-400">Hotline:</span>
+                  <a href="tel:0935909747" className="text-white hover:text-brand-300">
+                    0935 909747
+                  </a>
+                </span>
+              </li>
+              <li className="flex gap-4">
+                <Globe className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
+                <span>
+                  <span className="block text-slate-400">Website:</span>
+                  <a href="https://baobithanhphat.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand-300">
+                    baobithanhphat.com
+                  </a>
                 </span>
               </li>
             </ul>
