@@ -229,7 +229,6 @@ export default async function NewsDetailPage({ params }: Props) {
                     priority
                     sizes="(max-width: 1024px) 100vw, 66vw"
                     className="object-cover"
-                    unoptimized
                     fallbackClassName="bg-slate-100"
                   />
                 </div>

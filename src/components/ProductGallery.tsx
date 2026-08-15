@@ -42,7 +42,6 @@ export default function ProductGallery({
             sizes="(max-width: 1024px) 100vw, 75vw"
             className="object-contain bg-white p-2 sm:p-3"
             fallbackClassName="bg-white"
-            unoptimized
           />
         ) : (
           <>
@@ -77,7 +76,6 @@ export default function ProductGallery({
                   sizes="80px"
                   className="object-contain p-1"
                   fallbackClassName="bg-slate-50"
-                  unoptimized
                 />
               </button>
             ))}

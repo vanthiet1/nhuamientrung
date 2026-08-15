@@ -58,7 +58,7 @@ export default function HomeImageSlider({ images }: { images: string[] }) {
           <img
             src={img}
             alt="Sản phẩm Bao Bì Thành Phát"
-            className="max-h-[90%] max-w-[90%] object-contain drop-shadow-md transition-transform duration-[3000ms] ease-out"
+            className="h-full w-full object-cover transition-transform duration-[3000ms] ease-out mix-blend-multiply"
             style={{ transform: i === index ? "scale(1.05)" : "scale(1)" }}
             onError={() => handleError(img)}
           />

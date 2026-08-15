@@ -9,7 +9,8 @@
     "lint": "eslint",
     "seed:supabase": "node scripts/seed-supabase.mjs",
     "seed:news": "node scripts/seed-news-supabase.mjs",
-    "seed:news:dry": "node scripts/seed-news-supabase.mjs --dry-run"
+    "seed:news:dry": "node scripts/seed-news-supabase.mjs --dry-run",
+    "extract-news-images": "node scripts/extract-news-images.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

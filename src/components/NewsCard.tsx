@@ -35,7 +35,6 @@ export default function NewsCard({
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover transition duration-500 group-hover:scale-105"
-              unoptimized
               fallbackClassName="bg-slate-200/40"
             />
           ) : (
@@ -91,7 +90,6 @@ export default function NewsCard({
             fill
             sizes="112px"
             className="object-cover transition duration-300 group-hover:scale-105"
-            unoptimized
             fallbackClassName="bg-slate-200"
           />
         ) : (

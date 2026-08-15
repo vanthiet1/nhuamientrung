@@ -59,9 +59,9 @@ export default async function HomePage({ searchParams }: Props) {
     <>
       <HeroSlider banners={banners} />
 
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-slate-50/50 border-b border-slate-100 py-10">
         <div className="container-home">
-          <div className="mx-auto flex w-full flex-col divide-y divide-slate-100 bg-white py-6 md:flex-row md:divide-x md:divide-y-0 lg:py-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: (props: any) => <CheckCircle2 {...props} />,
@@ -88,17 +88,26 @@ export default async function HomePage({ searchParams }: Props) {
                 title: "Hỗ trợ tận tâm & Tốc độ",
                 subtitle: "Eco-Friendly",
               },
+              {
+                icon: (props: any) => <Truck {...props} />,
+                title: "Giao hàng toàn quốc",
+                subtitle: "Nationwide Delivery",
+              },
             ].map((item, i) => (
               <div
                 key={i}
-                className="flex flex-1 items-center justify-center gap-4 py-5 px-4 transition sm:py-6 md:justify-start lg:justify-center"
+                className="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-md"
               >
-                <div className="text-[#395c8c]">
-                  <item.icon className="h-9 w-9 sm:h-10 sm:w-10" />
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-50/80 text-[#395c8c] transition-colors duration-300 group-hover:bg-[#395c8c] group-hover:text-white">
+                  <item.icon className="h-7 w-7" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <div className="text-[15px] font-bold text-slate-800 sm:text-base">{item.title}</div>
-                  <div className="mt-0.5 text-[13px] font-medium text-slate-400 sm:text-sm">{item.subtitle}</div>
+                  <div className="text-[15px] font-bold text-slate-800 transition-colors group-hover:text-[#395c8c] sm:text-base">
+                    {item.title}
+                  </div>
+                  <div className="mt-0.5 text-[13px] font-medium text-slate-400">
+                    {item.subtitle}
+                  </div>
                 </div>
               </div>
             ))}

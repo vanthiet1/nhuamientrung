@@ -20,7 +20,10 @@ export default function HomeCategoryProducts({
   groups: CategoryWithProducts[];
   page?: number;
 }) {
-  const withProducts = groups.filter((g) => g.products.length > 0);
+  const withProducts = groups
+    .filter((g) => g.products.length > 0)
+    .sort((a, b) => b.products.length - a.products.length)
+    .slice(0, 5);
   const [activeTab, setActiveTab] = useState(withProducts[0]?.category.id);
   const [currentPage, setCurrentPage] = useState(1);
 

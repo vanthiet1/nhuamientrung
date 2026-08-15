@@ -10,6 +10,21 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "phuanpe.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "nhuadanang.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "nhuadanang.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "nhuamientrung.vn",
         pathname: "/**",
       },

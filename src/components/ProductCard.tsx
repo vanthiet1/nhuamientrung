@@ -53,8 +53,8 @@ export default function ProductCard({
   return (
     <Link href={href} className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/60 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-brand-500/50">
       <div
-        className={`relative flex items-center justify-center overflow-hidden ${
-          category.image ? "bg-slate-100" : `bg-gradient-to-br ${theme.gradient}`
+        className={`relative flex w-full items-center justify-center overflow-hidden ${
+          category.image ? "bg-white" : `bg-gradient-to-br ${theme.gradient}`
         } ${
           lg ? "h-[213px] sm:h-[229px] md:h-[245px]" : "h-[181px] sm:h-[197px]"
         }`}
@@ -65,9 +65,8 @@ export default function ProductCard({
             alt={`${category.name}${category.sku ? ` — mã ${category.sku}` : ""} — Bao Bì Thành Phát`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition duration-500 group-hover:scale-110"
+            className="object-cover transition duration-500 group-hover:scale-110 mix-blend-multiply"
             fallbackClassName="bg-white"
-            unoptimized
           />
         ) : (
           <>

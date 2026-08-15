@@ -128,7 +128,6 @@ export default function PartnersSlider({ partners }: { partners: Partner[] }) {
                   fill
                   sizes="180px"
                   className="object-contain opacity-80 transition duration-300 group-hover:scale-105 group-hover:opacity-100"
-                  unoptimized
                   fallbackClassName="bg-slate-50"
                 />
               </div>
