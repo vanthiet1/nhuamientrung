@@ -15,6 +15,7 @@ import {
   FileText,
   Building2,
   MapPin,
+  Image as ImageIcon
 } from "lucide-react";
 import type { QuoteRequestRecord } from "@/lib/cms/types";
 import { notifyQuotesUpdated } from "@/components/admin/AdminShell";
@@ -40,6 +41,13 @@ export default function AdminQuotesPage() {
   const [rows, setRows] = useState<QuoteRequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread" | "read">("all");
+  const [expandedImages, setExpandedImages] = useState<string[]>([]);
+
+  function toggleImage(id: string) {
+    setExpandedImages((prev) => 
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  }
 
   async function load() {
     setLoading(true);
@@ -245,18 +253,40 @@ export default function AdminQuotesPage() {
 
                 {m.referenceFileUrl && (
                   <div className="mt-3">
-                    {m.referenceFileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-                      <a href={m.referenceFileUrl} target="_blank" rel="noopener noreferrer" className="block w-fit">
-                        <img src={m.referenceFileUrl} alt="File đính kèm" className="max-h-48 w-auto rounded-lg border border-slate-200 object-cover shadow-sm transition hover:opacity-90" />
-                      </a>
+                    {/* Kiểm tra cả tên file và URL để đảm bảo không lọt ảnh */}
+                    {m.referenceFileName?.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || m.referenceFileUrl?.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) ? (
+                      expandedImages.includes(m.id) ? (
+                        <div className="flex flex-col gap-2 items-start">
+                          <button
+                            type="button"
+                            onClick={() => toggleImage(m.id)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                          >
+                            <EyeOff className="h-3.5 w-3.5" />
+                            Ẩn ảnh
+                          </button>
+                          <a href={m.referenceFileUrl} target="_blank" rel="noopener noreferrer" className="block w-fit">
+                            <img src={m.referenceFileUrl} alt="File đính kèm" className="max-h-64 w-auto rounded-lg border border-slate-200 object-contain shadow-sm transition hover:opacity-90" />
+                          </a>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => toggleImage(m.id)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-sm font-bold text-brand-700 hover:bg-brand-100"
+                        >
+                          <ImageIcon className="h-4 w-4" />
+                          Xem ảnh đính kèm
+                        </button>
+                      )
                     ) : (
                       <a
                         href={m.referenceFileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-2.5 py-1.5 text-xs font-bold text-brand-700 hover:bg-brand-100"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-sm font-bold text-brand-700 hover:bg-brand-100"
                       >
-                        <ExternalLink className="h-3.5 w-3.5" />
+                        <ExternalLink className="h-4 w-4" />
                         {m.referenceFileName || "Xem file đính kèm"}
                       </a>
                     )}
