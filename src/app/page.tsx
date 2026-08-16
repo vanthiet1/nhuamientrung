@@ -17,7 +17,10 @@ import HomeCategoryProducts from "@/components/HomeCategoryProducts";
 import HomeNewsScroll from "@/components/HomeNewsScroll";
 import NewsTicker from "@/components/NewsTicker";
 import PartnersSlider from "@/components/PartnersSlider";
+import ProcessFlow from "@/components/ProcessFlow";
+import QuoteForm from "@/components/QuoteForm";
 import CategorySidebar from "@/components/CategorySidebar";
+import SupportProductsSection from "@/components/SupportProductsSection";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FaqAccordion from "@/components/FaqAccordion";
 import { company } from "@/lib/data/company";
@@ -147,6 +150,9 @@ export default async function HomePage({ searchParams }: Props) {
         </div>
       </section>
 
+      {/* Sản phẩm hỗ trợ Miền Trung */}
+      <SupportProductsSection groups={groups} />
+
       {/* Danh mục sản phẩm (Tabs) */}
       <section id="danh-muc-san-pham" className="py-14 sm:py-20 bg-slate-50">
         <div className="container-home">
@@ -154,7 +160,8 @@ export default async function HomePage({ searchParams }: Props) {
         </div>
       </section>
 
-
+      <ProcessFlow />
+      <QuoteForm />
 
       <section className="border-b border-slate-100 bg-white py-12 sm:py-16">
         <div className="container-home text-center">

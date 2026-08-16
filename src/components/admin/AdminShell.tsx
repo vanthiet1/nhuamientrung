@@ -16,13 +16,16 @@ import {
   Menu,
   X,
   Star,
+  FileSpreadsheet,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
+import { createClient } from "@/lib/supabase/client";
 
 const nav = [
   { href: "/admin", label: "Tổng quan", icon: LayoutDashboard, exact: true },
+  { href: "/admin/quotes", label: "Báo giá", icon: FileSpreadsheet },
   { href: "/admin/banners", label: "Banner Hero", icon: ImageIcon },
   { href: "/admin/categories", label: "Danh mục", icon: FolderTree },
   { href: "/admin/subcategories", label: "Danh mục con", icon: Layers },
@@ -45,6 +48,7 @@ export default function AdminShell({
   const [open, setOpen] = useState(false);
   const [unreadContacts, setUnreadContacts] = useState(0);
   const [pendingReviews, setPendingReviews] = useState(0);
+  const [unreadQuotes, setUnreadQuotes] = useState(0);
 
   const fetchUnread = useCallback(async () => {
     try {
@@ -76,35 +80,79 @@ export default function AdminShell({
     }
   }, []);
 
+  const fetchUnreadQuotes = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/quotes/unread", {
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (typeof data.count === "number") {
+        setUnreadQuotes(data.count);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   // Fetch unread data on focus, visibility change, or custom event
   useEffect(() => {
     fetchUnread();
     fetchPendingReviews();
+    fetchUnreadQuotes();
 
     const onFocus = () => {
       fetchUnread();
       fetchPendingReviews();
+      fetchUnreadQuotes();
     };
     const onVis = () => {
       if (document.visibilityState === "visible") {
         fetchUnread();
         fetchPendingReviews();
+        fetchUnreadQuotes();
       }
     };
-    const onCustom = () => fetchUnread();
+    const onCustom = () => {
+      fetchUnread();
+      fetchUnreadQuotes();
+    };
 
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVis);
     window.addEventListener("admin-contacts-updated", onCustom);
+    window.addEventListener("admin-quotes-updated", fetchUnreadQuotes);
 
     return () => {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("admin-contacts-updated", onCustom);
+      window.removeEventListener("admin-quotes-updated", fetchUnreadQuotes);
     };
-  }, [fetchUnread, fetchPendingReviews]);
+  }, [fetchUnread, fetchPendingReviews, fetchUnreadQuotes]);
 
-  // Refresh badge when navigating contacts
+  // Supabase Realtime for B2B Quotes
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel("quote_requests_changes")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "quote_requests" },
+        (payload) => {
+          // Whenever a new quote is inserted, increment unread count
+          setUnreadQuotes((prev) => prev + 1);
+          window.dispatchEvent(new Event("admin-new-quote"));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Refresh badge when navigating
   useEffect(() => {
     if (pathname.startsWith("/admin/contacts")) {
       fetchUnread();
@@ -112,7 +160,10 @@ export default function AdminShell({
     if (pathname.startsWith("/admin/reviews")) {
       fetchPendingReviews();
     }
-  }, [pathname, fetchUnread, fetchPendingReviews]);
+    if (pathname.startsWith("/admin/quotes")) {
+      fetchUnreadQuotes();
+    }
+  }, [pathname, fetchUnread, fetchPendingReviews, fetchUnreadQuotes]);
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -167,8 +218,9 @@ export default function AdminShell({
         const active = isActive(item.href, item.exact);
         const isContacts = item.href === "/admin/contacts";
         const isReviews = item.href === "/admin/reviews";
+        const isQuotes = item.href === "/admin/quotes";
         
-        const count = isContacts ? unreadContacts : isReviews ? pendingReviews : 0;
+        const count = isContacts ? unreadContacts : isReviews ? pendingReviews : isQuotes ? unreadQuotes : 0;
         const hasNotification = count > 0;
 
         return (
@@ -198,6 +250,8 @@ export default function AdminShell({
       })}
     </>
   );
+
+  const totalNotifications = unreadContacts + pendingReviews + unreadQuotes;
 
   return (
     <ConfirmProvider>
@@ -252,9 +306,9 @@ export default function AdminShell({
                 aria-label="Mở menu"
               >
                 <Menu className="h-5 w-5" />
-                {(unreadContacts > 0 || pendingReviews > 0) && (
+                {totalNotifications > 0 && (
                   <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-extrabold text-white">
-                    {(unreadContacts + pendingReviews) > 9 ? "9+" : (unreadContacts + pendingReviews)}
+                    {totalNotifications > 9 ? "9+" : totalNotifications}
                   </span>
                 )}
               </button>
@@ -264,6 +318,15 @@ export default function AdminShell({
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {unreadQuotes > 0 && (
+                <Link
+                  href="/admin/quotes"
+                  className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-600 ring-1 ring-red-100"
+                >
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
+                  {unreadQuotes}
+                </Link>
+              )}
               {pendingReviews > 0 && (
                 <Link
                   href="/admin/reviews"
@@ -362,5 +425,11 @@ export default function AdminShell({
 export function notifyContactsUpdated() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event("admin-contacts-updated"));
+  }
+}
+
+export function notifyQuotesUpdated() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("admin-quotes-updated"));
   }
 }

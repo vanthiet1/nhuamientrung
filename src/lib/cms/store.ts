@@ -8,6 +8,7 @@ import type {
   ContactMessageRecord,
   BannerRecord,
   CategoryTree,
+  QuoteRequestRecord,
 } from "./types";
 
 function toCamel(obj: any): any {
@@ -406,6 +407,59 @@ export async function countUnreadContactMessages() {
   if (error) throw error;
   return count || 0;
 }
+
+// ── Quote Requests ──
+export async function getQuoteRequests(): Promise<QuoteRequestRecord[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  return toCamel(data);
+}
+
+export async function getQuoteRequestById(id: string): Promise<QuoteRequestRecord | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase.from('quote_requests').select('*').eq('id', id).maybeSingle();
+  if (error) throw error;
+  return data ? toCamel(data) : null;
+}
+
+export async function createQuoteRequest(
+  input: Omit<QuoteRequestRecord, "id" | "createdAt" | "isRead" | "status"> & {
+    isRead?: boolean;
+    status?: string;
+  }
+) {
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  const { data, error } = await supabase.from('quote_requests').insert(snakeInput).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
+}
+
+export async function updateQuoteRequest(
+  id: string,
+  input: Partial<Pick<QuoteRequestRecord, "isRead" | "status">>
+) {
+  const supabase = createServiceClient();
+  const snakeInput = toSnake(input);
+  const { data, error } = await supabase.from('quote_requests').update(snakeInput).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toCamel(data);
+}
+
+export async function deleteQuoteRequest(id: string) {
+  const supabase = createServiceClient();
+  const { error } = await supabase.from('quote_requests').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+export async function countUnreadQuoteRequests() {
+  const supabase = createServiceClient();
+  const { count, error } = await supabase.from('quote_requests').select('*', { count: 'exact', head: true }).eq('is_read', false);
+  if (error) throw error;
+  return count || 0;
+}
+
 
 // ── Banners ──
 export async function getBanners(includeInactive = true): Promise<BannerRecord[]> {

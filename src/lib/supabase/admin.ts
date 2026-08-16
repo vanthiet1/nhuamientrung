@@ -2,6 +2,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 export const PRODUCT_IMAGE_BUCKET = "products";
 export const DOCUMENTS_BUCKET = "documents";
+export const QUOTES_BUCKET = "quotes";
 
 function requireEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -100,12 +101,16 @@ export async function uploadToStorage(opts: {
 }): Promise<{ path: string; publicUrl: string }> {
   const bucket = opts.bucket || PRODUCT_IMAGE_BUCKET;
   const isDocs = bucket === DOCUMENTS_BUCKET;
+  const isQuotes = bucket === QUOTES_BUCKET;
+  
   await ensureStorageBucket(bucket, {
     public: true,
-    fileSizeLimit: isDocs ? 8 * 1024 * 1024 : 5 * 1024 * 1024,
+    fileSizeLimit: (isDocs || isQuotes) ? 8 * 1024 * 1024 : 5 * 1024 * 1024,
     allowedMimeTypes: isDocs
       ? ["application/pdf", "application/x-pdf"]
-      : undefined,
+      : isQuotes 
+        ? ["application/pdf", "application/x-pdf", "image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif", "application/postscript", "application/illustrator", "application/vnd.adobe.illustrator"]
+        : undefined,
   });
 
   const encodedPath = opts.path

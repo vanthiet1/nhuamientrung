@@ -129,3 +129,26 @@ export type ProductReviewRecord = {
   created_at: string;
   updated_at: string;
 };
+
+export type QuoteRequestRecord = {
+  id: string;
+  name: string;
+  companyName: string | null;
+  phone: string;
+  email: string | null;
+  productType: string;
+  industry: string | null;
+  quantityExpected: string;
+  dimensions: string | null;
+  material: string | null;
+  printColors: string | null;
+  deadline: string | null;
+  deliveryDestination: string;
+  details: string | null;
+  referenceFileUrl: string | null;
+  referenceFileName: string | null;
+  status: "pending" | "contacted" | "quoted" | "rejected";
+  isRead: boolean;
+  createdAt: string;
+};
+

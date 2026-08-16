@@ -67,11 +67,13 @@ export default function Footer({
 
           {/* Column 3: Company */}
           <div>
-            <h3 className="mb-6 text-lg font-bold text-white">Công ty</h3>
+            <h3 className="mb-6 text-lg font-bold text-white uppercase">Hỗ trợ Miền Trung</h3>
             <ul className="space-y-4 text-sm">
               {[
-                { href: "/gioi-thieu", label: "Giới thiệu" },
-                { href: "/tuyen-dung", label: "Tuyển dụng" },
+                { href: "/danh-muc/mang-xop-hoi-xop-khi-xop-boc-hang", label: "Xốp hơi" },
+                { href: "/danh-muc/mang-xop-pe-foam", label: "Xốp PE Foam" },
+                { href: "/danh-muc/mang-quan-pallet", label: "Màng PE quấn pallet" },
+                { href: "/danh-muc/bang-keo-hang-de-vo", label: "Băng keo" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
