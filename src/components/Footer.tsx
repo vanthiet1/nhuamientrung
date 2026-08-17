@@ -55,17 +55,11 @@ export default function Footer({
               {company.aboutBlurb || "Cung cấp giải pháp bao bì chuyên nghiệp, chất lượng cao với dịch vụ tận tâm."}
             </p>
             <div className="flex gap-3">
-              <a href={company.social?.facebook || "#"} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-1 hover:bg-[#1877f2] hover:shadow-lg" title="Facebook">
-                <FacebookIcon className="h-4 w-4" />
-              </a>
-              <a href={company.social?.youtube || "#"} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-1 hover:bg-[#ff0000] hover:shadow-lg" title="Youtube">
-                <YoutubeIcon className="h-4 w-4" />
-              </a>
-              <a href={company.social?.linkedin || "#"} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-1 hover:bg-[#0a66c2] hover:shadow-lg" title="LinkedIn">
-                <LinkedinIcon className="h-4 w-4" />
-              </a>
               <a href={company.zaloUrl} target="_blank" rel="noopener noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-1 hover:bg-[#0068ff] hover:shadow-lg" title="Zalo">
                 <span className="font-extrabold text-[12px] tracking-tight mt-0.5">Zalo</span>
+              </a>
+              <a href={`mailto:${company.email}`} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-1 hover:bg-sky-500 hover:shadow-lg" title="Email">
+                <Mail className="h-4 w-4" />
               </a>
             </div>
           </div>
