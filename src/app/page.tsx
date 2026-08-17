@@ -34,13 +34,9 @@ import {
 
 export const revalidate = 3600;
 
-type Props = {
-  searchParams: Promise<{ page?: string }>;
-};
+type Props = {};
 
-export default async function HomePage({ searchParams }: Props) {
-  const sp = await searchParams;
-  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+export default async function HomePage({}: Props) {
 
   const [categories, newsItems, allProducts, banners] = await Promise.all([
     loadCategories(),
@@ -156,7 +152,7 @@ export default async function HomePage({ searchParams }: Props) {
       {/* Danh mục sản phẩm (Tabs) */}
       <section id="danh-muc-san-pham" className="py-14 sm:py-20 bg-slate-50">
         <div className="container-home">
-          <HomeCategoryProducts groups={groups} page={page} />
+          <HomeCategoryProducts groups={groups} />
         </div>
       </section>
 
