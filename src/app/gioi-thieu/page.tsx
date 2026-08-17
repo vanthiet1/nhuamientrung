@@ -118,7 +118,7 @@ export default function AboutPage() {
               <dl className="mt-4 space-y-3.5 text-sm">
                 {[
                   { label: "Tên công ty", value: company.name },
-                  { label: "Mã số thuế", value: company.taxCode },
+
                   { label: "Địa chỉ", value: company.address },
                 ].map((row) => (
                   <div key={row.label}>

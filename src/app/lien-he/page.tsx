@@ -4,7 +4,6 @@ import {
   MapPin,
   Phone,
   Building2,
-  CreditCard,
   MessageCircle,
 } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
@@ -54,12 +53,7 @@ export default function ContactPage() {
                   label: "Tên công ty",
                   value: company.name,
                 },
-                {
-                  icon: null,
-                  label: "Mã số thuế",
-                  value: company.taxCode,
-                  badge: "MST",
-                },
+
                 {
                   icon: MapPin,
                   label: "Địa chỉ",
@@ -112,18 +106,7 @@ export default function ContactPage() {
                   </a>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <CreditCard className="mt-0.5 h-5 w-5 shrink-0 text-accent-500" />
-                <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400">
-                    Số tài khoản
-                  </div>
-                  <div className="mt-0.5 font-mono text-sm text-slate-800">
-                    {company.bankAccount}
-                  </div>
-                  <div className="text-xs text-slate-500">{company.bankName}</div>
-                </div>
-              </div>
+
             </div>
 
             <a

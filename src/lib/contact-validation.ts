@@ -38,7 +38,7 @@ export function phoneErrorMessage(raw: string): string | null {
   if (digits.length < 9) return "Số điện thoại quá ngắn";
   if (digits.length > 12) return "Số điện thoại quá dài";
   if (!isValidVietnamPhone(p)) {
-    return "Số điện thoại không đúng định dạng VN (VD: 0901234567 hoặc 02363725379)";
+    return "Số điện thoại không đúng định dạng VN (VD: 0901234567 hoặc 0935909747)";
   }
   return null;
 }

@@ -52,15 +52,7 @@ export default function ProductContactBox() {
           </span>
         </p>
 
-        <p className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center text-[10px] font-black text-slate-500">
-            MST
-          </span>
-          <span>
-            <span className="font-semibold text-slate-800">Mã số thuế: </span>
-            {company.taxCode}
-          </span>
-        </p>
+
 
         <p className="flex items-start gap-2.5">
           <Mail className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
@@ -83,13 +75,7 @@ export default function ProductContactBox() {
           </span>
         </p>
 
-        <p className="pl-6 text-xs text-slate-500 sm:text-sm">
-          STK:{" "}
-          <span className="font-mono font-semibold text-slate-700">
-            {company.bankAccount}
-          </span>{" "}
-          – {company.bankName}
-        </p>
+
       </div>
     </div>
   );
