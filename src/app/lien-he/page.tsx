@@ -61,13 +61,7 @@ export default function ContactPage() {
                 },
               ].map((row) => (
                 <div key={row.label} className="flex gap-3">
-                  {row.icon ? (
-                    <row.icon className="mt-0.5 h-5 w-5 shrink-0 text-accent-500" />
-                  ) : (
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center text-[9px] font-black text-accent-500">
-                      {row.badge}
-                    </span>
-                  )}
+                  <row.icon className="mt-0.5 h-5 w-5 shrink-0 text-accent-500" />
                   <div>
                     <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400">
                       {row.label}
