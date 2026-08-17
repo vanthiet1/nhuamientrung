@@ -5,6 +5,8 @@ export const company = {
   address: "12 Hà Đông 2, Phường Thanh Khê, Thành phố Đà Nẵng, Việt Nam",
   phone: "0935 909747",
   phoneRaw: "0935909747",
+  landline: "0236 3725379",
+  landlineRaw: "02363725379",
   email: "contact@baobithanhphat.com",
   bankAccount: "115002948432",
   bankName: "Ngân hàng TMCP Công Thương Việt Nam - CN Đà Nẵng",

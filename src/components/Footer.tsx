@@ -42,7 +42,7 @@ export default function Footer({
           {/* Column 2: Quick Links */}
           <div>
             <h3 className="mb-6 text-lg font-bold text-white">Liên kết nhanh</h3>
-            <ul className="space-y-4 text-sm">
+            <ul className="space-y-4 text-base">
               {[
                 { href: "/", label: "Trang chủ" },
                 { href: "/danh-muc", label: "Danh mục" },
@@ -65,8 +65,8 @@ export default function Footer({
 
           {/* Column 3: Company */}
           <div>
-            <h3 className="mb-6 text-lg font-bold text-white uppercase">Hỗ trợ Miền Trung</h3>
-            <ul className="space-y-4 text-sm">
+            <h3 className="mb-6 text-lg font-bold text-white uppercase">Hỗ trợ</h3>
+            <ul className="space-y-4 text-base">
               {[
                 { href: "/danh-muc/mang-xop-hoi-xop-khi-xop-boc-hang", label: "Xốp hơi" },
                 { href: "/danh-muc/mang-xop-pe-foam", label: "Xốp PE Foam" },
@@ -89,13 +89,13 @@ export default function Footer({
           {/* Column 4: Contact Us */}
           <div>
             <h3 className="mb-6 text-lg font-bold text-white">Thông tin liên hệ</h3>
-            <ul className="space-y-4 text-sm">
+            <ul className="space-y-4 text-base">
               <li className="flex gap-4">
                 <Phone className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
                 <span>
                   <span className="block text-slate-400">Điện thoại:</span>
-                  <a href={`tel:${company.phoneRaw}`} className="text-white hover:text-brand-300">
-                    {company.phone}
+                  <a href={`tel:${company.landlineRaw}`} className="text-white hover:text-brand-300">
+                    {company.landline}
                   </a>
                 </span>
               </li>
@@ -129,8 +129,8 @@ export default function Footer({
                 <Globe className="mt-1 h-5 w-5 shrink-0 text-brand-400" />
                 <span>
                   <span className="block text-slate-400">Website:</span>
-                  <a href="https://baobithanhphat.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand-300">
-                    baobithanhphat.com
+                  <a href="https://nhuamientrung.vn" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand-300">
+                    nhuamientrung.vn
                   </a>
                 </span>
               </li>

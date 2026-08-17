@@ -37,7 +37,7 @@ export default function SupportProductsSection({ groups = [] }: { groups?: Categ
             <div className="mb-3 flex items-center gap-3">
               <span className="h-[2px] w-8 bg-brand-500"></span>
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">
-                Sản phẩm hỗ trợ - 20%
+                Sản phẩm hỗ trợ
               </span>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
