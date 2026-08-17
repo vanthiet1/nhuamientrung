@@ -19,9 +19,9 @@ const sizes = {
   },
   /** Footer: giữ logo gốc (có nền), không dùng bản transparent */
   footer: {
-    width: 180,
-    height: 56,
-    className: "h-14 w-auto rounded-lg bg-white object-contain p-1",
+    width: 260,
+    height: 88,
+    className: "h-20 sm:h-24 w-auto rounded-xl bg-white object-contain p-1.5",
     src: "/logo.png",
   },
   admin: {
