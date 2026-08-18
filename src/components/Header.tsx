@@ -65,11 +65,11 @@ export default function Header({
           </p>
           <div className="flex items-center gap-2">
             <a
-              href={`tel:${company.landlineRaw}`}
+              href={`tel:${company.phoneRaw}`}
               className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 font-semibold backdrop-blur transition hover:bg-sky-500 sm:px-3"
             >
               <Phone className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Hotline:</span> {company.landline}
+              <span className="hidden sm:inline">Hotline:</span> {company.phone}
             </a>
           </div>
         </div>
