@@ -49,6 +49,7 @@ const WELCOME: ChatLine = {
 };
 
 export default function ChatWidget() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatLine[]>([WELCOME]);
   const [text, setText] = useState("");
@@ -59,6 +60,10 @@ export default function ChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
     setShowTip(false);
     const el = listRef.current;
@@ -67,6 +72,8 @@ export default function ChatWidget() {
     const t = window.setTimeout(() => inputRef.current?.focus(), 80);
     return () => window.clearTimeout(t);
   }, [open, messages, loading]);
+
+  if (!mounted) return null;
 
   async function sendMessage(raw: string) {
     const content = raw.trim();
@@ -202,7 +209,7 @@ export default function ChatWidget() {
 
   return (
     // Chatbox nằm phía trên nút Gọi + Zalo (thêm, không thay thế)
-    <div className="pointer-events-none fixed bottom-[max(calc(1.25rem+8.75rem),calc(env(safe-area-inset-bottom)+8.75rem))] right-[max(0.75rem,env(safe-area-inset-right))] z-[100] flex flex-col items-end gap-3 sm:bottom-[calc(1.75rem+9.25rem)] sm:right-5">
+    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] z-[100] flex flex-col items-end gap-3 sm:bottom-7 sm:right-5">
       {open && (
         <div
           className="pointer-events-auto flex w-[min(100vw-1.5rem,23rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.22)]"
@@ -353,6 +360,7 @@ export default function ChatWidget() {
           <button
             type="button"
             onClick={() => setOpen(true)}
+            suppressHydrationWarning
             className="mb-1 max-w-[12rem] rounded-2xl rounded-br-md border border-violet-100 bg-white px-3 py-2 text-left text-[12px] font-semibold leading-snug text-slate-700 shadow-lg animate-float-soft sm:max-w-[14rem]"
           >
             💬 ChatBot tư vấn
@@ -365,6 +373,7 @@ export default function ChatWidget() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
+          suppressHydrationWarning
           className="relative flex h-[56px] w-[56px] items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-brand-700 text-white shadow-[0_10px_28px_rgba(109,40,217,0.45)] ring-4 ring-white transition hover:scale-105 animate-float-bounce sm:h-[60px] sm:w-[60px]"
           aria-label={open ? "Đóng ChatBot tư vấn" : "Mở ChatBot tư vấn"}
           aria-expanded={open}

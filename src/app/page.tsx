@@ -12,8 +12,12 @@ import {
   Leaf,
 } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
+import HomeDarkBanner from "@/components/HomeDarkBanner";
 import HomeImageSlider from "@/components/HomeImageSlider";
 import HomeCategoryProducts from "@/components/HomeCategoryProducts";
+import HomePrintingProducts from "@/components/HomePrintingProducts";
+import HomeAuxiliaryProducts from "@/components/HomeAuxiliaryProducts";
+import HomeRemainingProducts from "@/components/HomeRemainingProducts";
 import HomeNewsScroll from "@/components/HomeNewsScroll";
 import NewsTicker from "@/components/NewsTicker";
 import PartnersSlider from "@/components/PartnersSlider";
@@ -114,45 +118,16 @@ export default async function HomePage({}: Props) {
         </div>
       </section>
 
-      {/* SEO Content / About Us */}
-      <section className="bg-white py-14 sm:py-20">
-        <div className="container-home">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
-            <div className="relative lg:pr-12">
-              <div className="mx-auto aspect-[4/3] max-w-md overflow-hidden rounded-3xl bg-slate-100 shadow-lg lg:ml-0 lg:max-w-xl">
-                <HomeImageSlider images={allProducts.map(p => p.image || "").filter(Boolean)} />
-              </div>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
-                VỀ CHÚNG TÔI
-              </p>
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.15]">
-                Bao Bì Thành Phát - <br className="hidden sm:block" />
-                <span className="text-brand-600">Giải pháp màng co toàn diện</span>
-              </h2>
-              <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg">
-                Với kinh nghiệm nhiều năm trong lĩnh vực sản xuất và phân phối bao bì, chúng tôi tự hào là đối tác tin cậy của hàng ngàn doanh nghiệp tại <strong>Đà Nẵng</strong>. Thành Phát chuyên cung cấp màng co PVC, POF, PE và các dịch vụ gia công in ấn chất lượng cao.
-              </p>
-              <div className="mt-8">
-                <Link href="/gioi-thieu" className="btn-primary !rounded-full bg-[#1a2a4b] hover:bg-[#111c33] px-6 py-3">
-                  TÌM HIỂU THÊM
-                  <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sản phẩm hỗ trợ Miền Trung */}
-      <SupportProductsSection groups={groups} />
+      {/* Dark Navy Hero/About Banner matching baobithanhphat.com */}
+      <HomeDarkBanner banners={banners} />
 
       {/* Danh mục sản phẩm (Tabs) */}
       <section id="danh-muc-san-pham" className="py-14 sm:py-20 bg-slate-50">
-        <div className="container-home">
+        <div className="container-home space-y-16">
           <HomeCategoryProducts groups={groups} />
+          <HomePrintingProducts groups={groups} />
+          <HomeAuxiliaryProducts groups={groups} />
+          <HomeRemainingProducts groups={groups} />
         </div>
       </section>
 
