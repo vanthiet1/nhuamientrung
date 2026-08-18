@@ -35,38 +35,38 @@ function PulseRings({ colorClass }: { colorClass: string }) {
 
 export default function ZaloFloat() {
   return (
-    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] z-[90] flex flex-col items-end gap-3 sm:bottom-7 sm:right-5">
-      {/* Hotline — always visible + bounce */}
+    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-[max(0.75rem,env(safe-area-inset-left))] z-[90] flex flex-col items-start gap-3 sm:bottom-7 sm:left-5">
+      {/* Hotline — positioned on LEFT */}
       <a
         href={`tel:${company.phoneRaw}`}
-        className="pointer-events-auto group relative flex items-center justify-end animate-float-bounce"
+        className="pointer-events-auto group relative flex items-center justify-start animate-float-bounce"
         aria-label={`Gọi hotline ${company.phone}`}
         style={{ animationDelay: "0s" }}
       >
-        <span className="mr-3 max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-white/95 px-0 py-2 text-xs font-bold text-emerald-700 opacity-0 shadow-[0_8px_24px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/80 backdrop-blur transition-all duration-300 group-hover:max-w-[12rem] group-hover:px-3.5 group-hover:opacity-100 group-focus-visible:max-w-[12rem] group-focus-visible:px-3.5 group-focus-visible:opacity-100 sm:max-w-none sm:px-3.5 sm:opacity-100">
-          Gọi {company.phone}
-        </span>
-        <span className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-[0_10px_28px_rgba(16,185,129,0.45)] ring-4 ring-white transition duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_32px_rgba(16,185,129,0.55)] sm:h-14 sm:w-14">
+        <span className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-[0_10px_28px_rgba(16,185,129,0.45)] ring-4 ring-white transition duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_32px_rgba(16,185,129,0.55)] sm:h-14 sm:w-14 shrink-0">
           <PulseRings colorClass="bg-emerald-400" />
           <Phone className="relative h-[22px] w-[22px] drop-shadow-sm" strokeWidth={2.25} />
         </span>
+        <span className="ml-3 max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-white/95 px-0 py-2 text-xs font-bold text-emerald-700 opacity-0 shadow-[0_8px_24px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/80 backdrop-blur transition-all duration-300 group-hover:max-w-[12rem] group-hover:px-3.5 group-hover:opacity-100 group-focus-visible:max-w-[12rem] group-focus-visible:px-3.5 group-focus-visible:opacity-100 sm:max-w-none sm:px-3.5 sm:opacity-100">
+          Gọi {company.phone}
+        </span>
       </a>
 
-      {/* Zalo — always visible + bounce (staggered) */}
+      {/* Zalo — positioned on LEFT */}
       <a
         href={company.zaloUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="pointer-events-auto group relative flex items-center justify-end animate-float-bounce"
+        className="pointer-events-auto group relative flex items-center justify-start animate-float-bounce"
         aria-label="Chat Zalo tư vấn"
         style={{ animationDelay: "0.35s" }}
       >
-        <span className="mr-3 max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-white/95 px-0 py-2 text-xs font-bold text-[#0068FF] opacity-0 shadow-[0_8px_24px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/80 backdrop-blur transition-all duration-300 group-hover:max-w-[12rem] group-hover:px-3.5 group-hover:opacity-100 group-focus-visible:max-w-[12rem] group-focus-visible:px-3.5 group-focus-visible:opacity-100 sm:max-w-none sm:px-3.5 sm:opacity-100">
-          Chat Zalo ngay
-        </span>
-        <span className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-[#2f80ff] to-[#0068FF] text-white shadow-[0_10px_28px_rgba(0,104,255,0.45)] ring-4 ring-white transition duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_32px_rgba(0,104,255,0.55)] sm:h-14 sm:w-14">
+        <span className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-[#2f80ff] to-[#0068FF] text-white shadow-[0_10px_28px_rgba(0,104,255,0.45)] ring-4 ring-white transition duration-300 group-hover:scale-105 group-hover:shadow-[0_12px_32px_rgba(0,104,255,0.55)] sm:h-14 sm:w-14 shrink-0">
           <PulseRings colorClass="bg-[#0068FF]" />
           <ZaloMark className="relative h-8 w-8 drop-shadow-sm" />
+        </span>
+        <span className="ml-3 max-w-0 overflow-hidden whitespace-nowrap rounded-full bg-white/95 px-0 py-2 text-xs font-bold text-[#0068FF] opacity-0 shadow-[0_8px_24px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/80 backdrop-blur transition-all duration-300 group-hover:max-w-[12rem] group-hover:px-3.5 group-hover:opacity-100 group-focus-visible:max-w-[12rem] group-focus-visible:px-3.5 group-focus-visible:opacity-100 sm:max-w-none sm:px-3.5 sm:opacity-100">
+          Chat Zalo ngay
         </span>
       </a>
     </div>

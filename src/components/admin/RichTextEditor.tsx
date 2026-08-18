@@ -23,7 +23,6 @@ const formats = [
   "blockquote",
   "code-block",
   "list",
-  "bullet",
   "link",
   "image",
   "video",

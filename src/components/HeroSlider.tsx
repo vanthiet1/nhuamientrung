@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import type { BannerRecord } from "@/lib/cms/types";
@@ -31,17 +31,32 @@ export default function HeroSlider({
 }: {
   banners?: BannerRecord[];
 }) {
-  const slides =
-    banners.length > 0
-      ? banners
-      : FALLBACK.map((b, i) => ({
-          ...b,
-          id: `fb-${i}`,
-          isActive: true,
-          sortOrder: i,
-          createdAt: "",
-          updatedAt: "",
-        }));
+  // Only display banners with sortOrder 0, 1, 2
+  const slides = useMemo(() => {
+    // 1. Explicitly filter banners with sortOrder 0, 1, 2
+    const filtered = banners.filter(
+      (b) => b.isActive !== false && (b.sortOrder === 0 || b.sortOrder === 1 || b.sortOrder === 2)
+    );
+
+    if (filtered.length > 0) {
+      return filtered;
+    }
+
+    // 2. Fallback: If DB banners array exists, pick first 3 items (index 0, 1, 2)
+    if (banners.length > 0) {
+      return banners.slice(0, 3);
+    }
+
+    // 3. Fallback default banner
+    return FALLBACK.map((b, i) => ({
+      ...b,
+      id: `fb-${i}`,
+      isActive: true,
+      sortOrder: i,
+      createdAt: "",
+      updatedAt: "",
+    }));
+  }, [banners]);
 
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);

@@ -1,134 +1,121 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import type { CategoryTree } from "@/lib/cms/types";
-import type { ProductRecord } from "@/lib/cms/types";
-
-const PRODUCTS_PER_PAGE = 8;
+import type { CategoryTree, ProductRecord } from "@/lib/cms/types";
 
 export type CategoryWithProducts = {
   category: CategoryTree;
   products: ProductRecord[];
 };
 
+const FEATURED_4_ITEMS = [
+  {
+    id: "mang-co-pe",
+    name: "Màng Co PE",
+    keyword: "pe",
+    itemOffset: 0,
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+  },
+  {
+    id: "mang-co-pof",
+    name: "Màng Co POF",
+    keyword: "pof",
+    itemOffset: 0,
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pof-1.jpg",
+  },
+  {
+    id: "mang-co-pvc",
+    name: "Màng Co PVC",
+    keyword: "pvc",
+    itemOffset: 0,
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pvc-1.jpg",
+  },
+  {
+    id: "mang-co-pet",
+    name: "Màng Co PET",
+    keyword: "pet",
+    itemOffset: 0,
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pet-1.jpg",
+  },
+];
+
 export default function HomeCategoryProducts({
-  groups,
+  groups = [],
 }: {
   groups: CategoryWithProducts[];
   page?: number;
 }) {
-  const withProducts = groups
-    .filter((g) => g.products.length > 0)
-    .sort((a, b) => b.products.length - a.products.length)
-    .slice(0, 5);
-  const [activeTab, setActiveTab] = useState(withProducts[0]?.category.id);
-  const [currentPage, setCurrentPage] = useState(1);
+  const cards = FEATURED_4_ITEMS.map((itemConfig, i) => {
+    // Search matching products for this keyword
+    const matchingProducts: ProductRecord[] = [];
 
-  if (withProducts.length === 0) {
-    return (
-      <p className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-slate-500">
-        Chưa có sản phẩm để hiển thị.
-      </p>
+    // 1. Check matching category group
+    const matchedGroup = groups.find(
+      (g) =>
+        g.category.slug.toLowerCase().includes(itemConfig.keyword) ||
+        g.category.name.toLowerCase().includes(itemConfig.keyword)
     );
-  }
 
-  const activeGroup =
-    withProducts.find((g) => g.category.id === activeTab) || withProducts[0];
-  
-  const totalPages = Math.ceil(activeGroup.products.length / PRODUCTS_PER_PAGE);
-  const items = activeGroup.products.slice(
-    (currentPage - 1) * PRODUCTS_PER_PAGE,
-    currentPage * PRODUCTS_PER_PAGE
-  );
+    if (matchedGroup?.products) {
+      matchingProducts.push(...matchedGroup.products);
+    }
+
+    // 2. Search across all groups if needed
+    groups.forEach((g) => {
+      g.products.forEach((p) => {
+        if (
+          (p.name.toLowerCase().includes(itemConfig.keyword) ||
+            p.slug.toLowerCase().includes(itemConfig.keyword)) &&
+          !matchingProducts.some((existing) => existing.id === p.id)
+        ) {
+          matchingProducts.push(p);
+        }
+      });
+    });
+
+    const targetProduct = matchingProducts[itemConfig.itemOffset] || matchingProducts[0];
+
+    const name = itemConfig.name;
+    const slug = targetProduct?.slug || itemConfig.id;
+    const image = targetProduct?.image || itemConfig.fallbackImage;
+
+    return {
+      id: `${itemConfig.id}-${i}`,
+      name,
+      slug,
+      image,
+      index: i,
+    };
+  });
 
   return (
-    <div className="space-y-10">
-      {/* Tabs */}
-      <div className="flex w-full overflow-x-auto gap-3 pb-4 md:flex-wrap md:justify-center scrollbar-none">
-        {withProducts.map((group) => {
-          const isActive = group.category.id === activeTab;
-          return (
-            <button
-              key={group.category.id}
-              onClick={() => {
-                setActiveTab(group.category.id);
-                setCurrentPage(1);
-              }}
-              className={`shrink-0 rounded-full border px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-bold uppercase transition-all ${
-                isActive
-                  ? "border-[#1a2a4b] bg-[#1a2a4b] text-white shadow-md"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
-              }`}
-            >
-              {group.category.name}
-            </button>
-          );
-        })}
+    <div className="space-y-8">
+      {/* Perfectly Centered & Balanced Header Title with Flex Lines */}
+      <div className="flex items-center justify-center gap-3 sm:gap-4 my-8 w-full">
+        <div className="h-[1px] flex-1 bg-slate-300" />
+        <div className="flex items-center gap-2.5 px-5 sm:px-7 py-2 sm:py-2.5 bg-white border border-slate-300 text-[#051a53] font-black text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-wide rounded-full shadow-sm shrink-0">
+          <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5 text-[#051a53] shrink-0" />
+          <span>Màng Co PE | Màng Co POF | Màng Co PVC | Màng Co PET</span>
+        </div>
+        <div className="h-[1px] flex-1 bg-slate-300" />
       </div>
 
-      {/* Product Grid */}
+      {/* 4 Product Cards in 1 Row (Màng Co PE, Màng Co POF, Màng Co PVC, Màng Co PET - thứ tự 9) */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map((p, i) => (
+        {cards.map((card) => (
           <ProductCard
-            size="lg"
-            key={p.id}
+            key={card.id}
             category={{
-              slug: p.slug,
-              name: p.name,
-              description: p.description,
-              image: p.image,
-              sku: p.sku,
+              slug: card.slug,
+              name: card.name,
+              image: card.image,
             }}
-            index={i}
+            index={card.index}
             isProduct={true}
           />
         ))}
       </div>
-      
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-10 flex items-center justify-center gap-2">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
-            aria-label="Trang trước"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          {Array.from({ length: totalPages }).map((_, i) => {
-            const p = i + 1;
-            return (
-              <button
-                key={p}
-                onClick={() => setCurrentPage(p)}
-                className={`flex h-10 w-10 items-center justify-center rounded-lg border font-semibold transition-colors ${
-                  currentPage === p
-                    ? "border-[#1a2a4b] bg-[#1a2a4b] text-white"
-                    : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                }`}
-              >
-                {p}
-              </button>
-            );
-          })}
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
-            aria-label="Trang sau"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      )}
     </div>
   );
 }
