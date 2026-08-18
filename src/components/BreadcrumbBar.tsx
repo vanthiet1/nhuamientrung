@@ -61,6 +61,8 @@ export function buildBreadcrumbs(
 
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
+    if (!seg || seg.toLowerCase() === "index") continue;
+
     path += `/${seg}`;
     const isLast = i === segments.length - 1;
 
@@ -121,14 +123,16 @@ export default function BreadcrumbBar({
   if (
     pathname === "/" ||
     pathname.startsWith("/admin") ||
-    (!items && (pathname.startsWith("/san-pham") || pathname.startsWith("/tat-ca-san-pham"))) ||
     // News detail has its own inline breadcrumb with proper Vietnamese title
     (!items && /^\/tin-tuc\/.+/.test(pathname))
   ) {
     return null;
   }
 
-  const crumbs = items && items.length > 0 ? items : buildBreadcrumbs(pathname, categories);
+  const rawCrumbs = items && items.length > 0 ? items : buildBreadcrumbs(pathname, categories);
+  const crumbs = rawCrumbs.filter(
+    (c) => c.label && c.label.toLowerCase() !== "index" && c.label.toLowerCase() !== "trang chủ"
+  );
 
   if (crumbs.length === 0) return null;
 
