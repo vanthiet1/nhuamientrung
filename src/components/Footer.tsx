@@ -3,30 +3,35 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import type { CategoryTree } from "@/lib/cms/types";
+import { company } from "@/lib/data/company";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7.5v4H10V22h4v-8.5z"/>
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
+
+const ZaloIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12c0 2.17.69 4.19 1.87 5.84L2.05 22l4.35-1.74A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm.89 14.5h-4.3c-.32 0-.59-.26-.59-.58v-.4c0-.21.11-.4.29-.5l3.24-4.22h-3.1c-.32 0-.58-.26-.58-.58v-.42c0-.32.26-.58.58-.58h4.15c.32 0 .59.26.59.58v.41c0 .2-.11.39-.29.49l-3.25 4.23h3.26c.32 0 .58.26.58.58v.41c0 .32-.26.58-.58.58z"/>
   </svg>
 );
 
 const InstagramIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
   </svg>
 );
 
-const TwitterIcon = ({ className }: { className?: string }) => (
+const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .56.04.82.11V9.32a6.33 6.33 0 0 0-1-.08 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.05a8.27 8.27 0 0 0 4.97 1.63V7.24a4.82 4.82 0 0 1-1.01-.55z"/>
   </svg>
 );
 
 const YoutubeIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M21.582 6.186a2.64 2.64 0 00-1.859-1.874C18.083 3.875 12 3.875 12 3.875s-6.083 0-7.723.437a2.64 2.64 0 00-1.859 1.874C2 7.842 2 12 2 12s0 4.158.418 5.814a2.64 2.64 0 001.859 1.874c1.64.437 7.723.437 7.723.437s6.083 0 7.723-.437a2.64 2.64 0 001.859-1.874C22 16.158 22 12 22 12s0-4.158-.418-5.814zM9.814 15.148V8.852L15.394 12l-5.58 3.148z"/>
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
   </svg>
 );
 
@@ -162,43 +167,56 @@ export default function Footer({
 
           {/* Column 3: Social & Policies (md:col-span-3) */}
           <div className="space-y-6 md:col-span-3">
-            {/* Circular Social Icons */}
-            <div className="flex items-center gap-2.5">
+            {/* Circular Social Icons with Official Brand Hover Colors */}
+            <div className="flex items-center gap-3">
               <a
-                href="https://facebook.com"
+                href={company.social.facebook || "https://facebook.com"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white transition-all hover:bg-white hover:text-[#051355]"
+                className="group flex h-9.5 w-9.5 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white transition-all duration-300 hover:border-[#1877F2] hover:bg-[#1877F2] hover:shadow-lg hover:shadow-[#1877F2]/40 hover:-translate-y-1"
                 aria-label="Facebook"
               >
-                <FacebookIcon className="h-4 w-4" />
+                <FacebookIcon className="h-4.5 w-4.5" />
               </a>
+
+              <a
+                href={`https://zalo.me/${company.phoneRaw}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-9.5 w-9.5 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white transition-all duration-300 hover:border-[#0068FF] hover:bg-[#0068FF] hover:shadow-lg hover:shadow-[#0068FF]/40 hover:-translate-y-1"
+                aria-label="Zalo"
+              >
+                <ZaloIcon className="h-4.5 w-4.5" />
+              </a>
+
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white transition-all hover:bg-white hover:text-[#051355]"
+                className="group flex h-9.5 w-9.5 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white transition-all duration-300 hover:border-[#E4405F] hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:shadow-lg hover:shadow-[#E4405F]/40 hover:-translate-y-1"
                 aria-label="Instagram"
               >
-                <InstagramIcon className="h-4 w-4" />
+                <InstagramIcon className="h-4.5 w-4.5" />
               </a>
+
               <a
-                href="https://twitter.com"
+                href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white transition-all hover:bg-white hover:text-[#051355]"
-                aria-label="Twitter"
+                className="group flex h-9.5 w-9.5 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white transition-all duration-300 hover:border-black hover:bg-black hover:shadow-lg hover:shadow-black/40 hover:-translate-y-1"
+                aria-label="TikTok"
               >
-                <TwitterIcon className="h-4 w-4" />
+                <TikTokIcon className="h-4.5 w-4.5" />
               </a>
+
               <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white transition-all hover:bg-white hover:text-[#051355]"
+                className="group flex h-9.5 w-9.5 items-center justify-center rounded-full border border-white/30 bg-white/5 text-white transition-all duration-300 hover:border-[#FF0000] hover:bg-[#FF0000] hover:shadow-lg hover:shadow-[#FF0000]/40 hover:-translate-y-1"
                 aria-label="YouTube"
               >
-                <YoutubeIcon className="h-4 w-4" />
+                <YoutubeIcon className="h-4.5 w-4.5" />
               </a>
             </div>
 

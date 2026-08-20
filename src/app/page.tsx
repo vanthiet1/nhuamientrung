@@ -62,53 +62,68 @@ export default async function HomePage({}: Props) {
     <>
       <HeroSlider banners={banners} />
 
-      <section className="bg-slate-50/50 border-b border-slate-100 py-10">
+      {/* Premium Feature Highlights Section */}
+      <section className="bg-gradient-to-b from-slate-100/80 via-white to-slate-50/50 border-b border-slate-200/80 py-10 sm:py-12">
         <div className="container-home">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: (props: any) => <CheckCircle2 {...props} />,
                 title: "Chất lượng vượt trội",
-                subtitle: "Quality",
+                subtitle: "Đảm bảo 100% tiêu chuẩn",
+                badge: "✨ Quality",
+                gradient: "from-brand-600 to-brand-800",
+                glow: "shadow-brand-600/25",
               },
               {
                 icon: (props: any) => (
-                  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="14" cy="5" r="1.5" />
-                    <path d="M3 10h4" />
-                    <path d="M2 14h5" />
-                    <path d="M4 18h3" />
-                    <path d="M9 13l2-3 2 1-1 4 3.5 1.5 2-2.5" />
-                    <path d="M12 15l-1.5 4.5-3-1.5" />
-                    <path d="M13 7l2.5-1.5" />
-                  </svg>
+                  <Factory {...props} />
                 ),
                 title: "Xưởng sản xuất trực tiếp",
-                subtitle: "Fast Service",
+                subtitle: "Giá gốc không qua trung gian",
+                badge: "🏭 Direct Factory",
+                gradient: "from-sky-600 to-brand-700",
+                glow: "shadow-sky-600/25",
               },
               {
                 icon: (props: any) => <Leaf {...props} />,
                 title: "Hỗ trợ tận tâm & Tốc độ",
-                subtitle: "Eco-Friendly",
+                subtitle: "Tư vấn báo giá 24/7",
+                badge: "⚡ Fast Service",
+                gradient: "from-emerald-600 to-teal-700",
+                glow: "shadow-emerald-600/25",
               },
               {
                 icon: (props: any) => <Truck {...props} />,
                 title: "Giao hàng toàn quốc",
-                subtitle: "Nationwide Delivery",
+                subtitle: "Giao hàng tận nơi siêu tốc",
+                badge: "🚛 Delivery",
+                gradient: "from-brand-700 to-sky-700",
+                glow: "shadow-brand-700/25",
               },
             ].map((item, i) => (
               <div
                 key={i}
-                className="group flex flex-1 items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-md"
+                className="group relative flex flex-1 items-center gap-4.5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white via-white to-slate-50/80 p-5 sm:p-6 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-400 hover:shadow-xl hover:shadow-brand-900/10 overflow-hidden"
               >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-50/80 text-[#395c8c] transition-colors duration-300 group-hover:bg-[#395c8c] group-hover:text-white">
-                  <item.icon className="h-7 w-7" />
+                {/* Glossy Glint Shimmer Sweep on Hover */}
+                <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+                  <div className="absolute -left-[100%] top-0 h-full w-[70%] -skew-x-[25deg] bg-gradient-to-r from-transparent via-white/50 to-transparent transition-all duration-1000 group-hover:left-[150%]" />
                 </div>
-                <div className="flex flex-col text-left">
-                  <div className="text-[15px] font-bold text-slate-800 transition-colors group-hover:text-[#395c8c] sm:text-base">
+
+                {/* Top border glass highlight line */}
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-brand-400/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                {/* Icon Box with Metallic Gradient & Glowing Shadow */}
+                <div className={`flex h-13 w-13 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-white ${item.glow} shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                  <item.icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                </div>
+
+                <div className="flex flex-col text-left min-w-0">
+                  <div className="text-sm font-extrabold text-slate-800 transition-colors duration-300 group-hover:text-brand-700 sm:text-base leading-snug truncate">
                     {item.title}
                   </div>
-                  <div className="mt-0.5 text-[13px] font-medium text-slate-400">
+                  <div className="mt-1 text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors truncate">
                     {item.subtitle}
                   </div>
                 </div>

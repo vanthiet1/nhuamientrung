@@ -161,8 +161,8 @@ export default function HeaderSearch({
           onFocus={() => {
             if (q.trim()) setIsOpen(true);
           }}
-          placeholder="Tìm kiếm sản phẩm..."
-          className="w-[11rem] rounded-full border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-500/15 xl:w-[14rem] 2xl:w-[16rem]"
+          placeholder="Tìm kiếm..."
+          className="w-[6.5rem] focus:w-[9.5rem] xl:w-[9rem] xl:focus:w-[11.5rem] 2xl:w-[12rem] rounded-full border border-slate-200 bg-slate-50 py-1 pl-7 pr-2 text-[11px] xl:text-xs text-slate-800 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-500/15"
         />
       </div>
       <SearchDropdown />

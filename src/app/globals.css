@@ -490,3 +490,59 @@ html.translated-rtl body {
 .ql-align-right img {
   margin-left: auto;
 }
+
+/* ── Glossy Shimmer CTA Button ── */
+@keyframes glossy-shimmer {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  45%, 100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.btn-glossy-shimmer {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #0b4f8a 0%, #0ea5e9 50%, #0369a1 100%);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  shrink: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-glossy-shimmer::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 55%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  animation: glossy-shimmer 3.2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.btn-glossy-shimmer:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.75);
+}

@@ -81,11 +81,11 @@ export default function Header({
           scrolled ? "shadow-nav" : ""
         }`}
       >
-        <div className="container-page flex items-center justify-between gap-3 py-2.5 sm:gap-4 sm:py-3">
+        <div className="container-page flex items-center justify-between gap-1 xl:gap-2.5 py-2 sm:py-2.5">
           <BrandLogo href="/" variant="header" priority />
 
           {/* Desktop menu */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
             {navLinks.map((link) =>
               link.hasDropdown ? (
                 <div
@@ -96,7 +96,7 @@ export default function Header({
                 >
                   <Link
                     href={link.href}
-                    className={`inline-flex items-center gap-1 rounded-full px-3 lg:px-4 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                    className={`inline-flex items-center gap-0.5 rounded-full px-1.5 lg:px-2 xl:px-3 py-1 text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors ${
                       isActive(link.href)
                         ? "bg-sky-50 text-sky-600"
                         : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
@@ -104,7 +104,7 @@ export default function Header({
                   >
                     {link.label}
                     <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${
+                      className={`h-3 w-3 transition-transform ${
                         productOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -166,7 +166,7 @@ export default function Header({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`rounded-full px-3 lg:px-4 py-2 text-[13px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                  className={`rounded-full px-1.5 lg:px-2 xl:px-3 py-1 text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors ${
                     isActive(link.href)
                       ? "bg-sky-50 text-sky-600"
                       : "text-slate-700 hover:bg-slate-50 hover:text-brand-600"
@@ -179,15 +179,14 @@ export default function Header({
           </nav>
 
           {/* Search + language + báo giá (desktop) */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-1 sm:gap-1.5">
             <HeaderSearch variant="desktop" />
             <div className="hidden lg:block">
               <LanguageSwitcher compact variant="light" />
             </div>
             <Link
               href="/lien-he"
-              className="btn-primary hidden lg:inline-flex !rounded-full bg-brand-800 hover:bg-brand-900 whitespace-nowrap shrink-0"
-              style={{ padding: "0.55rem 1.25rem", fontSize: "0.8125rem" }}
+              className="btn-glossy-shimmer hidden lg:inline-flex text-[10px] xl:text-[11px] !px-2.5 !py-1"
             >
               Báo giá
             </Link>
