@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useMemo, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import dynamic from "next/dynamic";
 import { Field } from "@/components/admin/FormField";
 import { Code, Type } from "lucide-react";
-import "react-quill-new/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { 
   ssr: false, 
@@ -47,6 +46,10 @@ export default function RichTextEditor({
   const [content, setContent] = useState(defaultValue);
   const [mode, setMode] = useState<"visual" | "html">("visual");
   const quillRef = useRef<any>(null);
+
+  useEffect(() => {
+    import("react-quill-new/dist/quill.snow.css" as any);
+  }, []);
 
   const imageHandler = useCallback(() => {
     const input = document.createElement("input");
