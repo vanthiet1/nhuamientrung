@@ -11,6 +11,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (!body.title?.trim()) throw new Error("Tiêu đề là bắt buộc");
     const item = await createNews(body);
+    revalidatePath("/", "layout");
+    revalidatePath("/tin-tuc");
     return jsonOk(item, 201);
   });
 }

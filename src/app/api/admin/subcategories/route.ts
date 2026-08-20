@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     if (!body.name?.trim()) throw new Error("Tên danh mục con là bắt buộc");
     if (!body.categoryId) throw new Error("Chọn danh mục cha");
     const item = await createSubcategory(body);
+    revalidatePath("/", "layout");
     return jsonOk(item, 201);
   });
 }

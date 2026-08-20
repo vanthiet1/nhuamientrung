@@ -32,6 +32,8 @@ export async function PUT(request: Request, ctx: Ctx) {
       isActive: body.isActive,
       sortOrder: body.sortOrder !== undefined ? Number(body.sortOrder) : undefined,
     });
+    revalidatePath("/", "layout");
+    revalidatePath("/admin/banners");
     return jsonOk(item);
   });
 }
@@ -40,6 +42,8 @@ export async function DELETE(_request: Request, ctx: Ctx) {
   return withAdmin(async () => {
     const { id } = await ctx.params;
     await deleteBanner(id);
+    revalidatePath("/", "layout");
+    revalidatePath("/admin/banners");
     return jsonOk({ ok: true });
   });
 }

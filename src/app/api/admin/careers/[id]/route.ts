@@ -22,6 +22,8 @@ export async function PUT(request: Request, ctx: Ctx) {
     const { id } = await ctx.params;
     const body = await request.json();
     const item = await updateCareer(id, body);
+    revalidatePath("/", "layout");
+    revalidatePath("/tuyen-dung");
     return jsonOk(item);
   });
 }
@@ -30,6 +32,8 @@ export async function DELETE(_req: Request, ctx: Ctx) {
   return withAdmin(async () => {
     const { id } = await ctx.params;
     await deleteCareer(id);
+    revalidatePath("/", "layout");
+    revalidatePath("/tuyen-dung");
     return jsonOk({ ok: true });
   });
 }

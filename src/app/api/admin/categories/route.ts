@@ -11,6 +11,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (!body.name?.trim()) throw new Error("Tên danh mục là bắt buộc");
     const item = await createCategory(body);
+    revalidatePath("/", "layout");
     return jsonOk(item, 201);
   });
 }

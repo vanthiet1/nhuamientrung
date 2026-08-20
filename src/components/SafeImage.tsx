@@ -9,6 +9,17 @@ function hasSrc(src: ImageProps["src"] | null | undefined): src is ImageProps["s
   return true;
 }
 
+function encodeSafeUrl(src: ImageProps["src"]): ImageProps["src"] {
+  if (typeof src === "string") {
+    try {
+      return encodeURI(decodeURI(src.trim()));
+    } catch {
+      return encodeURI(src.trim());
+    }
+  }
+  return src;
+}
+
 type SafeImageProps = Omit<ImageProps, "src" | "alt"> & {
   src?: ImageProps["src"] | null;
   alt: string;
@@ -49,9 +60,11 @@ export default function SafeImage({
     );
   }
 
+  const safeSrc = encodeSafeUrl(src);
+
   return (
     <Image
-      src={src}
+      src={safeSrc}
       alt={alt}
       className={className}
       fill={fill}
@@ -97,10 +110,12 @@ export function SafeImg({
     );
   }
 
+  const safeSrc = typeof raw === "string" ? String(encodeSafeUrl(raw)) : raw;
+
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={raw}
+      src={safeSrc}
       alt={alt}
       className={className}
       onError={(e) => {

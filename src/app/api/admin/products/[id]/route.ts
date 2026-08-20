@@ -22,6 +22,7 @@ export async function PUT(request: Request, ctx: Ctx) {
     const { id } = await ctx.params;
     const body = await request.json();
     const item = await updateProduct(id, body);
+    revalidatePath("/", "layout");
     return jsonOk(item);
   });
 }
@@ -30,6 +31,7 @@ export async function DELETE(_req: Request, ctx: Ctx) {
   return withAdmin(async () => {
     const { id } = await ctx.params;
     await deleteProduct(id);
+    revalidatePath("/", "layout");
     return jsonOk({ ok: true });
   });
 }

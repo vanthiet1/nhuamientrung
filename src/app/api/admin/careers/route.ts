@@ -11,6 +11,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (!body.title?.trim()) throw new Error("Tiêu đề vị trí là bắt buộc");
     const item = await createCareer(body);
+    revalidatePath("/", "layout");
+    revalidatePath("/tuyen-dung");
     return jsonOk(item, 201);
   });
 }
