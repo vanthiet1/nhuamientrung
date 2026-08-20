@@ -51,7 +51,7 @@ export function buildBreadcrumbs(
   pathname: string,
   categories: CategoryTree[] = []
 ): BreadcrumbItem[] {
-  if (!pathname || pathname === "/") return [];
+  if (!pathname || pathname === "/" || pathname.toLowerCase() === "/index") return [];
 
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length === 0) return [];
@@ -61,16 +61,17 @@ export function buildBreadcrumbs(
 
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
-    if (!seg || seg.toLowerCase() === "index") continue;
+    if (!seg || seg.toLowerCase() === "index" || seg.toLowerCase() === "trang-chu") continue;
 
     path += `/${seg}`;
     const isLast = i === segments.length - 1;
 
     // Static routes
     if (ROUTE_LABELS[seg]) {
+      const targetHref = seg === "san-pham" ? "/tat-ca-san-pham" : path;
       crumbs.push({
         label: ROUTE_LABELS[seg],
-        href: isLast ? undefined : path,
+        href: isLast ? undefined : targetHref,
       });
       continue;
     }
@@ -121,17 +122,24 @@ export default function BreadcrumbBar({
   const pathname = usePathname();
 
   if (
+    !pathname ||
     pathname === "/" ||
+    pathname.toLowerCase() === "/index" ||
     pathname.startsWith("/admin") ||
-    // News detail has its own inline breadcrumb with proper Vietnamese title
-    (!items && /^\/tin-tuc\/.+/.test(pathname))
+    // News detail & Product detail have custom breadcrumbs passed directly or inline
+    (!items && /^\/tin-tuc\/.+/.test(pathname)) ||
+    (!items && /^\/san-pham\/.+/.test(pathname))
   ) {
     return null;
   }
 
   const rawCrumbs = items && items.length > 0 ? items : buildBreadcrumbs(pathname, categories);
   const crumbs = rawCrumbs.filter(
-    (c) => c.label && c.label.toLowerCase() !== "index" && c.label.toLowerCase() !== "trang chủ"
+    (c) =>
+      c.label &&
+      c.label.toLowerCase() !== "index" &&
+      c.label.toLowerCase() !== "trang chủ" &&
+      c.label.toLowerCase() !== "trang chu"
   );
 
   if (crumbs.length === 0) return null;
