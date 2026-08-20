@@ -132,6 +132,16 @@ export default function HeroSlider({
 
   return (
     <section className="relative overflow-hidden bg-[#061539]">
+      {/* LCP Image Preload for Google PageSpeed Optimization */}
+      {slides[0]?.image && (
+        <link
+          rel="preload"
+          as="image"
+          href={slides[0].image}
+          // @ts-ignore
+          fetchPriority="high"
+        />
+      )}
       <div
         className="relative w-full min-h-[480px] sm:min-h-[520px] lg:min-h-[560px] flex items-center py-12 sm:py-16 touch-pan-y bg-gradient-to-br from-[#061539] via-[#0b225c] to-[#040e29]"
         onTouchStart={onTouchStart}
@@ -216,6 +226,10 @@ export default function HeroSlider({
                   <img
                     src={slide.image}
                     alt={slide.title}
+                    // @ts-ignore
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding={index === 0 ? "sync" : "async"}
                     className="relative z-10 w-full h-full object-contain rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                     onError={() => setImgFailed(true)}
                   />
@@ -254,7 +268,7 @@ export default function HeroSlider({
             </button>
 
             {/* Pagination Dots */}
-            <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2.5">
+            <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2.5 min-h-[10px] justify-center">
               {slides.map((s, i) => (
                 <button
                   key={s.id || i}

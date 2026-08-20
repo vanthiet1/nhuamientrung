@@ -118,12 +118,16 @@ export default function Footer({
             </div>
 
             {/* Ministry of Industry and Trade Badge Image */}
-            <div className="pt-2">
+            <div className="pt-2 min-h-[40px] flex items-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logoSaleNoti.png.webp"
                 alt="Đã thông báo Bộ Công Thương"
-                className="h-12 w-auto object-contain transition-transform hover:scale-105"
+                width={130}
+                height={40}
+                className="h-10 w-auto object-contain shrink-0 transition-transform hover:scale-105"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
