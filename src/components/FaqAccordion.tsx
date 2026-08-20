@@ -42,6 +42,7 @@ export default function FaqAccordion({
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
               className="flex w-full items-center justify-between py-4 text-left font-bold text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:py-5"
               aria-expanded={openIndex === i}
+              suppressHydrationWarning
             >
               <span className="pr-4 text-base sm:text-lg">{item.question}</span>
               <span

@@ -231,6 +231,7 @@ export default function HomeDarkBanner({
           onClick={prev}
           className="absolute left-2 sm:left-6 top-1/2 z-20 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/60 bg-black/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
           aria-label="Slide trước"
+          suppressHydrationWarning
         >
           <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
@@ -239,6 +240,7 @@ export default function HomeDarkBanner({
           onClick={next}
           className="absolute right-2 sm:right-6 top-1/2 z-20 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/60 bg-black/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
           aria-label="Slide sau"
+          suppressHydrationWarning
         >
           <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
@@ -256,6 +258,7 @@ export default function HomeDarkBanner({
                   : "border-2 border-white/70 bg-transparent hover:bg-white/40"
               }`}
               aria-label={`Chuyển đến slide ${i + 1}`}
+              suppressHydrationWarning
             />
           ))}
         </div>

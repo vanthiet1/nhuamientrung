@@ -145,9 +145,10 @@ export default function QuoteForm() {
                 ref={formRef}
                 className="p-6 sm:p-8"
                 onSubmit={handleSubmit}
+                suppressHydrationWarning
               >
                 {/* Honeypot */}
-                <input type="text" name="_hp" className="hidden" tabIndex={-1} autoComplete="off" />
+                <input type="text" name="_hp" className="hidden" tabIndex={-1} autoComplete="off" suppressHydrationWarning />
 
                 {/* 1. Thông tin liên hệ */}
                 <fieldset className="mb-8">
@@ -155,19 +156,19 @@ export default function QuoteForm() {
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Họ và tên <span className="text-red-500">*</span></label>
-                      <input required placeholder="Nguyễn Văn Anh" autoComplete="name" name="name" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input required placeholder="Nguyễn Văn Anh" autoComplete="name" name="name" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Tên doanh nghiệp</label>
-                      <input placeholder="Công ty / cơ sở sản xuất" autoComplete="organization" name="company" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input placeholder="Công ty / cơ sở sản xuất" autoComplete="organization" name="company" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Số điện thoại / Zalo <span className="text-red-500">*</span></label>
-                      <input type="tel" required placeholder="09xx xxx xxx" autoComplete="tel" pattern="[0-9 +()-]{9,15}" name="phone" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input type="tel" required placeholder="09xx xxx xxx" autoComplete="tel" pattern="[0-9 +()-]{9,15}" name="phone" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
-                      <input type="email" placeholder="email@congty.vn" autoComplete="email" name="email" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input type="email" placeholder="email@congty.vn" autoComplete="email" name="email" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                   </div>
                 </fieldset>
@@ -178,17 +179,17 @@ export default function QuoteForm() {
                   
                   <div className="grid sm:grid-cols-3 gap-3 mb-6">
                     <label className="relative flex flex-col p-4 cursor-pointer rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 [&:has(:checked)]:border-brand-500 [&:has(:checked)]:bg-brand-50/50 transition-all">
-                      <input type="radio" required name="product" value="in-mang-co" className="sr-only" defaultChecked />
+                      <input type="radio" required name="product" value="in-mang-co" className="sr-only" defaultChecked suppressHydrationWarning />
                       <span className="font-bold text-[#1a2a4b] mb-1">In màng co</span>
                       <span className="text-xs text-slate-500">Toàn quốc</span>
                     </label>
                     <label className="relative flex flex-col p-4 cursor-pointer rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 [&:has(:checked)]:border-brand-500 [&:has(:checked)]:bg-brand-50/50 transition-all">
-                      <input type="radio" required name="product" value="mang-ghep" className="sr-only" />
+                      <input type="radio" required name="product" value="mang-ghep" className="sr-only" suppressHydrationWarning />
                       <span className="font-bold text-[#1a2a4b] mb-1">Bao bì màng ghép</span>
                       <span className="text-xs text-slate-500">Toàn quốc</span>
                     </label>
                     <label className="relative flex flex-col p-4 cursor-pointer rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 [&:has(:checked)]:border-brand-500 [&:has(:checked)]:bg-brand-50/50 transition-all">
-                      <input type="radio" required name="product" value="vat-lieu" className="sr-only" />
+                      <input type="radio" required name="product" value="vat-lieu" className="sr-only" suppressHydrationWarning />
                       <span className="font-bold text-[#1a2a4b] mb-1">Vật liệu đóng gói</span>
                       <span className="text-xs text-slate-500">Miền Trung</span>
                     </label>
@@ -197,7 +198,7 @@ export default function QuoteForm() {
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Ngành hàng</label>
-                      <select name="industry" defaultValue="" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all appearance-none">
+                      <select name="industry" defaultValue="" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all appearance-none" suppressHydrationWarning>
                         <option value="" disabled>Chọn ngành hàng</option>
                         <option value="Nước uống & đồ uống">Nước uống & đồ uống</option>
                         <option value="Thực phẩm & nông sản">Thực phẩm & nông sản</option>
@@ -209,27 +210,27 @@ export default function QuoteForm() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Số lượng dự kiến <span className="text-red-500">*</span></label>
-                      <input required placeholder="Ví dụ: 50.000 tem / 500 kg" name="quantity" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input required placeholder="Ví dụ: 50.000 tem / 500 kg" name="quantity" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Kích thước / quy cách</label>
-                      <input placeholder="Dài × rộng × cao / khổ màng" name="dimensions" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input placeholder="Dài × rộng × cao / khổ màng" name="dimensions" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Vật liệu / độ dày</label>
-                      <input placeholder="Nếu đã xác định" name="material" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input placeholder="Nếu đã xác định" name="material" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Số màu in</label>
-                      <input placeholder="Ví dụ: 6 màu" name="colors" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input placeholder="Ví dụ: 6 màu" name="colors" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Thời gian cần hàng</label>
-                      <input type="date" name="deadline" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input type="date" name="deadline" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Địa điểm giao hàng <span className="text-red-500">*</span></label>
-                      <input required placeholder="Quận/huyện, tỉnh/thành" name="destination" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" />
+                      <input required placeholder="Quận/huyện, tỉnh/thành" name="destination" className="w-full h-11 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all" suppressHydrationWarning />
                     </div>
                   </div>
                 </fieldset>
@@ -240,11 +241,11 @@ export default function QuoteForm() {
                   <div className="space-y-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Yêu cầu và điều kiện sử dụng</label>
-                      <textarea name="details" rows={3} placeholder="Mô tả sản phẩm cần đóng gói, cách sử dụng, yêu cầu bề mặt/in ấn hoặc thông tin cần tư vấn…" className="w-full p-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all resize-none"></textarea>
+                      <textarea name="details" rows={3} placeholder="Mô tả sản phẩm cần đóng gói, cách sử dụng, yêu cầu bề mặt/in ấn hoặc thông tin cần tư vấn…" className="w-full p-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all resize-none" suppressHydrationWarning></textarea>
                     </div>
                     
                     <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-xl p-6 cursor-pointer transition-colors group text-center">
-                      <input type="file" accept="image/*,.pdf,.ai,.cdr" name="reference" onChange={handleFileChange} className="hidden" />
+                      <input type="file" accept="image/*,.pdf,.ai,.cdr" name="reference" onChange={handleFileChange} className="hidden" suppressHydrationWarning />
                       <div className="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-slate-400 group-hover:text-brand-500 mb-3 transition-colors">
                         <Upload className="w-5 h-5" />
                       </div>
@@ -258,7 +259,7 @@ export default function QuoteForm() {
 
                 <label className="flex items-start gap-3 mb-8 cursor-pointer group">
                   <div className="pt-0.5">
-                    <input type="checkbox" required checked={isAgreed} onChange={(e) => setIsAgreed(e.target.checked)} className="w-4 h-4 rounded border-slate-300 text-brand-600 focus:ring-brand-600" />
+                    <input type="checkbox" required checked={isAgreed} onChange={(e) => setIsAgreed(e.target.checked)} className="w-4 h-4 rounded border-slate-300 text-brand-600 focus:ring-brand-600" suppressHydrationWarning />
                   </div>
                   <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
                     Tôi đồng ý để Bao Bì Thành Phát liên hệ tư vấn theo thông tin đã cung cấp.
@@ -266,7 +267,7 @@ export default function QuoteForm() {
                 </label>
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <button disabled={isSubmitting || !isAgreed} type="submit" className="w-full sm:w-auto btn-primary !rounded-xl bg-brand-600 hover:bg-brand-700 text-white px-8 py-3.5 font-bold text-[15px] shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button disabled={isSubmitting || !isAgreed} type="submit" className="w-full sm:w-auto btn-primary !rounded-xl bg-brand-600 hover:bg-brand-700 text-white px-8 py-3.5 font-bold text-[15px] shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" suppressHydrationWarning>
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />

@@ -86,6 +86,7 @@ export default function PartnersSlider({ partners }: { partners: Partner[] }) {
           scrollByDir(-1);
         }}
         className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2.5 text-slate-600 shadow-md transition hover:border-brand-300 hover:text-brand-600 sm:-left-2"
+        suppressHydrationWarning
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -144,6 +145,7 @@ export default function PartnersSlider({ partners }: { partners: Partner[] }) {
           scrollByDir(1);
         }}
         className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-200 bg-white p-2.5 text-slate-600 shadow-md transition hover:border-brand-300 hover:text-brand-600 sm:-right-2"
+        suppressHydrationWarning
       >
         <ChevronRight className="h-5 w-5" />
       </button>

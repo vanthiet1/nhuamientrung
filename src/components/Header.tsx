@@ -186,8 +186,8 @@ export default function Header({
             </div>
             <Link
               href="/lien-he"
-              className="btn-primary hidden lg:inline-flex !rounded-full bg-brand-800 hover:bg-brand-900"
-              style={{ padding: "0.5rem 1.25rem", fontSize: "0.75rem" }}
+              className="btn-primary hidden lg:inline-flex !rounded-full bg-brand-800 hover:bg-brand-900 whitespace-nowrap shrink-0"
+              style={{ padding: "0.55rem 1.25rem", fontSize: "0.8125rem" }}
             >
               Báo giá
             </Link>

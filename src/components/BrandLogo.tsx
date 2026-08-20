@@ -10,37 +10,35 @@ type BrandLogoProps = {
 };
 
 const sizes = {
-  /** Nav header: logo trong suốt (không nền trắng mặc định của file logo.png) */
   header: {
-    width: 300,
-    height: 96,
-    className: "h-[66px] w-auto bg-transparent sm:h-[74px] md:h-[82px]",
-    src: "/logo-transparent.png",
+    width: 240,
+    height: 72,
+    className: "h-11 sm:h-13 md:h-[52px] w-auto bg-transparent",
+    src: "/logo.webp",
   },
-  /** Footer: giữ logo gốc (có nền), không dùng bản transparent */
   footer: {
-    width: 260,
-    height: 88,
-    className: "h-20 sm:h-24 w-auto rounded-xl bg-white object-contain p-1.5",
-    src: "/logo.png",
+    width: 240,
+    height: 72,
+    className: "h-14 sm:h-16 w-auto rounded-xl bg-white object-contain p-1.5",
+    src: "/logo.webp",
   },
   admin: {
     width: 150,
     height: 48,
-    className: "h-11 w-auto bg-transparent",
-    src: "/logo-transparent.png",
+    className: "h-10 w-auto bg-transparent",
+    src: "/logo.webp",
   },
   login: {
     width: 220,
     height: 72,
-    className: "h-[72px] w-auto bg-transparent",
-    src: "/logo-transparent.png",
+    className: "h-14 w-auto bg-transparent",
+    src: "/logo.webp",
   },
   compact: {
     width: 52,
     height: 52,
-    className: "h-11 w-11 object-contain bg-transparent",
-    src: "/logo-transparent.png",
+    className: "h-10 w-10 object-contain bg-transparent",
+    src: "/logo.webp",
   },
 } as const;
 

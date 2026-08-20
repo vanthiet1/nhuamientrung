@@ -213,6 +213,7 @@ export default function LanguageSwitcher({
     <div ref={rootRef} className={`relative ${className}`}>
       <button
         type="button"
+        suppressHydrationWarning
         onClick={() => setOpen((v) => !v)}
         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold backdrop-blur transition ${
           compact ? "" : "sm:px-3 sm:py-1.5 sm:text-sm"
@@ -246,6 +247,7 @@ export default function LanguageSwitcher({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Tìm ngôn ngữ..."
+                suppressHydrationWarning
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-500/20"
               />
             </div>
@@ -265,6 +267,7 @@ export default function LanguageSwitcher({
                 <li key={lang.code}>
                   <button
                     type="button"
+                    suppressHydrationWarning
                     role="option"
                     aria-selected={active}
                     onClick={() => {

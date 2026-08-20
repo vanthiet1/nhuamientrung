@@ -220,6 +220,7 @@ export default function HeroSlider({
               onClick={prev}
               className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/25 p-2.5 text-white backdrop-blur transition hover:bg-black/45 sm:left-5"
               aria-label="Slide trước"
+              suppressHydrationWarning
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -228,6 +229,7 @@ export default function HeroSlider({
               onClick={next}
               className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/25 p-2.5 text-white backdrop-blur transition hover:bg-black/45 sm:right-5"
               aria-label="Slide sau"
+              suppressHydrationWarning
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -244,6 +246,7 @@ export default function HeroSlider({
                       : "w-2.5 bg-white/45 hover:bg-white/70"
                   }`}
                   aria-label={`Slide ${i + 1}`}
+                  suppressHydrationWarning
                 />
               ))}
             </div>
