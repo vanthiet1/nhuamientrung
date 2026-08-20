@@ -13,7 +13,7 @@ const sizes = {
   header: {
     width: 240,
     height: 72,
-    className: "h-11 sm:h-13 md:h-[52px] w-auto bg-transparent",
+    className: "h-11 sm:h-13 md:h-[52px] w-[147px] sm:w-[173px] md:w-[173px] bg-transparent",
     src: "/logo.webp",
   },
   footer: {

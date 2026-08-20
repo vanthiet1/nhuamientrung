@@ -406,8 +406,14 @@ body {
   display: none !important;
 }
 
+html {
+  top: 0 !important;
+  position: relative !important;
+}
+
 body {
   top: 0 !important;
+  position: relative !important;
 }
 
 body > .skiptranslate,
@@ -415,18 +421,23 @@ body > .skiptranslate,
 .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
 .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
 div[id^="goog-gt-"],
-div.VIpgJd-ZVi9od-ORHb-OEVmcd {
+div.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.skiptranslate {
   display: none !important;
 }
 
 /* Avoid layout jump when Google injects iframe */
 iframe.skiptranslate {
   display: none !important;
+  visibility: hidden !important;
 }
 
+html.translated-ltr,
+html.translated-rtl,
 html.translated-ltr body,
 html.translated-rtl body {
   top: 0 !important;
+  position: relative !important;
 }
 
 /* Partners scroll-reveal helpers */
