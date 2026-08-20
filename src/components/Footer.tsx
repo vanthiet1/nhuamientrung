@@ -205,22 +205,22 @@ export default function Footer({
             {/* Policy Links */}
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
               <li>
-                <Link href="/lien-he" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-ban-hang" className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách bán hàng
                 </Link>
               </li>
               <li>
-                <Link href="/lien-he" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-thanh-toan" className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách thanh toán
                 </Link>
               </li>
               <li>
-                <Link href="/lien-he" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-van-chuyen" className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách vận chuyển
                 </Link>
               </li>
               <li>
-                <Link href="/lien-he" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-bao-mat" className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách bảo mật
                 </Link>
               </li>
