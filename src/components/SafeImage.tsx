@@ -68,7 +68,6 @@ export default function SafeImage({
       alt={alt}
       className={className}
       fill={fill}
-      unoptimized
       onError={(e) => {
         setFailed(true);
         onError?.(e);

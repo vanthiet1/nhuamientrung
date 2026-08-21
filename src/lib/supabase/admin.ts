@@ -123,7 +123,7 @@ export async function uploadToStorage(opts: {
     headers: {
       "Content-Type": opts.contentType,
       "x-upsert": opts.upsert ? "true" : "false",
-      "cache-control": "3600",
+      "cache-control": "public, max-age=31536000, immutable",
     },
     body: opts.body as BodyInit,
   });
@@ -136,7 +136,7 @@ export async function uploadToStorage(opts: {
       headers: {
         "Content-Type": opts.contentType,
         "x-upsert": opts.upsert ? "true" : "false",
-        "cache-control": "3600",
+        "cache-control": "public, max-age=31536000, immutable",
       },
       body: opts.body as BodyInit,
     });

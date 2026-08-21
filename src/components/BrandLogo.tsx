@@ -57,7 +57,6 @@ export default function BrandLogo({
       width={s.width}
       height={s.height}
       priority={priority}
-      unoptimized
       className={`${s.className} object-contain object-left ${className}`}
     />
   );
