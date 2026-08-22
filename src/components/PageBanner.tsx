@@ -46,7 +46,7 @@ export default function PageBanner({
           wide ? "container-home" : "container-page"
         }`}
       >
-        <TitleTag className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
+        <TitleTag className="text-xl font-extrabold tracking-tight sm:text-3xl md:text-4xl break-words">
           {title}
         </TitleTag>
         {safeSubtitle && (

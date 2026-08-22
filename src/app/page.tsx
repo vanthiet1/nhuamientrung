@@ -12,7 +12,6 @@ import {
   Leaf,
 } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
-import HomeDarkBanner from "@/components/HomeDarkBanner";
 import HomeImageSlider from "@/components/HomeImageSlider";
 import HomeCategoryProducts from "@/components/HomeCategoryProducts";
 import HomePrintingProducts from "@/components/HomePrintingProducts";
@@ -133,8 +132,7 @@ export default async function HomePage({}: Props) {
         </div>
       </section>
 
-      {/* Dark Navy Hero/About Banner matching baobithanhphat.com */}
-      <HomeDarkBanner banners={banners} />
+      {/* Premium Feature Highlights Section */}
 
       {/* Danh mục sản phẩm (Tabs) */}
       <section id="danh-muc-san-pham" className="py-14 sm:py-20 bg-slate-50">

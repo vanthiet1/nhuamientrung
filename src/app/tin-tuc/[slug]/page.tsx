@@ -200,28 +200,28 @@ export default async function NewsDetailPage({ params }: Props) {
         asH1={false}
       />
       {/* Breadcrumb có tiêu đề đúng dấu, ghi đè lên auto-breadcrumb từ slug */}
-      <div className="border-b border-slate-200/80 bg-slate-50">
+      <div className="border-b border-slate-200/80 bg-slate-50 overflow-hidden">
         <nav
           aria-label="Breadcrumb"
-          className="container-page flex flex-wrap items-center gap-1.5 py-4 text-sm text-slate-500 sm:text-base"
+          className="container-page flex flex-wrap items-center gap-1.5 py-4 text-xs sm:text-sm text-slate-500 max-w-full overflow-hidden"
         >
-          <Link href="/" className="inline-flex items-center gap-1.5 font-medium text-slate-600 transition hover:text-brand-600">
+          <Link href="/" className="inline-flex items-center gap-1.5 font-medium text-slate-600 transition hover:text-brand-600 shrink-0">
             <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
             <span>Trang chủ</span>
           </Link>
           <svg className="h-4 w-4 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-          <Link href="/tin-tuc" className="font-medium text-slate-600 transition hover:text-brand-600">Tin tức</Link>
+          <Link href="/tin-tuc" className="font-medium text-slate-600 transition hover:text-brand-600 shrink-0">Tin tức</Link>
           <svg className="h-4 w-4 shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-          <span className="font-semibold text-brand-600">{item.title}</span>
+          <span className="font-semibold text-brand-600 line-clamp-1 min-w-0 break-all">{item.title}</span>
         </nav>
       </div>
 
-      <section className="section container-page">
-        <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
-          <article className="lg:col-span-2">
-            <div className="card overflow-hidden p-0 sm:p-0">
+      <section className="section container-page overflow-hidden">
+        <div className="grid gap-8 lg:grid-cols-3 lg:gap-10 min-w-0 w-full overflow-hidden">
+          <article className="lg:col-span-2 min-w-0 w-full overflow-hidden">
+            <div className="card overflow-hidden p-0 sm:p-0 w-full">
               {item.image ? (
-                <div className="relative aspect-[16/9] w-full bg-slate-100 sm:aspect-[2/1]">
+                <div className="relative aspect-[16/9] w-full bg-slate-100 sm:aspect-[2/1] overflow-hidden">
                   <SafeImage
                     src={item.image}
                     alt={item.title}
@@ -233,21 +233,21 @@ export default async function NewsDetailPage({ params }: Props) {
                   />
                 </div>
               ) : null}
-              <div className="p-6 sm:p-8">
-              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-sky-600">
+              <div className="p-4 sm:p-8 overflow-hidden w-full">
+              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-sky-600">
                 <Calendar className="h-4 w-4" />
                 {date}
               </span>
-              <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+              <h1 className="mt-2 text-xl font-extrabold tracking-tight text-slate-900 sm:text-3xl break-words">
                 {item.title}
               </h1>
-              <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-4 py-3 text-sm font-bold leading-relaxed text-slate-800">
+              <p className="mt-4 rounded-xl border-l-4 border-brand-500 bg-brand-50/60 px-3.5 py-3 text-xs sm:text-sm font-bold leading-relaxed text-slate-800 break-words">
                 {cleanRawContent(item.excerpt, false).replace(/<[^>]*>/g, '').trim()}
               </p>
-              <div className="article-content mt-6">
+              <div className="article-content mt-6 w-full max-w-full overflow-hidden break-words">
                 {renderContent(item.content)}
               </div>
-              <p className="mt-8 text-xs text-slate-400">
+              <p className="mt-8 text-xs text-slate-400 break-words">
                 Bài viết từ {company.shortName} — chuyên màng co, bao bì Đà
                 Nẵng.{" "}
                 <Link href="/san-pham" className="font-semibold text-brand-600 hover:underline">
