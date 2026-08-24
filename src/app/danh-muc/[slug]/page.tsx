@@ -36,8 +36,10 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const sp = await searchParams;
+  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
   const found = await loadCategoryLookup(slug);
 
   if (!found) {
@@ -51,9 +53,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? found.category.description
       : found.subcategory.description;
 
-  const title = `${name} | Danh mục bao bì Đà Nẵng`;
+  const baseTitle = `${name} | Danh mục bao bì Đà Nẵng`;
+  const title = page > 1 ? `${name} · Trang ${page} | Danh mục bao bì Đà Nẵng` : baseTitle;
   const keywords = productKeywords(name);
-  const url = `${siteUrl}/danh-muc/${slug}`;
+  const url = page > 1 ? `${siteUrl}/danh-muc/${slug}?page=${page}` : `${siteUrl}/danh-muc/${slug}`;
 
   return {
     title,

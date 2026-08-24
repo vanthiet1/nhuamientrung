@@ -96,6 +96,153 @@ const EXACT_SLUG_MAP: Record<string, string> = {
     "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
   "xop-giam-soc-goi-hang-xop-bop-no-xop-pe-foam-mien-trung":
     "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
+
+  // Additional legacy indexed slugs from old nhuamientrung.vn & phuanpe.com
+  "tin-tuc-su-kien": "/tin-tuc",
+  "in-bao-bi-nhua-da-nang": "/san-pham/in-bao-bi-nhua",
+  "mang-co-pe-da-nang": "/san-pham/mang-co-pe",
+  "mang-co-da-nang": "/danh-muc/mang-co-pvc",
+  "mang-co-pvc-da-nang": "/danh-muc/mang-co-pvc",
+  "in-tui-mang-ghep-phuc-hop-tai-da-nang": "/san-pham/in-bao-bi-nhua",
+  "mang-co-nhiet-tai-da-nang": "/danh-muc/mang-co-pvc",
+  "dac-tinh-ky-thuat-cac-loai-nhua-pet-pe-pof-pvc": "/tin-tuc",
+  "mang-co-gia-re-tai-da-nang-hotline-0935-909-747": "/danh-muc/mang-co-pvc",
+  "dia-chi-cung-cap-mang-co-nhiet-tai-da-nang": "/danh-muc/mang-co-pvc",
+  "top-1-cong-ty-in-mang-co-bao-bi-gia-re-uy-tin-nhat-da-nang":
+    "/tin-tuc/top-1-cung-cap-mang-co-nhiet-chat-luong-da-nang",
+  "mang-co-pe-gia-re-tai-da-nang-hotline-0935-909-747": "/san-pham/mang-co-pe",
+  "dia-chi-ban-mang-co-pvc-pe-pof-gia-re-da-nang": "/danh-muc/mang-co-pvc",
+  "mang-boc-thuc-pham-co-an-toan-khong-cach-chon-the-nao": "/tin-tuc",
+  "in-mang-co-nhan-chai-da-nang": "/san-pham/in-mang-co-nhan-chai",
+  "in-an-mang-ep-ly-tra-sua-da-nang":
+    "/san-pham/in-cuon-mang-ep-ly-theo-yeu-cau",
+  "in-tui-ni-long-bao-bi-gia-re": "/san-pham/in-bao-bi-nhua",
+  "chai-nhua-pet-da-nang": "/danh-muc/mang-co-pet",
+  "chai-nhua-gia-re-da-nang": "/danh-muc/phu-kien-nganh-nuoc-uong",
+  "chai-nhua-pet-mau-chai-nhua-dep-giup-kinh-doanh-do-uong-hieu-qua":
+    "/danh-muc/mang-co-pet",
+  "dia-chi-cung-cap-mang-pe-chat-luong-gia-re-tai-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "ban-mang-co-pe-pvc-pof-gia-re-da-nang": "/danh-muc/mang-co-pvc",
+  "in-nhan-chai-nhua": "/san-pham/in-mang-co-nhan-chai",
+  "xop-boc-hang-da-nang":
+    "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
+  "xop-hoi-boc-goi-hang-tai-da-nang":
+    "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
+  "in-bao-bi-ca-phe-da-nang": "/san-pham/in-bao-bi-nhua",
+  "mang-dan-mieng-ly-da-nang": "/san-pham/in-cuon-mang-ep-ly-theo-yeu-cau",
+  "in-bao-bi-thuc-pham-da-nang": "/san-pham/in-bao-bi-nhua",
+  "in-tem-nhan-decal-chai-lo": "/san-pham/in-mang-co-nhan-chai",
+  "mang-co-gia-re-tai-hai-chau": "/danh-muc/mang-co-pvc",
+  "mang-co-boc-loc-chai-nap-chai-hop-my-pham-da-nang": "/san-pham/mang-co-pvc-loc",
+  "dia-chi-in-tem-nhan-dan-chai-gia-re-nhat-da-nang": "/san-pham/in-mang-co-nhan-chai",
+  "mang-co-quang-nam": "/danh-muc/mang-co-pvc",
+  "bang-bao-gia-mang-co": "/danh-muc/mang-co-pvc",
+  "mua-ban-mang-pe-gia-re-tai-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "ban-mang-co-nhiet-gia-re-va-cac-loai-mang-co-nhiet-da-nang":
+    "/danh-muc/mang-co-pvc",
+  "in-mang-co-gia-re-tai-son-tra-da-nang": "/san-pham/in-mang-co-nhan-chai",
+  "mang-xop-hoi-xop-bop-no-xop-khi-xop-goi-hang-da-nang":
+    "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
+  "mua-ban-mang-pe-gia-re-chat-luong-tot-nhat-tai-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "bang-keo-dan-thung": "/danh-muc/bang-keo-trong",
+  "mang-pe-lot-san":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-mau-xanh":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-quan-hang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-quan-may":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-quan-pallet":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-quan-pallet-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-san-xuat":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-shopee":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-stretch-film":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-tai-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-thuc-pham": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-pe-trai-san":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-trang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-quan-pe-gia-re":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-xop-hoi-da-nang":
+    "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
+  "mang_co_cuon_pallet":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang_co_nhiet_da_nang": "/danh-muc/mang-co-pvc",
+  "mang_co_pe_da_nang": "/san-pham/mang-co-pe",
+  "mang_pe": "/danh-muc/mang-co-pe-mang-pe",
+  "mang_pe_boc_hang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang_pe_gia_re":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mangcodanang": "/danh-muc/mang-co-pvc",
+  "mangconhietdanang": "/danh-muc/mang-co-pvc",
+  "may-thoi-mang-pe-3-lop": "/danh-muc/mang-co-pe-mang-pe",
+  "san_xuat_mang_pe": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-co-pof-nguyen-lieu-cua-tuong-lai": "/danh-muc/mang-co-pof",
+  "mang-co-quan-pallet-trong-cong-nghe-dong-goi": "/san-pham/mang-quan-pallet",
+  "tat-tan-tat-ve-mang-co-nhiet": "/danh-muc/mang-co-pvc",
+  "khong-phan-loai": "/tat-ca-san-pham",
+  "uncategorized": "/tat-ca-san-pham",
+  "dung-cu-quan-mang-pe-inox-cam-tay":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "in_mang_co_nap_chai": "/san-pham/in-mang-co-nhan-chai",
+  "in_tem_nhan_chai": "/san-pham/in-mang-co-nhan-chai",
+  "inmangcopvc": "/san-pham/in-mang-co-nhan-chai",
+  "mang-boc-pe-la-gi": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-boc-pe-va-pvc": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-co-pe-re": "/san-pham/mang-co-pe",
+  "mang-pe-4kg":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-bao-ve-be-mat":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-boc-do":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-boc-hang-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-boc-hang-hoa":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-boc-hang-mua-o-dau":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-boc-thuc-pham": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-pe-chong-tinh-dien":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-cong-nghiep":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-cuon":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-cuon-lon":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-day":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-dung-de-lam-gi": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-pe-den-gia-re":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-dong-goi":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-foam-dang-cuon":
+    "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
+  "mang-pe-foam-da-nang":
+    "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
+  "mang-pe-gia-re":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-gia-re-tai-da-nang":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-gia-si":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
+  "mang-pe-kho-2m":
+    "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
 };
 
 /**
@@ -144,6 +291,65 @@ export function getSeoRedirect(request: NextRequest): URL | null {
     needsRedirect = true;
   }
 
+  // 1.5. Legacy WordPress pagination path handling (/page/N)
+  const pageMatch = pathname.match(/^(.*)\/page\/(\d+)$/);
+  if (pageMatch) {
+    const rawBasePath = pageMatch[1] || "/";
+    const pageNum = parseInt(pageMatch[2], 10);
+
+    let targetPath = rawBasePath;
+    if (
+      rawBasePath === "/tin-tuc" ||
+      rawBasePath === "/news" ||
+      rawBasePath === "/category/tin-tuc"
+    ) {
+      targetPath = "/tin-tuc";
+    } else if (rawBasePath === "/danh-muc" || rawBasePath === "/danh-muc-sp") {
+      targetPath = "/danh-muc";
+    } else if (rawBasePath === "/san-pham" || rawBasePath === "/tat-ca-san-pham") {
+      targetPath = "/tat-ca-san-pham";
+    } else if (rawBasePath.startsWith("/news/")) {
+      const newsSlug = rawBasePath.replace(/^\/news\/?/, "");
+      targetPath = EXACT_SLUG_MAP[newsSlug] || `/tin-tuc/${newsSlug}`;
+    } else if (rawBasePath.startsWith("/danh-muc-sp/")) {
+      const catSlug = rawBasePath.replace(/^\/danh-muc-sp\/?/, "").split("/")[0];
+      targetPath =
+        EXACT_SLUG_MAP[catSlug] ||
+        (VALID_CATEGORY_SLUGS.has(catSlug) ? `/danh-muc/${catSlug}` : "/danh-muc");
+    } else if (rawBasePath.startsWith("/category/")) {
+      const catSlug = rawBasePath.replace(/^\/category\/?/, "").split("/")[0];
+      if (catSlug === "tin-tuc") {
+        targetPath = "/tin-tuc";
+      } else {
+        targetPath =
+          EXACT_SLUG_MAP[catSlug] ||
+          (VALID_CATEGORY_SLUGS.has(catSlug) ? `/danh-muc/${catSlug}` : "/danh-muc");
+      }
+    } else if (rawBasePath.startsWith("/tag/")) {
+      const tagSlug =
+        rawBasePath
+          .replace(/^\/tag\/(sp-tag\/|danh-muc-sp\/)?/, "")
+          .replace(/\/$/, "")
+          .split("/")
+          .pop() || "";
+      targetPath =
+        EXACT_SLUG_MAP[tagSlug] ||
+        (VALID_CATEGORY_SLUGS.has(tagSlug)
+          ? `/danh-muc/${tagSlug}`
+          : tagSlug
+          ? `/san-pham/${tagSlug}`
+          : "/tat-ca-san-pham");
+    }
+
+    url.pathname = targetPath;
+    if (pageNum > 1) {
+      url.searchParams.set("page", String(pageNum));
+    } else {
+      url.searchParams.delete("page");
+    }
+    return url;
+  }
+
   // 2. Handle old WordPress / WooCommerce query parameters
   // e.g. ?add-to-cart=349, ?p=1031, ?1Go4v4n4a7id7206, ?m3o-mang-co-ep-moc-nhom
   if (url.search) {
@@ -189,9 +395,16 @@ export function getSeoRedirect(request: NextRequest): URL | null {
 
   // 3. Handle old path prefixes
 
-  // Legacy news path: /news/* -> /tin-tuc/*
-  if (pathname === "/news" || pathname.startsWith("/news/")) {
-    const slug = pathname.replace(/^\/news\/?/, "");
+  // Legacy news path: /news/* or /tin-tuc-su-kien/* -> /tin-tuc/*
+  if (
+    pathname === "/news" ||
+    pathname.startsWith("/news/") ||
+    pathname === "/tin-tuc-su-kien" ||
+    pathname.startsWith("/tin-tuc-su-kien/")
+  ) {
+    const slug = pathname
+      .replace(/^\/news\/?/, "")
+      .replace(/^\/tin-tuc-su-kien\/?/, "");
     if (!slug || slug.startsWith("page/")) {
       url.pathname = "/tin-tuc";
     } else if (EXACT_SLUG_MAP[slug]) {
@@ -219,9 +432,13 @@ export function getSeoRedirect(request: NextRequest): URL | null {
     return url;
   }
 
-  // Legacy WP category path: /category/* -> /danh-muc
+  // Legacy WP category path: /category/* -> /tin-tuc or /danh-muc
   if (pathname.startsWith("/category")) {
-    url.pathname = "/danh-muc";
+    if (pathname === "/category/tin-tuc" || pathname.startsWith("/category/tin-tuc/")) {
+      url.pathname = "/tin-tuc";
+    } else {
+      url.pathname = "/danh-muc";
+    }
     url.search = "";
     return url;
   }

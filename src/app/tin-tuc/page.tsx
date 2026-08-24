@@ -7,24 +7,44 @@ import { loadNews } from "@/lib/data/public";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Tin tức màng co & bao bì",
-  description:
-    "Tin tức màng co nhiệt, bao bì đóng gói, kiến thức packaging từ Bao Bì Thành Phát Đà Nẵng.",
-  keywords: [
-    "tin tức bao bì",
-    "tin màng co nhiệt",
-    "kiến thức đóng gói",
-    "Bao Bì Thành Phát",
-  ],
-  alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com"}/tin-tuc`,
-  },
-};
-
 type Props = {
   searchParams: Promise<{ page?: string }>;
 };
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com";
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const sp = await searchParams;
+  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+  const baseTitle = "Tin tức màng co & bao bì";
+  const title = page > 1 ? `${baseTitle} · Trang ${page}` : baseTitle;
+  const description =
+    "Tin tức màng co nhiệt, bao bì đóng gói, kiến thức packaging từ Bao Bì Thành Phát Đà Nẵng.";
+  const canonical = page > 1 ? `${siteUrl}/tin-tuc?page=${page}` : `${siteUrl}/tin-tuc`;
+
+  return {
+    title,
+    description,
+    keywords: [
+      "tin tức bao bì",
+      "tin màng co nhiệt",
+      "kiến thức đóng gói",
+      "Bao Bì Thành Phát",
+    ],
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "website",
+      locale: "vi_VN",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 const PER_PAGE = 8;
 

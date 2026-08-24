@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/category/tin-tuc/:path*",
+        destination: "/tin-tuc/:path*",
+        permanent: true,
+      },
+      {
         source: "/category/:path*",
         destination: "/danh-muc",
         permanent: true,
