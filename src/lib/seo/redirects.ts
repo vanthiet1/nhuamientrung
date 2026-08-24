@@ -45,6 +45,8 @@ const EXACT_SLUG_MAP: Record<string, string> = {
     "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",
 
   // Category old slugs
+  "mang-co-pe": "/san-pham/mang-co-pe",
+  "mang-co": "/danh-muc/mang-co-pvc",
   "mang-co-pvc-chuyen-nhiet-giare-quangnam": "/danh-muc/mang-co-pvc",
   "mang-co-pvc-quang-nam-da-nang": "/danh-muc/mang-co-pvc",
   "mang-pe": "/danh-muc/mang-co-pe-mang-pe",
@@ -103,6 +105,10 @@ const EXACT_SLUG_MAP: Record<string, string> = {
 
   // Additional legacy indexed slugs from old nhuamientrung.vn & phuanpe.com
   "tin-tuc-su-kien": "/tin-tuc",
+  "tu-van-san-pham-mang-pe-quan-hang-hoa-tai-da-nang":
+    "/tin-tuc/mang-pe-su-lua-chon-tot-nhat-cho-viec-bao-ve-hang-hoa",
+  "tu-van-san-pham-mang-pe-quan-hang-hoa":
+    "/tin-tuc/mang-pe-su-lua-chon-tot-nhat-cho-viec-bao-ve-hang-hoa",
   "mang-co-nhiet-pet": "/danh-muc/mang-co-pet",
   "mang-co-pet-2": "/danh-muc/mang-co-pet",
   "mang-co-nhiet-pvc": "/danh-muc/mang-co-pvc",
@@ -294,9 +300,21 @@ export function getSeoRedirect(request: NextRequest): URL | null {
     needsRedirect = true;
   }
 
+  // Strip trailing /feed
+  if (pathname.endsWith("/feed")) {
+    pathname = pathname.slice(0, -5);
+    needsRedirect = true;
+  }
+
   // Normalize multiple consecutive slashes & trailing slash (except root)
   if (pathname.length > 1 && pathname.endsWith("/")) {
     pathname = pathname.slice(0, -1);
+    needsRedirect = true;
+  }
+
+  // Strip trailing /feed again if slash was trailing before /feed/
+  if (pathname.endsWith("/feed")) {
+    pathname = pathname.slice(0, -5);
     needsRedirect = true;
   }
 
@@ -425,15 +443,23 @@ export function getSeoRedirect(request: NextRequest): URL | null {
     return url;
   }
 
-  // Legacy category path: /danh-muc-sp/* -> /danh-muc/*
-  if (pathname === "/danh-muc-sp" || pathname.startsWith("/danh-muc-sp/")) {
-    const rawSlug = pathname.replace(/^\/danh-muc-sp\/?/, "").split("/")[0];
-    if (!rawSlug) {
+  // Legacy category path: /danh-muc-sp/* or nested /danh-muc/* -> /danh-muc/*
+  if (
+    pathname === "/danh-muc-sp" ||
+    pathname.startsWith("/danh-muc-sp/") ||
+    (pathname.startsWith("/danh-muc/") && pathname.split("/").filter(Boolean).length > 2)
+  ) {
+    const parts = pathname
+      .replace(/^\/(danh-muc-sp|danh-muc)\/?/, "")
+      .split("/")
+      .filter(Boolean);
+    const lastSlug = parts[parts.length - 1];
+    if (!lastSlug) {
       url.pathname = "/danh-muc";
-    } else if (EXACT_SLUG_MAP[rawSlug]) {
-      url.pathname = EXACT_SLUG_MAP[rawSlug];
-    } else if (VALID_CATEGORY_SLUGS.has(rawSlug)) {
-      url.pathname = `/danh-muc/${rawSlug}`;
+    } else if (EXACT_SLUG_MAP[lastSlug]) {
+      url.pathname = EXACT_SLUG_MAP[lastSlug];
+    } else if (VALID_CATEGORY_SLUGS.has(lastSlug)) {
+      url.pathname = `/danh-muc/${lastSlug}`;
     } else {
       url.pathname = `/danh-muc`;
     }

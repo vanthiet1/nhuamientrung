@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     "tuyển nhân viên kinh doanh bao bì"
   ],
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com"}/tuyen-dung`,
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://nhuamientrung.vn"}/tuyen-dung`,
   },
 };
 

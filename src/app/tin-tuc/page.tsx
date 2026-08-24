@@ -11,7 +11,7 @@ type Props = {
   searchParams: Promise<{ page?: string }>;
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nhuamientrung.vn";
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = await searchParams;

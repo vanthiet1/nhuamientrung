@@ -8,7 +8,7 @@ import { siteUrl } from "@/lib/seo/keywords";
  */
 export default function ProductContactBox() {
   const website =
-    siteUrl.replace(/^https?:\/\//, "") || "baobithanhphat.com";
+    siteUrl.replace(/^https?:\/\//, "") || "nhuamientrung.vn";
 
   return (
     <div className="mt-8 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/80 via-white to-sky-50/50 p-5 sm:p-6">

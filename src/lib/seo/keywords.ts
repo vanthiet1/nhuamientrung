@@ -41,7 +41,7 @@ export const allKeywords = [...primaryKeywords, ...secondaryKeywords];
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://baobithanhphat.com";
+  "https://nhuamientrung.vn";
 
 export const defaultSeo = {
   title: `${company.shortName} | Bao bì đóng gói Đà Nẵng`,

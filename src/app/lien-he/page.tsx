@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     company.phone,
   ],
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://baobithanhphat.com"}/lien-he`,
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://nhuamientrung.vn"}/lien-he`,
   },
 };
 
