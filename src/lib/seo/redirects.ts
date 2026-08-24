@@ -99,6 +99,11 @@ const EXACT_SLUG_MAP: Record<string, string> = {
 
   // Additional legacy indexed slugs from old nhuamientrung.vn & phuanpe.com
   "tin-tuc-su-kien": "/tin-tuc",
+  "mang-co-nhiet-pet": "/danh-muc/mang-co-pet",
+  "mang-co-pet-2": "/danh-muc/mang-co-pet",
+  "mang-co-nhiet-pvc": "/danh-muc/mang-co-pvc",
+  "mang-co-nhiet-pe": "/danh-muc/mang-co-pe-mang-pe",
+  "mang-co-nhiet-pof": "/danh-muc/mang-co-pof",
   "in-bao-bi-nhua-da-nang": "/san-pham/in-bao-bi-nhua",
   "mang-co-pe-da-nang": "/san-pham/mang-co-pe",
   "mang-co-da-nang": "/danh-muc/mang-co-pvc",
