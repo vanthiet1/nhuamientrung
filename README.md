@@ -83,7 +83,7 @@ Chạy SQL trong Supabase SQL Editor:
 
 - **MST:** 0402203761  
 - **Địa chỉ:** 12 Hà Đông 2, Phường Thanh Khê, TP. Đà Nẵng  
-- **ĐT:** 0236 3725379  
+- **ĐT:** 0935 909747  
 - **Email:** contact@baobithanhphat.com  
 - **STK:** 115002948432 — VietinBank CN Đà Nẵng  
 # baobithanhphat

@@ -9,6 +9,20 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/admin/", "/api/", "/admin"],
       },
+      {
+        userAgent: [
+          "AhrefsBot",
+          "SemrushBot",
+          "DotBot",
+          "MJ12bot",
+          "PetalBot",
+          "BLEXBot",
+          "Baiduspider",
+          "Bytespider",
+          "YandexBot"
+        ],
+        disallow: ["/"],
+      }
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,

@@ -76,6 +76,7 @@ export default function NewsTicker({ items }: { items: NewsItem[] }) {
           <Link
             key={news.slug}
             href={`/tin-tuc/${news.slug}`}
+            prefetch={false}
             data-news-item
             className="group flex gap-4 shrink-0"
           >

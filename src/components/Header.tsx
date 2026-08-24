@@ -96,6 +96,7 @@ export default function Header({
                 >
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className={`inline-flex items-center gap-0.5 rounded-full px-1.5 lg:px-2 xl:px-3 py-1 text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors ${
                       isActive(link.href)
                         ? "bg-sky-50 text-sky-600"
@@ -141,6 +142,7 @@ export default function Header({
                               <Link
                                 key={`${link.slug}-${idx}`}
                                 href={`/danh-muc/${link.slug}`}
+                                prefetch={false}
                                 className={`block text-[14px] font-bold leading-snug transition-colors hover:text-brand-600 ${
                                   isActive ? "text-brand-600" : "text-slate-800"
                                 }`}
@@ -154,6 +156,7 @@ export default function Header({
                       <div className="border-t border-slate-100 bg-slate-50 px-5 py-3.5 text-center">
                         <Link
                           href="/tat-ca-san-pham"
+                          prefetch={false}
                           className="text-base font-bold text-accent-600 hover:underline"
                         >
                           Xem tất cả sản phẩm →
@@ -166,6 +169,7 @@ export default function Header({
                 <Link
                   key={link.href}
                   href={link.href}
+                  prefetch={false}
                   className={`rounded-full px-1.5 lg:px-2 xl:px-3 py-1 text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors ${
                     isActive(link.href)
                       ? "bg-sky-50 text-sky-600"
@@ -265,6 +269,7 @@ export default function Header({
                       <div className="mb-2 ml-2 space-y-2 border-l-2 border-brand-200 pl-3">
                         <Link
                           href="/danh-muc"
+                          prefetch={false}
                           className="block py-1.5 text-sm font-bold text-accent-600"
                         >
                           Tất cả sản phẩm
@@ -275,6 +280,7 @@ export default function Header({
                             <div key={cat.slug}>
                               <Link
                                 href={`/danh-muc/${cat.slug}`}
+                                prefetch={false}
                                 className={`block py-1 text-sm font-bold ${
                                   isCatActive ? "text-brand-600" : "text-brand-700"
                                 }`}
@@ -305,6 +311,7 @@ export default function Header({
                   <Link
                     key={link.href}
                     href={link.href}
+                    prefetch={false}
                     className={`rounded-xl px-3 py-3 text-sm font-bold uppercase ${
                       isActive(link.href)
                         ? "bg-accent-50 text-accent-600"

@@ -145,6 +145,7 @@ export default function Footer({
                   <li key={cat.slug}>
                     <Link
                       href={cat.slug === "uncategorized" ? "/danh-muc" : `/danh-muc/${cat.slug}`}
+                      prefetch={false}
                       className="hover:text-white transition-colors flex items-center gap-1.5 line-clamp-1"
                     >
                       <span className="text-sky-400 text-xs shrink-0">▸</span> {cat.name}
@@ -159,6 +160,7 @@ export default function Footer({
                   <li key={cat.slug}>
                     <Link
                       href={cat.slug === "uncategorized" ? "/danh-muc" : `/danh-muc/${cat.slug}`}
+                      prefetch={false}
                       className="hover:text-white transition-colors flex items-center gap-1.5 line-clamp-1"
                     >
                       <span className="text-sky-400 text-xs shrink-0">▸</span> {cat.name}
@@ -227,22 +229,22 @@ export default function Footer({
             {/* Policy Links */}
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300">
               <li>
-                <Link href="/chinh-sach-ban-hang" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-ban-hang" prefetch={false} className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách bán hàng
                 </Link>
               </li>
               <li>
-                <Link href="/chinh-sach-thanh-toan" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-thanh-toan" prefetch={false} className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách thanh toán
                 </Link>
               </li>
               <li>
-                <Link href="/chinh-sach-van-chuyen" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-van-chuyen" prefetch={false} className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách vận chuyển
                 </Link>
               </li>
               <li>
-                <Link href="/chinh-sach-bao-mat" className="hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/chinh-sach-bao-mat" prefetch={false} className="hover:text-white transition-colors flex items-center gap-2">
                   <span className="text-slate-400">–</span> Chính sách bảo mật
                 </Link>
               </li>

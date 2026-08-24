@@ -25,6 +25,7 @@ export default function ProductCard({
   return (
     <Link
       href={href}
+      prefetch={false}
       className="group relative flex flex-col justify-between overflow-hidden rounded-none border border-slate-300 bg-white shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-600 hover:shadow-2xl hover:shadow-brand-900/20"
     >
       {/* Glossy Light Sweep / Shimmer Glint Effect on Hover */}

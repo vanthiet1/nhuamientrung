@@ -30,6 +30,7 @@ export default function CategorySidebar({
             >
               <Link
                 href={`/danh-muc/${cat.slug}`}
+                prefetch={false}
                 className={`flex items-center justify-between gap-2 px-4 py-3 text-sm font-bold transition ${
                   isActive
                     ? "bg-accent-50 text-accent-600"
@@ -63,6 +64,7 @@ export default function CategorySidebar({
                       <li key={child.slug}>
                         <Link
                           href={`/danh-muc/${child.slug}`}
+                          prefetch={false}
                           className={`block border-l-2 py-2 pl-6 pr-4 text-xs transition ${
                             subActive
                               ? "border-accent-500 bg-white font-bold text-accent-600"

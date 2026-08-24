@@ -25,6 +25,7 @@ export default function NewsCard({
     return (
       <Link
         href={`/tin-tuc/${item.slug}`}
+        prefetch={false}
         className="card-hover group flex h-full flex-col overflow-hidden"
       >
         <div className="relative h-48 overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 sm:h-52">
@@ -80,6 +81,7 @@ export default function NewsCard({
   return (
     <Link
       href={`/tin-tuc/${item.slug}`}
+      prefetch={false}
       className="card-hover group flex gap-3.5 p-3 sm:gap-4 sm:p-3.5"
     >
       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 sm:h-28 sm:w-28">
