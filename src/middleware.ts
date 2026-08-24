@@ -4,8 +4,14 @@ import {
   ADMIN_COOKIE,
   verifySessionTokenEdge,
 } from "@/lib/admin/auth-edge";
+import { getSeoRedirect } from "@/lib/seo/redirects";
 
 export async function middleware(request: NextRequest) {
+  const seoRedirectUrl = getSeoRedirect(request);
+  if (seoRedirectUrl) {
+    return NextResponse.redirect(seoRedirectUrl, 301);
+  }
+
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/admin")) {
