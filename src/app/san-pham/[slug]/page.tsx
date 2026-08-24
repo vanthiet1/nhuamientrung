@@ -89,19 +89,26 @@ export default async function ProductPage({
   const product = await loadProductBySlug(slug);
   if (!product) notFound();
 
-  const categories = await loadCategories();
-  const newsItems = await loadNews();
+  const [categories, newsItems, viewsRes, reviews, relatedProducts] = await Promise.all([
+    loadCategories(),
+    loadNews(),
+    (async () => {
+      try {
+        const supabase = await createClient();
+        const { data } = await supabase.from("products").select("views").eq("id", product.id).single();
+        return data && typeof data.views === "number" ? data.views : null;
+      } catch (error) {
+        console.error("Lỗi lấy view từ supabase:", error);
+        return null;
+      }
+    })(),
+    getApprovedReviews(product.id),
+    product.categoryId
+      ? loadProducts({ categoryId: product.categoryId })
+      : loadProducts(),
+  ]);
 
-  let viewCount = product.views || 0;
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase.from("products").select("views").eq("id", product.id).single();
-    if (data && typeof data.views === "number") {
-      viewCount = data.views;
-    }
-  } catch (error) {
-    console.error("Lỗi lấy view từ supabase:", error);
-  }
+  const viewCount = viewsRes !== null ? viewsRes : (product.views || 0);
 
   const title = product.name;
   const description = product.description 
@@ -114,7 +121,6 @@ export default async function ProductPage({
   // Breadcrumb: Trang chủ → Tên danh mục → SP
   const breadcrumbs: { label: string; href?: string }[] = [];
 
-  const reviews = await getApprovedReviews(product.id);
   if (product.categoryId) {
     const cat = categories.find((c) => c.id === product.categoryId);
     if (cat) {
@@ -140,10 +146,6 @@ export default async function ProductPage({
     }
   }
   breadcrumbs.push({ label: title });
-
-  let relatedProducts = product.categoryId
-    ? await loadProducts({ categoryId: product.categoryId })
-    : await loadProducts();
 
   const sameTypeProducts = relatedProducts.filter((p) => p.slug !== slug);
   const productTotalPages = Math.max(

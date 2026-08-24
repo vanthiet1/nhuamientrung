@@ -17,7 +17,7 @@ const EXACT_SLUG_MAP: Record<string, string> = {
   "cuon-mang-xop-hoi-10m-xop-hoi-boc-hang-xop-bop-no-da-nang":
     "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
   "bang-keo-duc-trong-97-108y": "/san-pham/bang-keo-duc-5cm-100-yard",
-  "mang-co-ep-moc-nhom": "/san-pham/mang-co-ep-moc-nhom",
+  "mang-co-ep-moc-nhom": "/danh-muc/mang-co-ep-moc-nhom",
   "mang-quan-pallet-5": "/san-pham/mang-quan-pallet",
   "cuon-mang-quan-pallet": "/san-pham/mang-quan-pallet",
   "mang-co-shirt-pet": "/san-pham/mang-co-pet",
@@ -135,6 +135,15 @@ const EXACT_SLUG_MAP: Record<string, string> = {
   "chai-nhua-pet-da-nang": "/danh-muc/mang-co-pet",
   "chai-nhua-gia-re-da-nang": "/danh-muc/phu-kien-nganh-nuoc-uong",
   "chai-nhua-pet-mau-chai-nhua-dep-giup-kinh-doanh-do-uong-hieu-qua":
+    "/danh-muc/mang-co-pet",
+  "dia-chi-ban-chai-nhua-pet-gia-re-chat-luong-nhat-tai-da-nang":
+    "/danh-muc/mang-co-pet",
+  "chai-nhua-pet-tra-sua-detox-tai-da-nang": "/danh-muc/mang-co-pet",
+  "chai-nhua-pet-tai-da-nang-gia-re-ben-dep-uy-tin-chat-luong-so-1":
+    "/danh-muc/mang-co-pet",
+  "san-xuat-va-cung-cap-chai-nhua-pet-tai-khu-vuc-mien-trung-tay-nguyen":
+    "/danh-muc/mang-co-pet",
+  "chai-nhua-pet-la-gi-tai-sao-nen-su-dung-chai-nhua-pet":
     "/danh-muc/mang-co-pet",
   "dia-chi-cung-cap-mang-pe-chat-luong-gia-re-tai-da-nang":
     "/san-pham/mang-pe-quan-hang-hoa-mang-pe-quan-pallet-da-nang",

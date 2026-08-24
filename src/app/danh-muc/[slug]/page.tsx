@@ -86,8 +86,10 @@ export default async function CategoryPage({
   const sp = await searchParams;
   const listPage = Math.max(1, parseInt(sp.page || "1", 10) || 1);
 
-  const categories = await loadCategories();
-  const found = await loadCategoryLookup(slug);
+  const [categories, found] = await Promise.all([
+    loadCategories(),
+    loadCategoryLookup(slug),
+  ]);
 
   if (!found) notFound();
 

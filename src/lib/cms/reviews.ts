@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getOrSetCache } from "@/lib/cache";
 import type { ProductReviewRecord } from "./types";
 
 export async function submitReview(data: Omit<ProductReviewRecord, "id" | "status" | "created_at" | "updated_at">) {
@@ -18,17 +19,20 @@ export async function submitReview(data: Omit<ProductReviewRecord, "id" | "statu
 }
 
 export async function getApprovedReviews(productId: string): Promise<ProductReviewRecord[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("product_reviews")
-    .select("*")
-    .eq("product_id", productId)
-    .eq("status", "approved")
-    .order("created_at", { ascending: false });
+  return getOrSetCache(`cms:reviews:${productId}`, async () => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("product_reviews")
+      .select("*")
+      .eq("product_id", productId)
+      .eq("status", "approved")
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Lỗi lấy danh sách review:", error);
-    return [];
-  }
-  return data || [];
+    if (error) {
+      console.error("Lỗi lấy danh sách review:", error);
+      return [];
+    }
+    return data || [];
+  });
 }
+
