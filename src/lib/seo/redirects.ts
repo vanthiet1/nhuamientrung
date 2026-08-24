@@ -96,6 +96,10 @@ const EXACT_SLUG_MAP: Record<string, string> = {
     "/san-pham/xop-bop-no-mang-xop-hoi-xop-khi-xop-goi-hang-da-nang",
   "xop-giam-soc-goi-hang-xop-bop-no-xop-pe-foam-mien-trung":
     "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
+  "mang-xop-hoi-goi-hangxop-bop-no-xop-pe-foam-mien-trung":
+    "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
+  "mang-xop-hoi-goi-hang-xop-bop-no-xop-pe-foam-mien-trung":
+    "/san-pham/mang-xop-pe-foam-boc-hang-hoa-chat-luong-gia-re-da-nang",
 
   // Additional legacy indexed slugs from old nhuamientrung.vn & phuanpe.com
   "tin-tuc-su-kien": "/tin-tuc",
