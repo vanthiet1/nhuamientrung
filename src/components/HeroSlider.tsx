@@ -49,18 +49,27 @@ export default function HeroSlider({
   banners?: BannerRecord[];
 }) {
   // Only display banners with sortOrder 0, 1, 2
-  const slides = useMemo(() => {
-    const filtered = banners.filter(
-      (b) => b.isActive !== false && (b.sortOrder === 0 || b.sortOrder === 1 || b.sortOrder === 2)
-    );
+    const slides = useMemo(() => {
+    // 1. Lấy tất cả banner đang kích hoạt (isActive !== false), sắp xếp theo sortOrder
+    const activeBanners = banners
+      .filter((b) => b.isActive !== false)
+      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
-    if (filtered.length > 0) {
-      return filtered;
+    if (activeBanners.length > 0) {
+      return activeBanners;
     }
 
-    if (banners.length > 0) {
-      return banners.slice(0, 3);
-    }
+    // 2. Chỉ khi Database rỗng/không có banner nào mới dùng mảng dự phòng FALLBACK
+    return FALLBACK.map((b, i) => ({
+      ...b,
+      id: `fb-${i}`,
+      isActive: true,
+      sortOrder: i,
+      createdAt: "",
+      updatedAt: "",
+    }));
+  }, [banners]);
+
 
     return FALLBACK.map((b, i) => ({
       ...b,
