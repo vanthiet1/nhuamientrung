@@ -22,6 +22,9 @@ type OfflineDatabase = {
   news: NewsRecord[];
   banners: BannerRecord[];
   careers: CareerRecord[];
+  contactMessages?: ContactMessageRecord[];
+  quoteRequests?: QuoteRequestRecord[];
+  reviews?: any[];
 };
 
 let cachedOfflineDb: OfflineDatabase | null = null;
@@ -38,6 +41,16 @@ export function getOfflineDb(): OfflineDatabase | null {
     console.warn("Lỗi đọc data/offline-database.json:", e);
   }
   return null;
+}
+
+export function saveOfflineDb(db: OfflineDatabase) {
+  try {
+    const p = path.join(process.cwd(), "data/offline-database.json");
+    fs.writeFileSync(p, JSON.stringify(db, null, 2), "utf8");
+    cachedOfflineDb = db;
+  } catch (e) {
+    console.warn("Lỗi lưu data/offline-database.json:", e);
+  }
 }
 import type {
   CategoryRecord,
@@ -525,17 +538,34 @@ export async function deleteCareer(id: string) {
 
 // ── Contact Messages ──
 export async function getContactMessages(): Promise<ContactMessageRecord[]> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
-  if (error) throw error;
-  return toCamel(data);
+  if (!isSupabaseOnline()) {
+    return getOfflineDb()?.contactMessages || [];
+  }
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
+    if (error) {
+      console.warn("Contact messages table error:", error.message);
+      return getOfflineDb()?.contactMessages || [];
+    }
+    return toCamel(data);
+  } catch {
+    return getOfflineDb()?.contactMessages || [];
+  }
 }
 
 export async function getContactMessageById(id: string): Promise<ContactMessageRecord | null> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase.from('contact_messages').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
-  return data ? toCamel(data) : null;
+  if (!isSupabaseOnline()) {
+    return getOfflineDb()?.contactMessages?.find(c => c.id === id) || null;
+  }
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase.from('contact_messages').select('*').eq('id', id).maybeSingle();
+    if (error) return getOfflineDb()?.contactMessages?.find(c => c.id === id) || null;
+    return data ? toCamel(data) : null;
+  } catch {
+    return getOfflineDb()?.contactMessages?.find(c => c.id === id) || null;
+  }
 }
 
 export async function createContactMessage(
@@ -544,6 +574,29 @@ export async function createContactMessage(
     remoteId?: number | string | null;
   }
 ) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    const newMsg: ContactMessageRecord = {
+      id: "msg-" + Date.now(),
+      name: input.name,
+      email: input.email || "",
+      phone: input.phone,
+      subject: input.subject || "",
+      content: input.content || "",
+      type: input.type || "contact",
+      cvUrl: input.cvUrl || "",
+      cvFileName: input.cvFileName || "",
+      isRead: input.isRead || false,
+      createdAt: new Date().toISOString(),
+      remoteId: input.remoteId || null,
+    };
+    if (db) {
+      db.contactMessages = db.contactMessages || [];
+      db.contactMessages.unshift(newMsg);
+      saveOfflineDb(db);
+    }
+    return newMsg;
+  }
   const supabase = createServiceClient();
   const snakeInput = toSnake(input);
   const { data, error } = await supabase.from('contact_messages').insert(snakeInput).select().single();
@@ -555,6 +608,17 @@ export async function updateContactMessage(
   id: string,
   input: Partial<Pick<ContactMessageRecord, "isRead" | "remoteId">>
 ) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    if (db?.contactMessages) {
+      const item = db.contactMessages.find(c => c.id === id);
+      if (item) {
+        Object.assign(item, input);
+        saveOfflineDb(db);
+        return item;
+      }
+    }
+  }
   const supabase = createServiceClient();
   const snakeInput = toSnake(input);
   const { data, error } = await supabase.from('contact_messages').update(snakeInput).eq('id', id).select().single();
@@ -563,31 +627,63 @@ export async function updateContactMessage(
 }
 
 export async function deleteContactMessage(id: string) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    if (db?.contactMessages) {
+      db.contactMessages = db.contactMessages.filter(c => c.id !== id);
+      saveOfflineDb(db);
+      return;
+    }
+  }
   const supabase = createServiceClient();
   const { error } = await supabase.from('contact_messages').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }
 
 export async function countUnreadContactMessages() {
-  const supabase = createServiceClient();
-  const { count, error } = await supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
-  if (error) throw error;
-  return count || 0;
+  if (!isSupabaseOnline()) {
+    return (getOfflineDb()?.contactMessages || []).filter(c => !c.isRead).length;
+  }
+  try {
+    const supabase = createServiceClient();
+    const { count, error } = await supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+    if (error) return (getOfflineDb()?.contactMessages || []).filter(c => !c.isRead).length;
+    return count || 0;
+  } catch {
+    return (getOfflineDb()?.contactMessages || []).filter(c => !c.isRead).length;
+  }
 }
 
 // ── Quote Requests ──
 export async function getQuoteRequests(): Promise<QuoteRequestRecord[]> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false });
-  if (error) throw error;
-  return toCamel(data);
+  if (!isSupabaseOnline()) {
+    return getOfflineDb()?.quoteRequests || [];
+  }
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase.from('quote_requests').select('*').order('created_at', { ascending: false });
+    if (error) {
+      console.warn("Quote requests table error:", error.message);
+      return getOfflineDb()?.quoteRequests || [];
+    }
+    return toCamel(data);
+  } catch {
+    return getOfflineDb()?.quoteRequests || [];
+  }
 }
 
 export async function getQuoteRequestById(id: string): Promise<QuoteRequestRecord | null> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase.from('quote_requests').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
-  return data ? toCamel(data) : null;
+  if (!isSupabaseOnline()) {
+    return getOfflineDb()?.quoteRequests?.find(q => q.id === id) || null;
+  }
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase.from('quote_requests').select('*').eq('id', id).maybeSingle();
+    if (error) return getOfflineDb()?.quoteRequests?.find(q => q.id === id) || null;
+    return data ? toCamel(data) : null;
+  } catch {
+    return getOfflineDb()?.quoteRequests?.find(q => q.id === id) || null;
+  }
 }
 
 export async function createQuoteRequest(
@@ -596,6 +692,36 @@ export async function createQuoteRequest(
     status?: string;
   }
 ) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    const newQuote: QuoteRequestRecord = {
+      id: "quote-" + Date.now(),
+      name: input.name,
+      phone: input.phone,
+      email: input.email || null,
+      companyName: input.companyName || null,
+      productType: input.productType || "",
+      industry: input.industry || null,
+      quantityExpected: input.quantityExpected || "",
+      dimensions: input.dimensions || null,
+      material: input.material || null,
+      printColors: input.printColors || null,
+      deadline: input.deadline || null,
+      deliveryDestination: input.deliveryDestination || "",
+      details: input.details || null,
+      referenceFileUrl: input.referenceFileUrl || null,
+      referenceFileName: input.referenceFileName || null,
+      status: (input.status as any) || "pending",
+      isRead: input.isRead || false,
+      createdAt: new Date().toISOString(),
+    };
+    if (db) {
+      db.quoteRequests = db.quoteRequests || [];
+      db.quoteRequests.unshift(newQuote);
+      saveOfflineDb(db);
+    }
+    return newQuote;
+  }
   const supabase = createServiceClient();
   const snakeInput = toSnake(input);
   const { data, error } = await supabase.from('quote_requests').insert(snakeInput).select().single();
@@ -607,6 +733,17 @@ export async function updateQuoteRequest(
   id: string,
   input: Partial<Pick<QuoteRequestRecord, "isRead" | "status">>
 ) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    if (db?.quoteRequests) {
+      const item = db.quoteRequests.find(q => q.id === id);
+      if (item) {
+        Object.assign(item, input);
+        saveOfflineDb(db);
+        return item;
+      }
+    }
+  }
   const supabase = createServiceClient();
   const snakeInput = toSnake(input);
   const { data, error } = await supabase.from('quote_requests').update(snakeInput).eq('id', id).select().single();
@@ -615,16 +752,31 @@ export async function updateQuoteRequest(
 }
 
 export async function deleteQuoteRequest(id: string) {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    if (db?.quoteRequests) {
+      db.quoteRequests = db.quoteRequests.filter(q => q.id !== id);
+      saveOfflineDb(db);
+      return;
+    }
+  }
   const supabase = createServiceClient();
   const { error } = await supabase.from('quote_requests').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }
 
 export async function countUnreadQuoteRequests() {
-  const supabase = createServiceClient();
-  const { count, error } = await supabase.from('quote_requests').select('*', { count: 'exact', head: true }).eq('is_read', false);
-  if (error) throw error;
-  return count || 0;
+  if (!isSupabaseOnline()) {
+    return (getOfflineDb()?.quoteRequests || []).filter(q => !q.isRead).length;
+  }
+  try {
+    const supabase = createServiceClient();
+    const { count, error } = await supabase.from('quote_requests').select('*', { count: 'exact', head: true }).eq('is_read', false);
+    if (error) return (getOfflineDb()?.quoteRequests || []).filter(q => !q.isRead).length;
+    return count || 0;
+  } catch {
+    return (getOfflineDb()?.quoteRequests || []).filter(q => !q.isRead).length;
+  }
 }
 
 

@@ -1,9 +1,15 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { isSupabaseOnline, getOfflineDb } from "@/lib/cms/store";
 
 export async function GET() {
   try {
+    if (!isSupabaseOnline()) {
+      const db = getOfflineDb();
+      const count = (db?.reviews || []).filter((r: any) => r.status === "pending").length;
+      return NextResponse.json({ count });
+    }
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -16,7 +22,8 @@ export async function GET() {
     if (error) throw error;
     return NextResponse.json({ count: count || 0 });
   } catch (error: any) {
-    console.error("Error fetching pending reviews count:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const db = getOfflineDb();
+    const count = (db?.reviews || []).filter((r: any) => r.status === "pending").length;
+    return NextResponse.json({ count });
   }
 }
