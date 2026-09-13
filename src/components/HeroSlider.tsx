@@ -58,6 +58,7 @@ export default function HeroSlider({
       return activeBanners;
     }
 
+    // 2. Chỉ khi Database rỗng hoặc không có banner nào mới dùng mảng dự phòng FALLBACK
     return FALLBACK.map((b, i) => ({
       ...b,
       id: `fb-${i}`,
