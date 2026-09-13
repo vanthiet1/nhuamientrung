@@ -141,6 +141,17 @@ export default async function HomePage({}: Props) {
           <HomePrintingProducts groups={groups} />
           <HomeAuxiliaryProducts groups={groups} />
           <HomeRemainingProducts groups={groups} />
+
+          {/* Nút Xem tất cả 50+ sản phẩm */}
+          <div className="flex justify-center pt-2">
+            <Link
+              href="/tat-ca-san-pham"
+              className="inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-brand-700 via-brand-800 to-brand-900 hover:from-brand-600 hover:via-brand-700 hover:to-brand-800 text-white font-extrabold text-sm sm:text-base rounded-full shadow-lg shadow-brand-900/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <span>XEM TẤT CẢ 50+ SẢN PHẨM BAO BÌ THÀNH PHÁT</span>
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </div>
         </div>
       </section>
 

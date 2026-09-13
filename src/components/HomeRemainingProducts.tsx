@@ -15,28 +15,28 @@ const REMAINING_PRODUCTS_CONFIG = [
     name: "In Bao Bì Nhựa",
     slug: "in-bao-bi",
     keyword: "in-bao-bi",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/in-mang-co-pvc.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-pvc.jpg",
   },
   {
     id: "mang-co-ao-binh-5gallons",
     name: "Màng Co Áo Bình 5 Gallons",
     slug: "mang-co-ao-binh-5gallons",
     keyword: "binh-5gallons",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pvc-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-nap-chai-3.jpg",
   },
   {
     id: "mang-pe-quan-pallet",
     name: "Màng PE Quấn Pallet",
     slug: "mang-quan-pallet",
     keyword: "pallet",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-pe-quan-pallet.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-pe-quan-pallet.jpg",
   },
   {
     id: "phu-kien-nganh-nuoc-uong",
     name: "Phụ Kiện Nước Uống Đóng Chai",
     slug: "phu-kien-nganh-nuoc-uong",
     keyword: "phu-kien",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-loc-1.jpg",
   },
 ];
 
