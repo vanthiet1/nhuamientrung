@@ -48,18 +48,14 @@ export default function HeroSlider({
 }: {
   banners?: BannerRecord[];
 }) {
-  // Only display banners with sortOrder 0, 1, 2
   const slides = useMemo(() => {
-    const filtered = banners.filter(
-      (b) => b.isActive !== false && (b.sortOrder === 0 || b.sortOrder === 1 || b.sortOrder === 2)
-    );
+    // 1. Lấy tất cả banner đang kích hoạt (isActive !== false), sắp xếp theo sortOrder
+    const activeBanners = banners
+      .filter((b) => b.isActive !== false)
+      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
-    if (filtered.length > 0) {
-      return filtered;
-    }
-
-    if (banners.length > 0) {
-      return banners.slice(0, 3);
+    if (activeBanners.length > 0) {
+      return activeBanners;
     }
 
     return FALLBACK.map((b, i) => ({
