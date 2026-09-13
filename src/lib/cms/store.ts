@@ -57,7 +57,10 @@ export async function getCategories(): Promise<CategoryRecord[]> {
   return getOrSetCache("cms:categories:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('categories').select('*').order('sort_order', { ascending: true });
-    if (error) throw error;
+    if (error) {
+      console.warn("[Supabase getCategories error]:", error.message || error);
+      return [];
+    }
     return toCamel(data);
   });
 }
@@ -108,7 +111,10 @@ export async function getSubcategories(): Promise<SubcategoryRecord[]> {
   return getOrSetCache("cms:subcategories:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('subcategories').select('*').order('sort_order', { ascending: true });
-    if (error) throw error;
+    if (error) {
+      console.warn("[Supabase getSubcategories error]:", error.message || error);
+      return [];
+    }
     return toCamel(data);
   });
 }
@@ -156,7 +162,10 @@ export async function getProducts(): Promise<ProductRecord[]> {
   return getOrSetCache("cms:products:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('products').select('*').order('sort_order', { ascending: true });
-    if (error) throw error;
+    if (error) {
+      console.warn("[Supabase getProducts error]:", error.message || error);
+      return [];
+    }
     return toCamel(data);
   });
 }
@@ -172,7 +181,10 @@ export async function getProductBySlug(slug: string): Promise<ProductRecord | nu
   return getOrSetCache(`cms:product:${slug}`, async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('products').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
-    if (error) throw error;
+    if (error) {
+      console.warn(`[Supabase getProductBySlug(${slug}) error]:`, error.message || error);
+      return null;
+    }
     return data ? toCamel(data) : null;
   });
 }
@@ -226,7 +238,10 @@ export async function getNews(includeDraft = true): Promise<NewsRecord[]> {
       query = query.eq('is_published', true);
     }
     const { data, error } = await query;
-    if (error) throw error;
+    if (error) {
+      console.warn("[Supabase getNews error]:", error.message || error);
+      return [];
+    }
     return toCamel(data).map((n: any) => ({ ...n, date: n.publishedAt }));
   });
 }
@@ -245,7 +260,10 @@ export async function getNewsBySlug(slug: string): Promise<NewsRecord | null> {
   return getOrSetCache(`cms:news:${slug}`, async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('news').select('*').eq('slug', slug).eq('is_published', true).maybeSingle();
-    if (error) throw error;
+    if (error) {
+      console.warn(`[Supabase getNewsBySlug(${slug}) error]:`, error.message || error);
+      return null;
+    }
     if (!data) return null;
     const camel = toCamel(data);
     camel.date = camel.publishedAt;

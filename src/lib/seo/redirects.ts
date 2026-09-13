@@ -295,9 +295,22 @@ const VALID_CATEGORY_SLUGS = new Set([
 /**
  * Evaluates incoming requests and returns target redirect URL string if redirect is needed,
  * or null if no redirect is necessary.
+ * Guaranteed to NEVER return a redirect target matching the current URL (eliminates infinite loops).
  */
 export function getSeoRedirect(request: NextRequest): URL | null {
   const nextUrl = request.nextUrl || new URL((request as any).url);
+  const target = evaluateSeoRedirect(request, nextUrl);
+  if (!target) return null;
+
+  // STRICT GUARD: Never redirect if target destination is the exact same path and query!
+  if (target.pathname === nextUrl.pathname && target.search === nextUrl.search) {
+    return null;
+  }
+
+  return target;
+}
+
+function evaluateSeoRedirect(request: NextRequest, nextUrl: URL): URL | null {
   const url = new URL(nextUrl.href);
   let pathname = url.pathname;
   const searchParams = url.searchParams;
@@ -420,8 +433,8 @@ export function getSeoRedirect(request: NextRequest): URL | null {
           k.includes("7206") ||
           k === "p"
       );
-      if (hasLegacyJunkParams || keys.length > 0) {
-        // Clear all query params on root to clean indexed Google URLs
+      if (hasLegacyJunkParams) {
+        // Clear junk query params on root to clean indexed Google URLs
         url.search = "";
         url.pathname = "/";
         return url;
@@ -528,21 +541,27 @@ export function getSeoRedirect(request: NextRequest): URL | null {
     }
 
     if (EXACT_SLUG_MAP[currentSlug]) {
-      url.pathname = EXACT_SLUG_MAP[currentSlug];
-      url.search = "";
-      return url;
+      const target = EXACT_SLUG_MAP[currentSlug];
+      if (target !== pathname) {
+        url.pathname = target;
+        url.search = "";
+        return url;
+      }
     }
   }
 
   // Direct exact slug match if raw slug without prefix matches dictionary
   const rawSlug = pathname.replace(/^\//, "");
   if (EXACT_SLUG_MAP[rawSlug]) {
-    url.pathname = EXACT_SLUG_MAP[rawSlug];
-    url.search = "";
-    return url;
+    const target = EXACT_SLUG_MAP[rawSlug];
+    if (target !== pathname) {
+      url.pathname = target;
+      url.search = "";
+      return url;
+    }
   }
 
-  // If pathname was altered (e.g. stripped .html or stripped add-to-cart param)
+  // If pathname was altered (e.g. stripped .html or trailing slash)
   if (needsRedirect) {
     url.pathname = pathname;
     return url;
