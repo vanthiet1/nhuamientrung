@@ -15,28 +15,28 @@ const FEATURED_4_AUXILIARY = [
     name: "Màng Xốp Hơi",
     keyword: "boc-hang",
     slug: "mang-xop-hoi-xop-khi-xop-boc-hang",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-xop-hoi-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/11/cuon-mang-xop-hoi.jpg",
   },
   {
     id: "mang-xop-pe-foam",
     name: "Màng Xốp PE FOAM",
     keyword: "pe-foam",
     slug: "mang-xop-pe-foam",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-pe-quan-pallet.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/11/xop-pe-foam-3mm-x-100m.jpg",
   },
   {
     id: "bang-keo-trong",
     name: "Băng Keo Trong",
     keyword: "bang-keo-trong",
     slug: "bang-keo-trong",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pof-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2023/03/bang-keo-trong-thanh-phat.jpg",
   },
   {
     id: "bang-keo-duc",
     name: "Băng Keo Đục",
     keyword: "bang-keo-duc",
     slug: "bang-keo-duc",
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2023/03/bang-keo-duc-thanh-phat.png",
   },
 ];
 

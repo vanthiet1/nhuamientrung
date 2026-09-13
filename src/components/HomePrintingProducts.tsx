@@ -17,7 +17,7 @@ const PRINTING_8_ITEMS = [
     slug: "cuon-mang-ep-ly-tron",
     keyword: "tron",
     catIndex: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-xop-hoi-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-nhan-chai-nuoc-suoi.jpg",
   },
   {
     id: "in-mang-ep-ly-2",
@@ -25,7 +25,7 @@ const PRINTING_8_ITEMS = [
     slug: "in-cuon-mang-ep-ly-theo-yeu-cau",
     keyword: "yeu-cau",
     catIndex: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-pe-quan-pallet.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/bao-bi-mang-ghep-1-1.jpg",
   },
 
   // 6 Products for Category 1: Dịch Vụ In Màng Co
@@ -35,7 +35,7 @@ const PRINTING_8_ITEMS = [
     slug: "in-mang-co-pvc",
     keyword: "pvc",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pvc-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-pvc.jpg",
   },
   {
     id: "in-mang-co-nhan-chai",
@@ -43,7 +43,7 @@ const PRINTING_8_ITEMS = [
     slug: "in-mang-co-nhan-chai",
     keyword: "nhan-chai",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/in-mang-co-pvc.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-nhan-chai-1-2.jpg",
   },
   {
     id: "in-mang-chuyen-nhiet",
@@ -51,7 +51,7 @@ const PRINTING_8_ITEMS = [
     slug: "in-mang-chuyen-nhiet",
     keyword: "chuyen-nhiet",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-nhan-chai-3.jpg",
   },
   {
     id: "mang-co-pvc-in-cuon",
@@ -59,7 +59,7 @@ const PRINTING_8_ITEMS = [
     slug: "mang-co-pvc-in-dang-cuon",
     keyword: "cuon",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pvc.jpg",
   },
   {
     id: "mang-co-in-pof",
@@ -67,7 +67,7 @@ const PRINTING_8_ITEMS = [
     slug: "mang-co-in-chat-lieu-pof",
     keyword: "pof",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pof-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pof.jpg",
   },
   {
     id: "mang-co-in-pe",
@@ -75,7 +75,7 @@ const PRINTING_8_ITEMS = [
     slug: "mang-co-in-chat-lieu-pe",
     keyword: "pe",
     catIndex: 1,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pe.jpg",
   },
 ];
 

@@ -27,7 +27,7 @@ type OfflineDatabase = {
 let cachedOfflineDb: OfflineDatabase | null = null;
 
 export function getOfflineDb(): OfflineDatabase | null {
-  if (cachedOfflineDb) return cachedOfflineDb;
+  if (cachedOfflineDb && process.env.NODE_ENV === "production") return cachedOfflineDb;
   try {
     const p = path.join(process.cwd(), "data/offline-database.json");
     if (fs.existsSync(p)) {

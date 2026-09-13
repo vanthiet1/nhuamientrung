@@ -15,28 +15,28 @@ const FEATURED_4_ITEMS = [
     name: "Màng Co PE",
     keyword: "pe",
     itemOffset: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pe.jpg",
   },
   {
     id: "mang-co-pof",
     name: "Màng Co POF",
     keyword: "pof",
     itemOffset: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pof-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pof.jpg",
   },
   {
     id: "mang-co-pvc",
     name: "Màng Co PVC",
     keyword: "pvc",
     itemOffset: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pvc-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2021/12/mang-co-pvc.jpg",
   },
   {
     id: "mang-co-pet",
     name: "Màng Co PET",
     keyword: "pet",
     itemOffset: 0,
-    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-pet-1.jpg",
+    fallbackImage: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet.jpg",
   },
 ];
 

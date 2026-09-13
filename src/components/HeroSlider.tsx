@@ -10,21 +10,21 @@ const FALLBACK: Pick<
   "title" | "subtitle" | "badge" | "cta" | "href" | "image" | "gradient"
 >[] = [
   {
+    title: "Giải pháp bao bì chuyên nghiệp Thành Phát",
+    subtitle: "Màng co PVC · PE · POF · PET · Màng phức hợp — chất lượng ổn định, giao hàng toàn quốc",
+    badge: "BAO BÌ THÀNH PHÁT",
+    cta: "TƯ VẤN NGAY",
+    href: "/danh-muc",
+    image: "https://baobithanhphat.com/wp-content/uploads/2025/11/banner-baobi.png",
+    gradient: "from-[#07163c] via-[#0b2158] to-[#040d27]",
+  },
+  {
     title: "In màng co nhiệt logo thương hiệu",
     subtitle: "Nâng tầm nhận diện - Bảo vệ sản phẩm - Tăng giá trị trên kệ hàng",
     badge: "IN ẤN BRANDING",
     cta: "TƯ VẤN NGAY",
     href: "/danh-muc",
-    image: "https://baobithanhphat.com/wp-content/uploads/2022/03/in-mang-co-pvc.jpg",
-    gradient: "from-[#07163c] via-[#0b2158] to-[#040d27]",
-  },
-  {
-    title: "Giải pháp màng co PVC · PE · POF chuyên nghiệp",
-    subtitle: "Sản xuất theo công nghệ Châu Âu · Hạt nhựa nguyên sinh 100% · Giao hàng toàn quốc",
-    badge: "BAO BÌ THÀNH PHÁT",
-    cta: "TƯ VẤN NGAY",
-    href: "/danh-muc",
-    image: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-co-nhiet-pe-1.jpg",
+    image: "https://baobithanhphat.com/wp-content/uploads/2021/12/in-mang-co-pvc.jpg",
     gradient: "from-[#07163c] via-[#0b2158] to-[#040d27]",
   },
   {
@@ -33,7 +33,7 @@ const FALLBACK: Pick<
     badge: "GIÁ TẬN XƯỞNG",
     cta: "BÁO GIÁ NHANH",
     href: "/lien-he",
-    image: "https://baobithanhphat.com/wp-content/uploads/2022/03/mang-xop-hoi-1.jpg",
+    image: "https://baobithanhphat.com/wp-content/uploads/2021/11/cuon-mang-xop-hoi.jpg",
     gradient: "from-[#07163c] via-[#0b2158] to-[#040d27]",
   },
 ];
@@ -137,7 +137,7 @@ export default function HeroSlider({
 
   if (!slide) return null;
 
-  const bgImage = slide.image || "https://baobithanhphat.com/wp-content/uploads/2022/03/in-mang-co-pvc.jpg";
+  const bgImage = slide.image || "https://baobithanhphat.com/wp-content/uploads/2025/11/banner-baobi.png";
   const hasImage = Boolean(bgImage) && !imgFailed;
 
   return (
