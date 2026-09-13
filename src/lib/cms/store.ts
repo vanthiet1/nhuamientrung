@@ -1,5 +1,44 @@
 import { createServiceClient } from "@/lib/supabase/admin";
 import { getOrSetCache, clearCmsCache } from "@/lib/cache";
+import fs from "fs";
+import path from "path";
+
+// Thời điểm Supabase reset chu kỳ gói cước (4 ngày kể từ 13/09/2026 -> 17/09/2026):
+const SUPABASE_RESET_TIMESTAMP = new Date("2026-09-17T12:00:00.000Z").getTime();
+
+export function isSupabaseOnline(): boolean {
+  if (process.env.FORCE_SUPABASE_ONLINE === "true") return true;
+  // Trong 4 ngày chờ Supabase reset hạn mức: dùng trực tiếp JSON offline để tránh lỗi 402 và tiết kiệm 100% băng thông
+  if (Date.now() < SUPABASE_RESET_TIMESTAMP) {
+    return false;
+  }
+  return true;
+}
+
+type OfflineDatabase = {
+  categories: CategoryRecord[];
+  subcategories: SubcategoryRecord[];
+  products: ProductRecord[];
+  news: NewsRecord[];
+  banners: BannerRecord[];
+  careers: CareerRecord[];
+};
+
+let cachedOfflineDb: OfflineDatabase | null = null;
+
+export function getOfflineDb(): OfflineDatabase | null {
+  if (cachedOfflineDb) return cachedOfflineDb;
+  try {
+    const p = path.join(process.cwd(), "data/offline-database.json");
+    if (fs.existsSync(p)) {
+      cachedOfflineDb = JSON.parse(fs.readFileSync(p, "utf8")) as OfflineDatabase;
+      return cachedOfflineDb;
+    }
+  } catch (e) {
+    console.warn("Lỗi đọc data/offline-database.json:", e);
+  }
+  return null;
+}
 import type {
   CategoryRecord,
   SubcategoryRecord,
@@ -54,21 +93,32 @@ export function slugify(input: string) {
 
 // ── Categories ──
 export async function getCategories(): Promise<CategoryRecord[]> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.categories || [];
+  }
+
   return getOrSetCache("cms:categories:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('categories').select('*').order('sort_order', { ascending: true });
     if (error) {
       console.warn("[Supabase getCategories error]:", error.message || error);
-      return [];
+      return offline?.categories || [];
     }
     return toCamel(data);
   });
 }
 
 export async function getCategoryById(id: string): Promise<CategoryRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.categories.find((c) => c.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('categories').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
+  if (error) {
+    return offline?.categories.find((c) => c.id === id) || null;
+  }
   return data ? toCamel(data) : null;
 }
 
@@ -108,21 +158,32 @@ export async function deleteCategory(id: string) {
 
 // ── Subcategories ──
 export async function getSubcategories(): Promise<SubcategoryRecord[]> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.subcategories || [];
+  }
+
   return getOrSetCache("cms:subcategories:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('subcategories').select('*').order('sort_order', { ascending: true });
     if (error) {
       console.warn("[Supabase getSubcategories error]:", error.message || error);
-      return [];
+      return offline?.subcategories || [];
     }
     return toCamel(data);
   });
 }
 
 export async function getSubcategoryById(id: string): Promise<SubcategoryRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.subcategories.find((s) => s.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('subcategories').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
+  if (error) {
+    return offline?.subcategories.find((s) => s.id === id) || null;
+  }
   return data ? toCamel(data) : null;
 }
 
@@ -159,31 +220,47 @@ export async function deleteSubcategory(id: string) {
 
 // ── Products ──
 export async function getProducts(): Promise<ProductRecord[]> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.products || [];
+  }
+
   return getOrSetCache("cms:products:all", async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('products').select('*').order('sort_order', { ascending: true });
     if (error) {
       console.warn("[Supabase getProducts error]:", error.message || error);
-      return [];
+      return offline?.products || [];
     }
     return toCamel(data);
   });
 }
 
 export async function getProductById(id: string): Promise<ProductRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.products.find((p) => p.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
+  if (error) {
+    return offline?.products.find((p) => p.id === id) || null;
+  }
   return data ? toCamel(data) : null;
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.products.find((p) => p.slug === slug) || null;
+  }
+
   return getOrSetCache(`cms:product:${slug}`, async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('products').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
     if (error) {
       console.warn(`[Supabase getProductBySlug(${slug}) error]:`, error.message || error);
-      return null;
+      return offline?.products.find((p) => p.slug === slug) || null;
     }
     return data ? toCamel(data) : null;
   });
@@ -230,6 +307,12 @@ export async function incrementProductView(id: string, ip: string) {
 
 // ── News ──
 export async function getNews(includeDraft = true): Promise<NewsRecord[]> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    const list = offline?.news || [];
+    return includeDraft ? list : list.filter((n) => n.isPublished);
+  }
+
   const cacheKey = includeDraft ? "cms:news:all" : "cms:news:published";
   return getOrSetCache(cacheKey, async () => {
     const supabase = createServiceClient();
@@ -240,31 +323,42 @@ export async function getNews(includeDraft = true): Promise<NewsRecord[]> {
     const { data, error } = await query;
     if (error) {
       console.warn("[Supabase getNews error]:", error.message || error);
-      return [];
+      const list = offline?.news || [];
+      return includeDraft ? list : list.filter((n) => n.isPublished);
     }
     return toCamel(data).map((n: any) => ({ ...n, date: n.publishedAt }));
   });
 }
 
 export async function getNewsById(id: string): Promise<NewsRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.news.find((n) => n.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('news').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
-  if (!data) return null;
+  if (error || !data) {
+    return offline?.news.find((n) => n.id === id) || null;
+  }
   const camel = toCamel(data);
   camel.date = camel.publishedAt;
   return camel;
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.news.find((n) => n.slug === slug) || null;
+  }
+
   return getOrSetCache(`cms:news:${slug}`, async () => {
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('news').select('*').eq('slug', slug).eq('is_published', true).maybeSingle();
     if (error) {
       console.warn(`[Supabase getNewsBySlug(${slug}) error]:`, error.message || error);
-      return null;
+      return offline?.news.find((n) => n.slug === slug) || null;
     }
-    if (!data) return null;
+    if (!data) return offline?.news.find((n) => n.slug === slug) || null;
     const camel = toCamel(data);
     camel.date = camel.publishedAt;
     return camel;
@@ -314,6 +408,11 @@ export async function deleteNews(id: string) {
 export async function getCareers(includeInactive = true): Promise<CareerRecord[]> {
   const cacheKey = includeInactive ? "cms:careers:all" : "cms:careers:active";
   return getOrSetCache(cacheKey, async () => {
+    if (!isSupabaseOnline()) {
+      const db = getOfflineDb();
+      const list = (db?.careers || []) as CareerRecord[];
+      return includeInactive ? list : list.filter(c => c.isActive);
+    }
     const supabase = createServiceClient();
     let query = supabase.from('careers').select('*').order('sort_order', { ascending: true });
     if (!includeInactive) {
@@ -322,7 +421,9 @@ export async function getCareers(includeInactive = true): Promise<CareerRecord[]
     const { data, error } = await query;
     if (error) {
       console.warn("Careers table error", error.message);
-      return [];
+      const db = getOfflineDb();
+      const list = (db?.careers || []) as CareerRecord[];
+      return includeInactive ? list : list.filter(c => c.isActive);
     }
     const result = toCamel(data);
     result.forEach((r: any) => {
@@ -342,9 +443,16 @@ export async function getCareers(includeInactive = true): Promise<CareerRecord[]
 }
 
 export async function getCareerById(id: string): Promise<CareerRecord | null> {
+  if (!isSupabaseOnline()) {
+    const db = getOfflineDb();
+    return (db?.careers || []).find(c => c.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('careers').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
+  if (error) {
+    const db = getOfflineDb();
+    return (db?.careers || []).find(c => c.id === id) || null;
+  }
   if (!data) return null;
   const result = toCamel(data);
   if (typeof result.requirements === 'string') {
@@ -362,9 +470,16 @@ export async function getCareerById(id: string): Promise<CareerRecord | null> {
 
 export async function getCareerBySlug(slug: string): Promise<CareerRecord | null> {
   return getOrSetCache(`cms:career:${slug}`, async () => {
+    if (!isSupabaseOnline()) {
+      const db = getOfflineDb();
+      return (db?.careers || []).find(c => c.slug === slug && c.isActive) || null;
+    }
     const supabase = createServiceClient();
     const { data, error } = await supabase.from('careers').select('*').eq('slug', slug).eq('is_active', true).maybeSingle();
-    if (error) throw error;
+    if (error) {
+      const db = getOfflineDb();
+      return (db?.careers || []).find(c => c.slug === slug && c.isActive) || null;
+    }
     if (!data) return null;
     const result = toCamel(data);
     if (typeof result.requirements === 'string') {
@@ -515,6 +630,12 @@ export async function countUnreadQuoteRequests() {
 
 // ── Banners ──
 export async function getBanners(includeInactive = true): Promise<BannerRecord[]> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    const list = offline?.banners || [];
+    return includeInactive ? list : list.filter((b) => b.isActive);
+  }
+
   const cacheKey = includeInactive ? "cms:banners:all" : "cms:banners:active";
   return getOrSetCache(cacheKey, async () => {
     const supabase = createServiceClient();
@@ -525,16 +646,23 @@ export async function getBanners(includeInactive = true): Promise<BannerRecord[]
     const { data, error } = await query;
     if (error) {
       console.warn("Banners table error", error.message);
-      return [];
+      const list = offline?.banners || [];
+      return includeInactive ? list : list.filter((b) => b.isActive);
     }
     return toCamel(data);
   });
 }
 
 export async function getBannerById(id: string): Promise<BannerRecord | null> {
+  const offline = getOfflineDb();
+  if (!isSupabaseOnline()) {
+    return offline?.banners.find((b) => b.id === id) || null;
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase.from('banners').select('*').eq('id', id).maybeSingle();
-  if (error) throw error;
+  if (error) {
+    return offline?.banners.find((b) => b.id === id) || null;
+  }
   return data ? toCamel(data) : null;
 }
 
