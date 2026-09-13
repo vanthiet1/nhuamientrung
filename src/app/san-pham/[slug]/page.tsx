@@ -22,6 +22,7 @@ import {
   loadProductBySlug,
   loadProducts,
 } from "@/lib/data/public";
+import { isSupabaseOnline } from "@/lib/cms/store";
 import { getApprovedReviews } from "@/lib/cms/reviews";
 import ProductTabs from "@/components/ProductTabs";
 import ProductReviews from "@/components/ProductReviews";
@@ -93,12 +94,12 @@ export default async function ProductPage({
     loadCategories(),
     loadNews(),
     (async () => {
+      if (!isSupabaseOnline()) return product.views || 0;
       try {
         const supabase = await createClient();
         const { data } = await supabase.from("products").select("views").eq("id", product.id).single();
         return data && typeof data.views === "number" ? data.views : null;
       } catch (error) {
-        console.error("Lỗi lấy view từ supabase:", error);
         return null;
       }
     })(),

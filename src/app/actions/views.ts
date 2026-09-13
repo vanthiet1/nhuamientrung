@@ -2,8 +2,12 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseOnline } from "@/lib/cms/store";
 
 export async function trackProductView(productId: string) {
+  if (!isSupabaseOnline()) {
+    return { success: true };
+  }
   try {
     const headersList = await headers();
     
